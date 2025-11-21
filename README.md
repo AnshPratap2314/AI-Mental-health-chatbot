@@ -1,6 +1,7 @@
 <!-- Logo Section -->
 <p align="center">
-  <img src="./logo chabot.png" height="260" width="260" alt="Mental Health Chatbot Logo">
+  <img src="[./logo chabot.png" height="260"](https://raw.githubusercontent.com/AnshPratap2314/AI-Mental-health-chatbot/main/logo%20chatbot.png
+) width="260" alt="Mental Health Chatbot Logo">
 </p>
 
 <h1 align="center">🧠💬 AI Mental Health & Supportive Chatbot</h1>
