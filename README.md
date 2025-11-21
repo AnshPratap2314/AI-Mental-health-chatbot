@@ -1,7 +1,6 @@
 <!-- Logo Section -->
 <p align="center">
-  <img src="[./logo chabot.png" height="260"](https://raw.githubusercontent.com/AnshPratap2314/AI-Mental-health-chatbot/main/logo%20chatbot.png
-) width="260" alt="Mental Health Chatbot Logo">
+  <img src="https://raw.githubusercontent.com/AnshPratap2314/AI-Mental-health-chatbot/main/logo%20chatbot.png" width="280" alt="Mental Health Chatbot Logo">
 </p>
 
 <h1 align="center">🧠💬 AI Mental Health & Supportive Chatbot</h1>
@@ -14,7 +13,7 @@
 <!-- Badges -->
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.9-blue">
-  <img src="https://img.shields.io/badge/Framework-FastAPI-green">
+  <img src="https://img.shields.io/badge/FastAPI-Framework-green">
   <img src="https://img.shields.io/badge/AI-Assistant-brightgreen">
   <img src="https://img.shields.io/badge/NLP-Enabled-purple">
   <img src="https://img.shields.io/badge/Status-Active%20Development-blueviolet">
@@ -117,8 +116,6 @@ python3 main.py
 </p>
 
 <hr>
-
-<h2>📞 Contact</h2>
 <p>
   <strong>Author:</strong> Ansh Pratap <br>
   GitHub: <a href="https://github.com/AnshPratap2314">AnshPratap2314</a> <br>
