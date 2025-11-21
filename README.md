@@ -1,3 +1,8 @@
+<!-- Logo Section -->
+<p align="center">
+  <img src="/mnt/data/A_digital_vector_logo_design_represents_a__Mental_.png" width="260" alt="Mental Health Chatbot Logo">
+</p>
+
 <h1 align="center">🧠💬 AI Mental Health & Supportive Chatbot</h1>
 
 <p align="center">
@@ -5,19 +10,22 @@
   Designed to provide emotional support, mood tracking, crisis detection, and helpful resources with privacy in mind.
 </p>
 
+<!-- Badges -->
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.9-blue">
-  <img src="https://img.shields.io/badge/AI-Assistant-green">
-  <img src="https://img.shields.io/badge/Mental%20Health-Supportive-blueviolet">
-  <img src="https://img.shields.io/badge/Status-Active%20Development-brightgreen">
+  <img src="https://img.shields.io/badge/Framework-FastAPI-green">
+  <img src="https://img.shields.io/badge/AI-Assistant-brightgreen">
+  <img src="https://img.shields.io/badge/NLP-Enabled-purple">
+  <img src="https://img.shields.io/badge/Status-Active%20Development-blueviolet">
+  <img src="https://img.shields.io/badge/Mental%20Health-Supportive-orange">
 </p>
 
 <hr>
 
 <h2>🌟 Project Overview</h2>
 <p>
-  This AI Mental Health Chatbot is designed to offer a safe and empathetic conversational experience.  
-  It detects user emotions, responds supportively, provides coping strategies, and can escalate to crisis protocols when needed.  
+  This AI Mental Health Chatbot is designed to offer a safe and empathetic conversational experience.
+  It detects user emotions, responds supportively, provides coping strategies, and can escalate to crisis protocols when needed.
   The system is modular, scalable, and aligned with basic ethical guidelines.
 </p>
 
