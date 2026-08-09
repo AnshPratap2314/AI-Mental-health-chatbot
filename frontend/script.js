@@ -1,4 +1,7 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = window.location.hostname === "127.0.0.1" ||
+                window.location.hostname === "localhost"
+    ? "http://127.0.0.1:8000"
+    : "https://mindcare-ai-api.onrender.com";
 
 const chatMessages = document.getElementById("chatMessages");
 const chatForm = document.getElementById("chatForm");
