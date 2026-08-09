@@ -1,16 +1,55 @@
 import requests
 
-url = "http://127.0.0.1:8000/chat"
+
+URL = "http://127.0.0.1:8000/chat"
+
 
 while True:
-    msg = input("You: ")
-    data = {"message": msg}
 
-    res = requests.post(url, json=data)
+    message = input("You: ")
 
-    if res.status_code != 200:
-        print("Error:", res.text)
+    if message.lower() in [
+        "exit",
+        "quit"
+    ]:
+        break
+
+    response = requests.post(
+        URL,
+        json={
+            "message": message
+        }
+    )
+
+    if response.status_code != 200:
+
+        print(
+            "Error:",
+            response.text
+        )
+
         continue
 
-    reply = res.json()["reply"]
-    print("Bot:", reply)
+    data = response.json()
+
+    print(
+        "Mode:",
+        data["mode"]
+    )
+
+    print(
+        "Risk Level:",
+        data["risk_level"]
+    )
+
+    print(
+        "Risk Score:",
+        data["risk_score"]
+    )
+
+    print(
+        "Bot:",
+        data["reply"]
+    )
+
+    print()

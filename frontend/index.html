@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="MindCare AI provides a private and supportive conversational space."
+    >
+
+    <title>MindCare AI</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+<main class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            <div class="brand-text">
+                <h1>MindCare</h1>
+                <span>Supportive AI</span>
+            </div>
+
+        </div>
+
+        <div class="sidebar-card">
+
+            <div class="status-dot"></div>
+
+            <div>
+                <strong>Private conversation</strong>
+
+                <p>
+                    Your conversation uses an isolated session.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="sidebar-info">
+
+            <h3>How I can help</h3>
+
+            <div class="info-item">
+                <span>💬</span>
+
+                <div>
+                    <strong>Talk openly</strong>
+                    <p>
+                        Share thoughts, emotions,
+                        worries, or daily experiences.
+                    </p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span>🧠</span>
+
+                <div>
+                    <strong>Reflect together</strong>
+                    <p>
+                        Explore what may be affecting
+                        how you feel.
+                    </p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span>🌱</span>
+
+                <div>
+                    <strong>Take one step</strong>
+                    <p>
+                        Work through difficult moments
+                        one step at a time.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="safety-note">
+
+            <div class="safety-icon">
+                !
+            </div>
+
+            <div>
+                <strong>Important</strong>
+
+                <p>
+                    MindCare is not a replacement for
+                    qualified mental-health professionals
+                    or emergency services.
+                </p>
+            </div>
+
+        </div>
+
+        <button
+            id="newChatButton"
+            class="new-chat-button"
+            type="button"
+        >
+            <span>＋</span>
+            New conversation
+        </button>
+
+    </aside>
+
+
+    <section class="chat-area">
+
+        <header class="chat-header">
+
+            <div class="assistant-profile">
+
+                <div class="avatar">
+                    <span>✦</span>
+                    <div class="avatar-glow"></div>
+                </div>
+
+                <div class="assistant-details">
+
+                    <h2>MindCare AI</h2>
+
+                    <div class="online-status">
+                        <span></span>
+                        <span>Online & ready to listen</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div
+                id="riskBadge"
+                class="risk-badge risk-low"
+            >
+                Safe
+            </div>
+
+        </header>
+
+
+        <div
+            id="chatMessages"
+            class="chat-messages"
+        >
+
+            <div class="welcome">
+
+                <div class="welcome-icon">
+                    ✦
+                </div>
+
+                <div class="welcome-eyebrow">
+                    A private space to talk
+                </div>
+
+                <h2>
+                    What's on your mind?
+                </h2>
+
+                <p>
+                    You can talk openly about your thoughts,
+                    emotions, stress, worries, or anything
+                    you would like to share.
+                </p>
+
+                <div class="suggestions">
+
+                    <button
+                        class="suggestion"
+                        data-message="I feel lonely"
+                        type="button"
+                    >
+                        <span>💭</span>
+                        I feel lonely
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        data-message="I'm having a difficult day"
+                        type="button"
+                    >
+                        <span>🌧</span>
+                        I’m having a difficult day
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        data-message="I just want to talk"
+                        type="button"
+                    >
+                        <span>💬</span>
+                        I just want to talk
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        data-message="I'm feeling anxious"
+                        type="button"
+                    >
+                        <span>🌿</span>
+                        I’m feeling anxious
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="typingIndicator"
+            class="typing-indicator hidden"
+        >
+            <div class="typing-avatar">
+                ✦
+            </div>
+
+            <div class="typing-bubble">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+
+        <form
+            id="chatForm"
+            class="input-area"
+        >
+
+            <div class="input-wrapper">
+
+                <textarea
+                    id="messageInput"
+                    rows="1"
+                    placeholder="Share what's on your mind..."
+                    autocomplete="off"
+                    maxlength="4000"
+                ></textarea>
+
+                <button
+                    id="sendButton"
+                    type="submit"
+                    aria-label="Send message"
+                >
+                    <span>↑</span>
+                </button>
+
+            </div>
+
+            <div class="input-footer">
+
+                <p class="input-note">
+                    MindCare provides supportive conversation,
+                    not professional diagnosis or treatment.
+                </p>
+
+                <span class="enter-hint">
+                    Enter ↵
+                </span>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
