@@ -4,7 +4,6 @@ const API_URL =
         ? "http://127.0.0.1:8000"
         : "https://mindcare-ai-wff8.onrender.com";
 
-
 const chatMessages =
     document.getElementById("chatMessages");
 
@@ -26,14 +25,12 @@ const riskBadge =
 const newChatButton =
     document.getElementById("newChatButton");
 
-
 let sessionId =
-    localStorage.getItem(
-        "mindcare_session_id"
-    );
+    localStorage.getItem("mindcare_session_id");
 
 let isSending = false;
 
+let userInteracting = false;
 
 async function fetchWithTimeout(
     url,
@@ -54,8 +51,7 @@ async function fetchWithTimeout(
             url,
             {
                 ...options,
-                signal:
-                    controller.signal
+                signal: controller.signal
             }
         );
     } finally {
@@ -63,6 +59,38 @@ async function fetchWithTimeout(
     }
 }
 
+function isNearBottom() {
+    const distance =
+        chatMessages.scrollHeight -
+        chatMessages.scrollTop -
+        chatMessages.clientHeight;
+
+    return distance < 140;
+}
+
+function scrollToBottom(
+    behavior = "smooth"
+) {
+    requestAnimationFrame(() => {
+        chatMessages.scrollTo({
+            top: chatMessages.scrollHeight,
+            behavior
+        });
+    });
+}
+
+function keepInputVisible() {
+    if (!messageInput) {
+        return;
+    }
+
+    setTimeout(() => {
+        messageInput.scrollIntoView({
+            block: "nearest",
+            behavior: "smooth"
+        });
+    }, 80);
+}
 
 async function createSession() {
     const response =
@@ -70,12 +98,10 @@ async function createSession() {
             `${API_URL}/session`,
             {
                 method: "POST",
-
                 headers: {
                     "Content-Type":
                         "application/json"
                 },
-
                 body: JSON.stringify({
                     user_name: "friend"
                 })
@@ -114,20 +140,21 @@ async function createSession() {
     return sessionId;
 }
 
-
 async function ensureSession() {
     if (sessionId) {
         return sessionId;
     }
 
-    return await createSession();
+    return createSession();
 }
-
 
 function addMessage(
     message,
     type
 ) {
+    const shouldScroll =
+        isNearBottom();
+
     const messageElement =
         document.createElement("div");
 
@@ -141,7 +168,7 @@ function addMessage(
         "bubble";
 
     bubble.textContent =
-        message;
+        String(message || "");
 
     messageElement.appendChild(
         bubble
@@ -151,22 +178,21 @@ function addMessage(
         messageElement
     );
 
-    chatMessages.scrollTop =
-        chatMessages.scrollHeight;
+    if (shouldScroll || type === "user") {
+        scrollToBottom(
+            "smooth"
+        );
+    }
 }
-
 
 function removeWelcome() {
     const welcome =
-        document.querySelector(
-            ".welcome"
-        );
+        document.querySelector(".welcome");
 
     if (welcome) {
         welcome.remove();
     }
 }
-
 
 function setTyping(visible) {
     typingIndicator.classList.toggle(
@@ -175,11 +201,11 @@ function setTyping(visible) {
     );
 
     if (visible) {
-        chatMessages.scrollTop =
-            chatMessages.scrollHeight;
+        scrollToBottom(
+            "smooth"
+        );
     }
 }
-
 
 function updateRiskBadge(
     riskLevel
@@ -206,7 +232,6 @@ function updateRiskBadge(
         `risk-badge risk-${level}`;
 }
 
-
 function showConnectionError(
     error
 ) {
@@ -220,7 +245,6 @@ function showConnectionError(
         "bot"
     );
 }
-
 
 async function sendMessage(
     message
@@ -242,6 +266,10 @@ async function sendMessage(
     sendButton.disabled =
         true;
 
+    sendButton.classList.add(
+        "sending"
+    );
+
     removeWelcome();
 
     addMessage(
@@ -252,98 +280,66 @@ async function sendMessage(
     messageInput.value =
         "";
 
-    messageInput.style.height =
-        "auto";
+    resizeTextarea();
 
     setTyping(true);
 
     try {
         await ensureSession();
 
-        const response =
+        let response =
             await fetchWithTimeout(
                 `${API_URL}/chat`,
                 {
                     method: "POST",
-
                     headers: {
                         "Content-Type":
                             "application/json"
                     },
+                    body: JSON.stringify({
+                        session_id:
+                            sessionId,
+                        message:
+                            cleanMessage
+                    })
+                },
+                70000
+            );
 
-                    body:
-                        JSON.stringify({
+        if (response.status === 404) {
+            localStorage.removeItem(
+                "mindcare_session_id"
+            );
+
+            sessionId = null;
+
+            await createSession();
+
+            response =
+                await fetchWithTimeout(
+                    `${API_URL}/chat`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify({
                             session_id:
                                 sessionId,
                             message:
                                 cleanMessage
                         })
-                },
-                70000
-            );
+                    },
+                    70000
+                );
+        }
 
         if (!response.ok) {
             const errorData =
                 await response
                     .json()
                     .catch(() => ({}));
-
-            if (
-                response.status === 404
-            ) {
-                localStorage.removeItem(
-                    "mindcare_session_id"
-                );
-
-                sessionId = null;
-
-                await createSession();
-
-                const retryResponse =
-                    await fetchWithTimeout(
-                        `${API_URL}/chat`,
-                        {
-                            method:
-                                "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    session_id:
-                                        sessionId,
-                                    message:
-                                        cleanMessage
-                                })
-                        },
-                        70000
-                    );
-
-                if (!retryResponse.ok) {
-                    throw new Error(
-                        "Unable to send message after creating a new session."
-                    );
-                }
-
-                const retryData =
-                    await retryResponse.json();
-
-                setTyping(false);
-
-                updateRiskBadge(
-                    retryData.risk_level
-                );
-
-                addMessage(
-                    retryData.reply,
-                    "bot"
-                );
-
-                return;
-            }
 
             throw new Error(
                 errorData.detail ||
@@ -379,10 +375,28 @@ async function sendMessage(
         sendButton.disabled =
             false;
 
-        messageInput.focus();
+        sendButton.classList.remove(
+            "sending"
+        );
+
+        requestAnimationFrame(() => {
+            messageInput.focus({
+                preventScroll: true
+            });
+        });
     }
 }
 
+function resizeTextarea() {
+    messageInput.style.height =
+        "auto";
+
+    messageInput.style.height =
+        `${Math.min(
+            messageInput.scrollHeight,
+            140
+        )}px`;
+}
 
 chatForm.addEventListener(
     "submit",
@@ -394,7 +408,6 @@ chatForm.addEventListener(
         );
     }
 );
-
 
 messageInput.addEventListener(
     "keydown",
@@ -412,41 +425,125 @@ messageInput.addEventListener(
     }
 );
 
-
 messageInput.addEventListener(
     "input",
     () => {
-        messageInput.style.height =
-            "auto";
+        resizeTextarea();
 
-        messageInput.style.height =
-            `${Math.min(
-                messageInput.scrollHeight,
-                130
-            )}px`;
+        if (
+            window.innerWidth <= 800
+        ) {
+            keepInputVisible();
+        }
     }
 );
 
+chatMessages.addEventListener(
+    "scroll",
+    () => {
+        userInteracting = true;
+
+        clearTimeout(
+            chatMessages._scrollTimer
+        );
+
+        chatMessages._scrollTimer =
+            setTimeout(() => {
+                userInteracting = false;
+            }, 120);
+    },
+    {
+        passive: true
+    }
+);
 
 function attachSuggestionHandlers() {
     document
-        .querySelectorAll(
-            ".suggestion"
-        )
+        .querySelectorAll(".suggestion")
         .forEach(button => {
-            button.onclick =
-                () => {
-                    const message =
-                        button.dataset
-                            .message;
+            button.onclick = () => {
+                const message =
+                    button.dataset.message;
 
-                    sendMessage(
-                        message
-                    );
-                };
+                sendMessage(
+                    message
+                );
+            };
         });
 }
 
+function resetChatUI() {
+    chatMessages.innerHTML = `
+        <div class="welcome">
+            <div class="welcome-icon">
+                ✦
+            </div>
+
+            <div class="welcome-eyebrow">
+                A private space to talk
+            </div>
+
+            <h2>What's on your mind?</h2>
+
+            <p>
+                You can talk openly about how you're feeling.
+                I'm here to listen.
+            </p>
+
+            <div class="suggestions">
+
+                <button
+                    class="suggestion"
+                    data-message="I feel lonely"
+                    type="button"
+                >
+                    <span>💭</span>
+                    I feel lonely
+                </button>
+
+                <button
+                    class="suggestion"
+                    data-message="I'm having a difficult day"
+                    type="button"
+                >
+                    <span>🌧</span>
+                    I'm having a difficult day
+                </button>
+
+                <button
+                    class="suggestion"
+                    data-message="I just want to talk"
+                    type="button"
+                >
+                    <span>💬</span>
+                    I just want to talk
+                </button>
+
+                <button
+                    class="suggestion"
+                    data-message="I'm feeling anxious"
+                    type="button"
+                >
+                    <span>🌿</span>
+                    I'm feeling anxious
+                </button>
+
+            </div>
+        </div>
+    `;
+
+    riskBadge.textContent =
+        "Safe";
+
+    riskBadge.className =
+        "risk-badge risk-low";
+
+    attachSuggestionHandlers();
+
+    scrollToBottom(
+        "instant"
+    );
+}
 
 newChatButton.addEventListener(
     "click",
@@ -461,53 +558,7 @@ newChatButton.addEventListener(
 
         sessionId = null;
 
-        chatMessages.innerHTML = `
-            <div class="welcome">
-                <div class="welcome-icon">
-                    ✦
-                </div>
-
-                <h2>What's on your mind?</h2>
-
-                <p>
-                    You can talk openly about how you're feeling.
-                    I'm here to listen.
-                </p>
-
-                <div class="suggestions">
-
-                    <button
-                        class="suggestion"
-                        data-message="I feel lonely"
-                    >
-                        I feel lonely
-                    </button>
-
-                    <button
-                        class="suggestion"
-                        data-message="I'm having a difficult day"
-                    >
-                        I'm having a difficult day
-                    </button>
-
-                    <button
-                        class="suggestion"
-                        data-message="I just want to talk"
-                    >
-                        I just want to talk
-                    </button>
-
-                </div>
-            </div>
-        `;
-
-        riskBadge.textContent =
-            "Safe";
-
-        riskBadge.className =
-            "risk-badge risk-low";
-
-        attachSuggestionHandlers();
+        resetChatUI();
 
         try {
             await ensureSession();
@@ -518,14 +569,59 @@ newChatButton.addEventListener(
             );
         }
 
-        messageInput.focus();
+        messageInput.focus({
+            preventScroll: true
+        });
     }
 );
 
+function handleViewportResize() {
+    document.documentElement.style.setProperty(
+        "--viewport-height",
+        `${window.visualViewport
+            ? window.visualViewport.height
+            : window.innerHeight}px`
+    );
+
+    if (
+        window.innerWidth <= 800 &&
+        document.activeElement === messageInput
+    ) {
+        keepInputVisible();
+    }
+}
+
+window.addEventListener(
+    "resize",
+    handleViewportResize,
+    {
+        passive: true
+    }
+);
+
+if (window.visualViewport) {
+    window.visualViewport.addEventListener(
+        "resize",
+        handleViewportResize,
+        {
+            passive: true
+        }
+    );
+
+    window.visualViewport.addEventListener(
+        "scroll",
+        handleViewportResize,
+        {
+            passive: true
+        }
+    );
+}
 
 window.addEventListener(
     "load",
     async () => {
+        handleViewportResize();
+
         console.log(
             "MindCare API:",
             API_URL
@@ -538,7 +634,6 @@ window.addEventListener(
                 "MindCare session ready:",
                 sessionId
             );
-
         } catch (error) {
             console.error(
                 "Session initialization failed:",
@@ -548,6 +643,29 @@ window.addEventListener(
 
         attachSuggestionHandlers();
 
-        messageInput.focus();
+        setTimeout(() => {
+            messageInput.focus({
+                preventScroll: true
+            });
+        }, 300);
+    }
+);
+
+window.addEventListener(
+    "pageshow",
+    () => {
+        handleViewportResize();
+    }
+);
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+        if (
+            document.visibilityState ===
+            "visible"
+        ) {
+            handleViewportResize();
+        }
     }
 );
