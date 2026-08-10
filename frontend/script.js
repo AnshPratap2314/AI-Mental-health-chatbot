@@ -1,130 +1,132 @@
-const API_URL = window.location.hostname === "127.0.0.1" ||
-                window.location.hostname === "localhost"
-    ? "http://127.0.0.1:8000"
-    : "https://mindcare-ai-api.onrender.com";
+const API_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://127.0.0.1:8000"
+        : "https://mindcare-ai-wff8.onrender.com";
 
-const chatMessages = document.getElementById("chatMessages");
-const chatForm = document.getElementById("chatForm");
-const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const typingIndicator = document.getElementById("typingIndicator");
-const riskBadge = document.getElementById("riskBadge");
-const newChatButton = document.getElementById("newChatButton");
 
-let sessionId = localStorage.getItem("mindcare_session_id");
+const chatMessages =
+    document.getElementById("chatMessages");
+
+const chatForm =
+    document.getElementById("chatForm");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const typingIndicator =
+    document.getElementById("typingIndicator");
+
+const riskBadge =
+    document.getElementById("riskBadge");
+
+const newChatButton =
+    document.getElementById("newChatButton");
+
+
+let sessionId =
+    localStorage.getItem(
+        "mindcare_session_id"
+    );
+
 let isSending = false;
 
-function setSession(id) {
-    sessionId = id;
 
-    if (id) {
-        localStorage.setItem(
-            "mindcare_session_id",
-            id
+async function fetchWithTimeout(
+    url,
+    options = {},
+    timeout = 70000
+) {
+    const controller =
+        new AbortController();
+
+    const timer =
+        setTimeout(
+            () => controller.abort(),
+            timeout
         );
-    } else {
-        localStorage.removeItem(
-            "mindcare_session_id"
+
+    try {
+        return await fetch(
+            url,
+            {
+                ...options,
+                signal:
+                    controller.signal
+            }
         );
+    } finally {
+        clearTimeout(timer);
     }
 }
 
+
 async function createSession() {
-    const response = await fetch(
-        `${API_URL}/session`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                user_name: "friend"
-            })
-        }
-    );
+    const response =
+        await fetchWithTimeout(
+            `${API_URL}/session`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    user_name: "friend"
+                })
+            }
+        );
 
     if (!response.ok) {
+        const error =
+            await response
+                .json()
+                .catch(() => ({}));
+
         throw new Error(
-            "Unable to create session."
+            error.detail ||
+            `Session creation failed (${response.status})`
         );
     }
 
-    const data = await response.json();
+    const data =
+        await response.json();
 
     if (!data.session_id) {
         throw new Error(
-            "Session ID was not returned."
+            "Server did not return a session ID."
         );
     }
 
-    setSession(data.session_id);
+    sessionId =
+        data.session_id;
+
+    localStorage.setItem(
+        "mindcare_session_id",
+        sessionId
+    );
 
     return sessionId;
 }
+
 
 async function ensureSession() {
     if (sessionId) {
         return sessionId;
     }
 
-    return createSession();
+    return await createSession();
 }
 
-async function apiChat(message) {
-    await ensureSession();
-
-    let response = await fetch(
-        `${API_URL}/chat`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                session_id: sessionId,
-                message
-            })
-        }
-    );
-
-    if (response.status === 404) {
-        setSession(null);
-
-        await createSession();
-
-        response = await fetch(
-            `${API_URL}/chat`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    session_id: sessionId,
-                    message
-                })
-            }
-        );
-    }
-
-    const data = await response.json()
-        .catch(() => ({}));
-
-    if (!response.ok) {
-        throw new Error(
-            typeof data.detail === "string"
-                ? data.detail
-                : "Unable to send message."
-        );
-    }
-
-    return data;
-}
 
 function addMessage(
     message,
-    type,
-    meta = null
+    type
 ) {
     const messageElement =
         document.createElement("div");
@@ -135,339 +137,252 @@ function addMessage(
     const bubble =
         document.createElement("div");
 
-    bubble.className = "bubble";
+    bubble.className =
+        "bubble";
 
     bubble.textContent =
-        message || "";
+        message;
 
     messageElement.appendChild(
         bubble
     );
 
-    if (meta) {
-        const metaElement =
-            document.createElement("div");
-
-        metaElement.className =
-            "message-meta";
-
-        metaElement.textContent =
-            meta;
-
-        messageElement.appendChild(
-            metaElement
-        );
-    }
-
     chatMessages.appendChild(
         messageElement
     );
 
-    scrollToBottom();
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
 }
 
-function addSystemMessage(message) {
-    const element =
-        document.createElement("div");
-
-    element.className =
-        "system-message";
-
-    element.textContent =
-        message;
-
-    chatMessages.appendChild(
-        element
-    );
-
-    scrollToBottom();
-}
 
 function removeWelcome() {
     const welcome =
-        document.querySelector(".welcome");
+        document.querySelector(
+            ".welcome"
+        );
 
     if (welcome) {
         welcome.remove();
     }
 }
 
-function showTyping() {
-    typingIndicator.classList.remove(
-        "hidden"
+
+function setTyping(visible) {
+    typingIndicator.classList.toggle(
+        "hidden",
+        !visible
     );
 
-    scrollToBottom();
+    if (visible) {
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+    }
 }
 
-function hideTyping() {
-    typingIndicator.classList.add(
-        "hidden"
-    );
-}
 
-function scrollToBottom() {
-    chatMessages.scrollTop =
-        chatMessages.scrollHeight;
-}
-
-function updateRiskBadge(riskLevel) {
+function updateRiskBadge(
+    riskLevel
+) {
     const level =
-        riskLevel || "low";
+        String(
+            riskLevel || "low"
+        ).toLowerCase();
 
-    const labels = {
-        low: "Safe",
-        moderate: "Support needed",
-        high: "Safety support"
-    };
-
-    riskBadge.textContent =
-        labels[level] || "Safe";
+    if (level === "high") {
+        riskBadge.textContent =
+            "Safety support";
+    } else if (
+        level === "moderate"
+    ) {
+        riskBadge.textContent =
+            "Support needed";
+    } else {
+        riskBadge.textContent =
+            "Safe";
+    }
 
     riskBadge.className =
         `risk-badge risk-${level}`;
-
-    document.body.dataset.risk =
-        level;
 }
 
-function updateConversationState(data) {
-    const analysis =
-        data.analysis || {};
 
-    const state =
-        analysis.state || {};
+function showConnectionError(
+    error
+) {
+    console.error(
+        "MindCare API error:",
+        error
+    );
 
-    const mood =
-        state.current_mood ||
-        analysis.mood ||
-        "neutral";
-
-    const topic =
-        state.last_topic ||
-        analysis.topic ||
-        "general";
-
-    const risk =
-        analysis.risk_level ||
-        state.current_risk ||
-        data.risk_level ||
-        "low";
-
-    document.body.dataset.mood =
-        mood;
-
-    document.body.dataset.topic =
-        topic;
-
-    document.body.dataset.risk =
-        risk;
-
-    updateRiskBadge(
-        risk
+    addMessage(
+        "I couldn't connect to MindCare right now. The service may be waking up. Please wait a few seconds and try again.",
+        "bot"
     );
 }
 
-function setSending(state) {
-    isSending = state;
 
-    sendButton.disabled =
-        state;
-
-    messageInput.disabled =
-        state;
-
-    sendButton.classList.toggle(
-        "sending",
-        state
-    );
-}
-
-function resizeInput() {
-    messageInput.style.height =
-        "auto";
-
-    messageInput.style.height =
-        `${Math.min(
-            messageInput.scrollHeight,
-            130
-        )}px`;
-}
-
-async function sendMessage(message) {
-    const cleaned =
-        (message || "").trim();
+async function sendMessage(
+    message
+) {
+    const cleanMessage =
+        String(
+            message || ""
+        ).trim();
 
     if (
-        !cleaned ||
+        !cleanMessage ||
         isSending
     ) {
         return;
     }
 
-    setSending(true);
+    isSending = true;
+
+    sendButton.disabled =
+        true;
 
     removeWelcome();
 
     addMessage(
-        cleaned,
+        cleanMessage,
         "user"
     );
 
-    messageInput.value = "";
+    messageInput.value =
+        "";
 
-    resizeInput();
+    messageInput.style.height =
+        "auto";
 
-    showTyping();
+    setTyping(true);
 
     try {
-        const data =
-            await apiChat(
-                cleaned
+        await ensureSession();
+
+        const response =
+            await fetchWithTimeout(
+                `${API_URL}/chat`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            session_id:
+                                sessionId,
+                            message:
+                                cleanMessage
+                        })
+                },
+                70000
             );
 
-        hideTyping();
+        if (!response.ok) {
+            const errorData =
+                await response
+                    .json()
+                    .catch(() => ({}));
 
-        const reply =
-            data.reply ||
-            data.response ||
-            data.message ||
-            "I'm here to listen.";
+            if (
+                response.status === 404
+            ) {
+                localStorage.removeItem(
+                    "mindcare_session_id"
+                );
 
-        addMessage(
-            reply,
-            "bot"
-        );
+                sessionId = null;
 
-        updateConversationState(
-            data
-        );
-    } catch (error) {
-        hideTyping();
+                await createSession();
 
-        console.error(
-            "Chat error:",
-            error
-        );
+                const retryResponse =
+                    await fetchWithTimeout(
+                        `${API_URL}/chat`,
+                        {
+                            method:
+                                "POST",
 
-        addMessage(
-            "I'm having trouble connecting right now. Please check that the MindCare server is running and try again.",
-            "bot"
-        );
-    } finally {
-        setSending(false);
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-        messageInput.focus();
+                            body:
+                                JSON.stringify({
+                                    session_id:
+                                        sessionId,
+                                    message:
+                                        cleanMessage
+                                })
+                        },
+                        70000
+                    );
 
-        scrollToBottom();
-    }
-}
-
-function attachSuggestionEvents() {
-    document
-        .querySelectorAll(".suggestion")
-        .forEach(button => {
-            button.addEventListener(
-                "click",
-                () => {
-                    sendMessage(
-                        button.dataset.message
+                if (!retryResponse.ok) {
+                    throw new Error(
+                        "Unable to send message after creating a new session."
                     );
                 }
+
+                const retryData =
+                    await retryResponse.json();
+
+                setTyping(false);
+
+                updateRiskBadge(
+                    retryData.risk_level
+                );
+
+                addMessage(
+                    retryData.reply,
+                    "bot"
+                );
+
+                return;
+            }
+
+            throw new Error(
+                errorData.detail ||
+                `Chat request failed (${response.status})`
             );
-        });
-}
+        }
 
-function renderWelcome() {
-    chatMessages.innerHTML = `
-        <div class="welcome">
-            <div class="welcome-icon">
-                ✦
-            </div>
+        const data =
+            await response.json();
 
-            <div class="welcome-eyebrow">
-                A private space to talk
-            </div>
+        setTyping(false);
 
-            <h2>What's on your mind?</h2>
-
-            <p>
-                You can talk openly about your thoughts,
-                emotions, stress, worries, or anything
-                you would like to share.
-            </p>
-
-            <div class="suggestions">
-                <button
-                    class="suggestion"
-                    data-message="I feel lonely"
-                >
-                    <span>💭</span>
-                    I feel lonely
-                </button>
-
-                <button
-                    class="suggestion"
-                    data-message="I'm having a difficult day"
-                >
-                    <span>🌧</span>
-                    I'm having a difficult day
-                </button>
-
-                <button
-                    class="suggestion"
-                    data-message="I just want to talk"
-                >
-                    <span>💬</span>
-                    I just want to talk
-                </button>
-
-                <button
-                    class="suggestion"
-                    data-message="I'm feeling anxious"
-                >
-                    <span>🌿</span>
-                    I'm feeling anxious
-                </button>
-            </div>
-        </div>
-    `;
-
-    attachSuggestionEvents();
-
-    updateRiskBadge(
-        "low"
-    );
-}
-
-async function startNewChat() {
-    if (isSending) {
-        return;
-    }
-
-    setSession(null);
-
-    renderWelcome();
-
-    try {
-        await createSession();
-
-        addSystemMessage(
-            "New private conversation started."
+        updateRiskBadge(
+            data.risk_level
         );
+
+        addMessage(
+            data.reply ||
+            "I'm here to listen. Tell me more about what's happening.",
+            "bot"
+        );
+
     } catch (error) {
-        console.error(
-            "New session error:",
+        setTyping(false);
+
+        showConnectionError(
             error
         );
 
-        addSystemMessage(
-            "Unable to create a new session. Please try again."
-        );
-    }
+    } finally {
+        isSending = false;
 
-    messageInput.focus();
+        sendButton.disabled =
+            false;
+
+        messageInput.focus();
+    }
 }
+
 
 chatForm.addEventListener(
     "submit",
@@ -479,6 +394,7 @@ chatForm.addEventListener(
         );
     }
 );
+
 
 messageInput.addEventListener(
     "keydown",
@@ -496,29 +412,141 @@ messageInput.addEventListener(
     }
 );
 
+
 messageInput.addEventListener(
     "input",
-    resizeInput
+    () => {
+        messageInput.style.height =
+            "auto";
+
+        messageInput.style.height =
+            `${Math.min(
+                messageInput.scrollHeight,
+                130
+            )}px`;
+    }
 );
+
+
+function attachSuggestionHandlers() {
+    document
+        .querySelectorAll(
+            ".suggestion"
+        )
+        .forEach(button => {
+            button.onclick =
+                () => {
+                    const message =
+                        button.dataset
+                            .message;
+
+                    sendMessage(
+                        message
+                    );
+                };
+        });
+}
+
 
 newChatButton.addEventListener(
     "click",
-    startNewChat
+    async () => {
+        if (isSending) {
+            return;
+        }
+
+        localStorage.removeItem(
+            "mindcare_session_id"
+        );
+
+        sessionId = null;
+
+        chatMessages.innerHTML = `
+            <div class="welcome">
+                <div class="welcome-icon">
+                    ✦
+                </div>
+
+                <h2>What's on your mind?</h2>
+
+                <p>
+                    You can talk openly about how you're feeling.
+                    I'm here to listen.
+                </p>
+
+                <div class="suggestions">
+
+                    <button
+                        class="suggestion"
+                        data-message="I feel lonely"
+                    >
+                        I feel lonely
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        data-message="I'm having a difficult day"
+                    >
+                        I'm having a difficult day
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        data-message="I just want to talk"
+                    >
+                        I just want to talk
+                    </button>
+
+                </div>
+            </div>
+        `;
+
+        riskBadge.textContent =
+            "Safe";
+
+        riskBadge.className =
+            "risk-badge risk-low";
+
+        attachSuggestionHandlers();
+
+        try {
+            await ensureSession();
+        } catch (error) {
+            console.error(
+                "Session creation failed:",
+                error
+            );
+        }
+
+        messageInput.focus();
+    }
 );
+
 
 window.addEventListener(
     "load",
     async () => {
-        attachSuggestionEvents();
+        console.log(
+            "MindCare API:",
+            API_URL
+        );
 
         try {
             await ensureSession();
+
+            console.log(
+                "MindCare session ready:",
+                sessionId
+            );
+
         } catch (error) {
             console.error(
                 "Session initialization failed:",
                 error
             );
         }
+
+        attachSuggestionHandlers();
 
         messageInput.focus();
     }
