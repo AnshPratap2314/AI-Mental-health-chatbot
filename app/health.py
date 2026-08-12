@@ -1,11 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict
 
 
 class HealthManager:
 
     def __init__(self):
-        self.started_at = datetime.utcnow()
+        self.started_at = datetime.now(timezone.utc)
 
     def check(
         self,
@@ -14,7 +14,7 @@ class HealthManager:
 
         result = {
             "status": "healthy",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "service": "mindcare",
             "python": True,
             "behavior_engine": behavior_engine is not None

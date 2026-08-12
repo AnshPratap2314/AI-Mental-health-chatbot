@@ -1,5 +1,10 @@
 from typing import Any, Dict, Optional
 
+# Default, verified as of the time this was written. Re-check periodically
+# against https://findahelpline.com since helpline numbers can change.
+_DEFAULT_EMERGENCY_NUMBER = "112"
+_DEFAULT_CRISIS_NUMBER = "14416 (Tele-MANAS, 24/7 free govt. helpline)"
+
 
 class SafetySupport:
 
@@ -10,8 +15,8 @@ class SafetySupport:
         crisis_number: Optional[str] = None
     ):
         self.country = (country or "").strip()
-        self.emergency_number = emergency_number
-        self.crisis_number = crisis_number
+        self.emergency_number = emergency_number or _DEFAULT_EMERGENCY_NUMBER
+        self.crisis_number = crisis_number or _DEFAULT_CRISIS_NUMBER
 
     def build_support(
         self,

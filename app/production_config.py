@@ -37,6 +37,24 @@ class ProductionConfig:
         "false"
     ).lower() == "true"
 
+    # How long (seconds) an idle session is kept before eviction.
+    # Default: 2 hours. Set to 0 to disable TTL-based eviction.
+    SESSION_TTL_SECONDS = int(
+        os.getenv(
+            "SESSION_TTL_SECONDS",
+            "7200"
+        )
+    )
+
+    # Max simultaneous in-memory sessions before the oldest are evicted.
+    # Set to 0 to disable the cap.
+    MAX_SESSIONS = int(
+        os.getenv(
+            "MAX_SESSIONS",
+            "1000"
+        )
+    )
+
     @classmethod
     def is_production(cls):
 

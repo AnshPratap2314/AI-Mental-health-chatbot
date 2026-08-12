@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 
@@ -23,7 +23,7 @@ class SafetyAudit:
         signals = signals or {}
 
         record = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "risk_level": risk_level,
             "action": action,
             "mode": mode,

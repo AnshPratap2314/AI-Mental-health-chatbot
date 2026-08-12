@@ -76,6 +76,15 @@ class SafetyEngine:
         policy: Dict[str, Any]
     ) -> Dict[str, Any]:
 
+        resources = None
+
+        try:
+            from app.safety_resources import SafetyResources
+
+            resources = SafetyResources().build_crisis_guidance()
+        except Exception:
+            resources = None
+
         return {
             "risk_level": "high",
             "policy": policy,
@@ -87,12 +96,15 @@ class SafetyEngine:
                     False
                 )
             ),
+            "resources": resources,
             "emergency_guidance": (
                 "If you may act on these thoughts "
                 "or you are in immediate danger, "
                 "move toward a safe person or place "
                 "and contact your local emergency "
-                "services or an appropriate crisis service."
+                "services or an appropriate crisis service. "
+                "Find A Helpline (findahelpline.com) can connect "
+                "you to a free, confidential crisis line right now."
             ),
             "human_support_guidance": (
                 "Please consider telling someone you "

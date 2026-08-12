@@ -1,42 +1,39 @@
-import os
+from pathlib import Path
 from typing import Optional
+
+import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from app.session_manager import SessionManager
 
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "2.0.0"
 
-DEFAULT_FRONTEND_URL = (
-    "https://ai-mental-health-chatbot-nm2r.onrender.com"
-)
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = BASE_DIR / "frontend"
 
-FRONTEND_URL = os.getenv(
-    "FRONTEND_URL",
-    DEFAULT_FRONTEND_URL
-).strip().rstrip("/")
-
-ALLOWED_ORIGINS = [
+LOCAL_ORIGINS = [
     "http://localhost:5500",
     "http://127.0.0.1:5500",
-    FRONTEND_URL,
 ]
 
-# Remove empty or duplicate origins
+FRONTEND_URL = os.getenv("FRONTEND_URL", "").strip().rstrip("/")
+
 ALLOWED_ORIGINS = list(
     dict.fromkeys(
         origin
-        for origin in ALLOWED_ORIGINS
+        for origin in LOCAL_ORIGINS + ([FRONTEND_URL] if FRONTEND_URL else [])
         if origin
     )
 )
 
 
 app = FastAPI(
-    title="Ethical Mental Health Chatbot",
+    title="MindCare AI",
     description="MindCare AI supportive mental health chatbot API",
     version=APP_VERSION,
 )
@@ -72,23 +69,8 @@ class ChatRequest(BaseModel):
     message: str
 
 
-@app.get("/")
-def home():
-    return {
-        "message": "Mental Health Chatbot API is running.",
-        "version": APP_VERSION,
-        "status": "healthy",
-        "service": "mindcare-api",
-    }
-
-
 @app.get("/health")
 def health():
-    """
-    Lightweight health endpoint.
-
-    Do not initialize the chatbot/session manager here.
-    """
     return {
         "status": "healthy",
         "service": "mindcare-api",
@@ -101,29 +83,26 @@ def health_live():
     return {
         "status": "alive",
         "service": "mindcare-api",
+        "version": APP_VERSION,
     }
 
 
 @app.get("/health/ready")
 def health_ready():
-    """
-    Readiness endpoint.
-
-    Unlike /health, this verifies that the session manager
-    can actually be initialized.
-    """
     try:
         get_session_manager()
 
         return {
             "status": "ready",
             "service": "mindcare-api",
+            "version": APP_VERSION,
         }
 
     except Exception as exc:
         return {
             "status": "degraded",
             "service": "mindcare-api",
+            "version": APP_VERSION,
             "error": str(exc),
         }
 
@@ -256,32 +235,26 @@ def chat_endpoint(
 
         return {
             "session_id": session_id,
-
             "mode": response.get(
                 "mode",
                 "supportive",
             ),
-
             "risk_level": analysis.get(
                 "risk_level",
                 "low",
             ),
-
             "risk_score": analysis.get(
                 "risk_score",
                 0.0,
             ),
-
             "signals": analysis.get(
                 "signals",
                 {},
             ),
-
             "context": analysis.get(
                 "context",
                 {},
             ),
-
             "reply": response.get(
                 "reply",
                 "I'm here to listen. Tell me what's on your mind.",
@@ -304,14 +277,30 @@ def api_status():
         "service": "MindCare AI",
         "api_version": APP_VERSION,
         "status": "online",
-        "frontend": FRONTEND_URL,
+        "frontend": "same-origin",
         "endpoints": {
-            "home": "/",
             "health": "/health",
             "live": "/health/live",
             "ready": "/health/ready",
             "create_session": "/session",
             "chat": "/chat",
             "delete_session": "/session/{session_id}",
+            "status": "/api/status",
         },
     }
+
+
+if not FRONTEND_DIR.exists():
+    raise RuntimeError(
+        f"Frontend directory not found: {FRONTEND_DIR}"
+    )
+
+
+app.mount(
+    "/",
+    StaticFiles(
+        directory=FRONTEND_DIR,
+        html=True,
+    ),
+    name="frontend",
+)

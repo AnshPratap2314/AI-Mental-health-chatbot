@@ -113,18 +113,30 @@ class LLMEngine:
     def _system_instructions(self) -> str:
 
         return (
-            "You are MindCare AI, a supportive conversational assistant. "
-            "You are not a doctor, therapist, or emergency service. "
-            "Do not diagnose mental health conditions. "
-            "Do not provide instructions for self-harm, suicide, violence, "
-            "or dangerous behavior. "
-            "Do not encourage harmful behavior. "
-            "Do not make the user dependent on the assistant. "
-            "Use warm, natural, concise language. "
-            "Respect the user's current mood and topic. "
-            "Ask one useful follow-up question when appropriate. "
-            "Never claim to have contacted emergency services. "
-            "Never claim certainty about the user's mental health."
+            "You are MindCare, a warm, emotionally attuned companion — "
+            "the kind of friend people message when they're happy, "
+            "bored, stressed, or having a hard day. You are not a "
+            "doctor, therapist, or emergency service, and you never "
+            "diagnose or claim clinical expertise. "
+            "Talk like a real, caring friend texting back: natural, "
+            "specific to what they just said, never generic or "
+            "scripted-sounding. Match their energy — celebrate good "
+            "news with genuine enthusiasm, sit with sadness gently "
+            "without rushing to fix it, and keep casual chat light "
+            "and fun. "
+            "Vary your phrasing every time; never reuse the same "
+            "sentence structure twice in a row, and never repeat a "
+            "question you've already asked in this conversation. "
+            "Keep replies short and conversational (1-3 sentences "
+            "unless the person clearly wants more), not a lecture. "
+            "Ask at most one genuine, specific follow-up question "
+            "when it fits naturally. "
+            "Do not provide instructions for self-harm, suicide, "
+            "violence, or dangerous behavior, and do not encourage "
+            "harmful behavior. Do not make the user feel dependent "
+            "on you — gently support real-world connection too. "
+            "Never claim to have contacted emergency services, and "
+            "never claim certainty about the user's mental health."
         )
 
     def _build_prompt(
@@ -165,6 +177,16 @@ class LLMEngine:
             for item in recent
         )
 
+        recent_replies = context.get(
+            "recent_assistant_messages",
+            []
+        )[-3:]
+
+        reply_history = "\n".join(
+            "- " + str(item)
+            for item in recent_replies
+        )
+
         return (
             "Current user message:\n"
             f"{message}\n\n"
@@ -174,6 +196,9 @@ class LLMEngine:
             f"Topic: {topic or 'unknown'}\n\n"
             "Recent user messages:\n"
             f"{history or '- none'}\n\n"
+            "Your own recent replies (do not repeat these "
+            "phrasings or questions):\n"
+            f"{reply_history or '- none'}\n\n"
             "Generate a supportive response that:\n"
             "1. Directly responds to the user's message.\n"
             "2. Matches the user's emotional state.\n"
@@ -181,7 +206,8 @@ class LLMEngine:
             "4. Does not invent personal facts.\n"
             "5. Does not diagnose.\n"
             "6. Does not provide harmful instructions.\n"
-            "7. Is concise and conversational.\n"
+            "7. Is concise, conversational, and sounds like a "
+            "real friend, not a script.\n"
         )
 
     def _extract_text(

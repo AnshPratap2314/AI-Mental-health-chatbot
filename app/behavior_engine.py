@@ -115,7 +115,7 @@ class BehaviorEngine:
             except TypeError:
                 try:
                     self.response_engine = ResponseEngine(
-                        user_name=self.user_name
+                            user_name=self.user_name
                     )
                 except Exception:
                     self.response_engine = None
@@ -180,6 +180,8 @@ class BehaviorEngine:
             except Exception:
                 pass
 
+        self._store_reply(reply)
+
         result = {
             "reply": reply,
             "response": reply,
@@ -200,7 +202,7 @@ class BehaviorEngine:
             if crisis_result.get("immediate_guidance", False):
                 try:
                     result["resources"] = (
-                        self.safety_resources.build_crisis_guidance()
+                    self.safety_resources.build_crisis_guidance()
                     )
                 except Exception:
                     pass
@@ -222,7 +224,8 @@ class BehaviorEngine:
             "mode": "normal",
             "topic": state.get("last_topic"),
             "topic_detected": False,
-            "signals": {},
+            "intent": "conversation",
+            "signals": {"advice_request": False},
             "context": self._build_context(),
             "state": state
         }
@@ -311,6 +314,14 @@ class BehaviorEngine:
             signals
         )
 
+        intent = (
+            "advice"
+            if signals.get("advice_request")
+            else "crisis"
+            if signals.get("intent")
+            else "conversation"
+        )
+
         return {
             "message": message,
             "risk_level": risk_level,
@@ -318,6 +329,7 @@ class BehaviorEngine:
             "context_risk_boost": context_risk_boost,
             "mood": mood,
             "mode": mode,
+            "intent": intent,
             "topic": topic,
             "detected_topic": detected_topic,
             "topic_detected": detected_topic is not None,
@@ -479,14 +491,24 @@ class BehaviorEngine:
                 "i think i will",
                 "i'm going to do it",
                 "i am going to do it",
-                "i want to do it",
-                "i need help",
-                "help me",
+                "i want to do it"
+            ]
+        )
+
+        advice_request = self._contains_any(
+            text,
+            [
                 "what should i do",
                 "what can i do",
-                "i don't know what to do",
-                "i need someone",
-                "i need support"
+                "what do i do",
+                "what should i say",
+                "what can i say",
+                "how should i handle this",
+                "how do i handle this",
+                "what would you do",
+                "any advice",
+                "give me advice",
+                "i need advice"
             ]
         )
 
@@ -530,9 +552,7 @@ class BehaviorEngine:
                 "go on",
                 "what else",
                 "more about that",
-                "and then",
-                "what should i do",
-                "what can i do"
+                "and then"
             ]
         )
 
@@ -553,6 +573,7 @@ class BehaviorEngine:
             "worthlessness": worthlessness,
             "self_harm": self_harm,
             "intent": intent,
+            "advice_request": advice_request,
             "temporal": temporal,
             "protective": protective,
             "negated": negated,
@@ -1009,29 +1030,36 @@ class BehaviorEngine:
             "detected_topic"
         )
 
+        intent = analysis.get(
+            "intent",
+            "conversation"
+        )
+
         if detected_topic is None:
             self.context_state.record_follow_up(
                 mood=mood,
-                risk_level=risk_level
+                risk_level=risk_level,
+                intent=intent
             )
         else:
             self.context_state.update(
                 mood=mood,
                 risk_level=risk_level,
-                topic=detected_topic
+                topic=detected_topic,
+                intent=intent
             )
 
         if self.user_profile is not None:
             try:
                 self.user_profile.add_topic(
-                    self.context_state.last_topic
+                self.context_state.last_topic
                 )
             except Exception:
                 pass
 
             try:
                 self.user_profile.add_mood(
-                    self.context_state.current_mood
+                self.context_state.current_mood
                 )
             except Exception:
                 pass
@@ -1042,10 +1070,17 @@ class BehaviorEngine:
             for item in self.memory[-self.max_memory:]
         ]
 
+        replies = [
+            item["reply"]
+            for item in self.memory[-self.max_memory:]
+            if item.get("reply")
+        ]
+
         return {
             "has_previous_context": bool(messages),
             "message_count": len(messages),
             "recent_user_messages": messages,
+            "recent_assistant_messages": replies,
             "state": self.get_context_state(),
             "user_profile": self._get_profile()
         }
@@ -1143,6 +1178,16 @@ class BehaviorEngine:
                 -self.max_memory:
             ]
 
+    def _store_reply(
+        self,
+        reply: Any
+    ):
+        if not reply or not self.memory:
+            return
+
+        text = reply if isinstance(reply, str) else str(reply)
+        self.memory[-1]["reply"] = text
+
     def _generate_response(
         self,
         message: str,
@@ -1208,6 +1253,12 @@ class BehaviorEngine:
             return self._anxiety_response(topic)
 
         if mode == "supportive":
+            if analysis.get("intent") == "advice":
+                return self._advice_response(
+                    message,
+                    topic,
+                    context
+                )
             return self._intent_response(topic)
 
         if mode == "contextual":
@@ -1375,6 +1426,90 @@ class BehaviorEngine:
             "at a time. What is worrying you the most?"
         )
 
+    def _advice_response(
+        self,
+        message: str,
+        topic: Optional[str],
+        context: Dict[str, Any]
+    ) -> str:
+        recent_messages = context.get(
+            "recent_user_messages",
+            []
+        )
+
+        previous = (
+            recent_messages[-1]
+            if recent_messages
+            else ""
+        ).lower()
+
+        if topic == "friends" or any(
+            phrase in previous
+            for phrase in [
+                "friend",
+                "friends",
+                "invite me",
+                "left me out",
+                "excluded me",
+                "went out without me"
+            ]
+        ):
+            if any(
+                phrase in previous
+                for phrase in [
+                    "didn't invite me",
+                    "did not invite me",
+                    "went out without me",
+                    "left me out",
+                    "excluded me"
+                ]
+            ):
+                return (
+                    "I'd avoid assuming the worst while you're still hurt. "
+                    "If you want clarity, ask one of them calmly what happened "
+                    "and give them room to explain. Their response will tell "
+                    "you more than guessing will. If this keeps happening, "
+                    "then it may be worth reconsidering how much effort you "
+                    "want to put into that friendship."
+                )
+
+            return (
+                "If you're unsure what to do with your friends, start with "
+                "the smallest honest step: talk to the person you trust most "
+                "and explain how the situation made you feel without blaming "
+                "them. See how they respond before deciding what to do next."
+            )
+
+        if topic == "college":
+            return (
+                "Start with the part of college that needs attention first. "
+                "Pick one concrete problem, decide what you can control today, "
+                "and leave the rest for later. If you tell me what happened, "
+                "I can help you think through the next step."
+            )
+
+        if topic == "work":
+            return (
+                "I'd break the situation into what you can control and what "
+                "you can't. Handle the most immediate task first, then decide "
+                "whether a conversation with the relevant person would help. "
+                "If you tell me what happened, we can work out what to say."
+            )
+
+        if topic == "relationships":
+            return (
+                "Before making a big decision, give yourself a little space "
+                "and separate what you know from what you're assuming. Then "
+                "have a calm conversation about the specific issue rather "
+                "than trying to solve the whole relationship at once."
+            )
+
+        return (
+            "I'd start with the smallest next step instead of trying to solve "
+            "everything at once. Tell me what happened, and I can help you "
+            "compare a couple of realistic options."
+        )
+
     def _intent_response(
         self,
         topic: Optional[str]
@@ -1441,58 +1576,81 @@ class BehaviorEngine:
         topic: Optional[str],
         context: Dict[str, Any]
     ) -> str:
+        streak = context.get(
+            "state",
+            {}
+        ).get(
+            "same_topic_streak",
+            0
+        )
 
         if topic == "college":
-            return (
-                "I'm following your college situation. "
-                "Tell me a little more about your exams, "
-                "studies, or what has been difficult."
-            )
+            options = [
+                "What's going on with college today?",
+                "Is the main issue the workload, exams, or something outside academics?",
+                "Let's narrow it down. What's the one college problem you'd most like to change right now?"
+            ]
+            return options[min(max(streak, 0), len(options) - 1)]
 
         if topic == "work":
-            return (
-                "I'm following your work and career situation. "
-                "Tell me a little more about your internship, "
-                "interview, or what has been difficult."
-            )
+            options = [
+                "What's been going on with work or your career?",
+                "Is the pressure coming more from the work itself, people around you, or uncertainty about what's next?",
+                "Let's focus on one thing. What's the biggest work or career problem on your mind today?"
+            ]
+            return options[min(max(streak, 0), len(options) - 1)]
 
-        if topic == "future":
-            return (
-                "I'm following what you've shared about your "
-                "future. Tell me a little more about what's "
-                "on your mind."
-            )
-
-        if topic == "relationships":
-            return (
-                "I'm following what you've shared about your "
-                "relationship situation. Tell me a little "
-                "more about what happened."
-            )
-
-        if topic == "family":
-            return (
-                "I'm following what you've shared about your "
-                "family situation. Tell me a little more."
-            )
+        if topic == "friends":
+            options = [
+                "I'm listening. What's been happening with your friends that has been sitting with you?",
+                "It sounds like there's something about this friendship situation you haven't quite made sense of yet. What part keeps replaying in your head?",
+                "We can look at this from either side: how it made you feel, or what you might want to do next. Which would help more right now?"
+            ]
+            return options[min(max(streak, 0), len(options) - 1)]
 
         if topic:
-            return (
-                f"I'm following your {topic} situation. "
-                "Tell me a little more about what's happening."
-            )
+            options = [
+                f"What's been happening with your {self._topic_word(topic)}?",
+                f"What part of your {self._topic_word(topic)} situation is affecting you most?",
+                "Would it help more to talk through what happened, or think about what you could do next?"
+            ]
+            return options[min(max(streak, 0), len(options) - 1)]
 
         if context.get(
             "has_previous_context",
             False
         ):
             return (
-                "I'm following what you've shared. "
-                "Tell me a little more about what is happening."
+                "I'm following you. Rather than making you repeat yourself, "
+                "what do you think is the main thing you need from this "
+                "conversation right now?"
             )
 
         return (
-            "I'm here to listen. Tell me what's on your mind."
+            "I'm here to listen. What's been on your mind today?"
+        )
+
+    def _topic_word(
+        self,
+        topic: Optional[str]
+    ) -> str:
+
+        words = {
+            "college": "college",
+            "work": "your work",
+            "future": "your future",
+            "relationships": "your relationship",
+            "family": "your family",
+            "health": "your health",
+            "finance": "your financial",
+            "friends": "your friendship",
+            "social": "your social",
+            "personal": "your personal"
+        }
+
+        return words.get(
+            topic,
+            str(topic)
         )
 
     def _greeting_response(self) -> str:
@@ -1508,20 +1666,44 @@ class BehaviorEngine:
         )
 
     def _crisis_response(self) -> str:
+        resources_line = ""
+
+        if self.safety_resources is not None:
+            try:
+                resources_line = self.safety_resources.format_for_reply()
+            except Exception:
+                resources_line = ""
+
+        if not resources_line:
+            resources_line = (
+                "Find A Helpline (findahelpline.com) can connect you to a "
+                "free, confidential crisis line in your area."
+            )
+
         return (
-            "I'm really sorry you're going through this. "
-            "Your safety is important. If you think you might "
-            "act on these thoughts or you're in immediate danger, "
-            "please move toward a safe person or place and "
-            "contact your local emergency services or a qualified "
-            "crisis service. You can keep talking to me while "
-            "you reach human support."
+            "I'm really glad you told me this, and I'm really sorry "
+            "you're carrying this much pain. Your safety is important, "
+            "and this isn't something you have to get through alone. "
+            f"{resources_line} "
+            "If you feel you might act on these thoughts or you're in "
+            "immediate danger, please reach out to one of those right now, "
+            "or move toward a trusted person nearby. "
+            "I'm still here, and you can keep talking to me while you "
+            "reach out for that support."
         )
 
     def _build_safety_response(
         self,
         risk_level: str
     ) -> Dict[str, Any]:
+
+        resources = None
+
+        if self.safety_resources is not None:
+            try:
+                resources = self.safety_resources.build_crisis_guidance()
+            except Exception:
+                resources = None
 
         return {
             "risk_level": risk_level,
@@ -1533,9 +1715,12 @@ class BehaviorEngine:
             },
             "require_safety_response": True,
             "requires_human_support": True,
+            "resources": resources,
             "emergency_guidance": (
                 "If there is immediate danger, contact local "
-                "emergency services or an appropriate crisis service."
+                "emergency services or an appropriate crisis service. "
+                "Find A Helpline (findahelpline.com) can connect you "
+                "to a free, confidential crisis line right now."
             ),
             "do_not": [
                 "Do not provide instructions for self-harm.",
