@@ -1,8 +1,10 @@
-const API_URL =
-    window.location.hostname === "localhost" ||
+const API_URL = String(
+    window.MINDCARE_API_URL ||
+    (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
         ? "http://127.0.0.1:8000"
-        : window.location.origin;
+        : "https://mindcare-ai-wff8.onrender.com")
+).replace(/\/$/, "");
 
 const chatMessages =
     document.getElementById("chatMessages");
@@ -21,6 +23,12 @@ const typingIndicator =
 
 const riskBadge =
     document.getElementById("riskBadge");
+
+const connectionStatus =
+    document.getElementById("connectionStatus");
+
+const connectionStatusText =
+    document.getElementById("connectionStatusText");
 
 const newChatButton =
     document.getElementById("newChatButton");
@@ -92,6 +100,39 @@ function keepInputVisible() {
     }, 80);
 }
 
+function setConnectionStatus(online, text) {
+    if (connectionStatus) {
+        connectionStatus.classList.toggle("offline", !online);
+    }
+
+    if (connectionStatusText) {
+        connectionStatusText.textContent = text;
+    }
+}
+
+async function checkBackendHealth() {
+    setConnectionStatus(false, "Checking connection...");
+
+    try {
+        const response = await fetchWithTimeout(
+            `${API_URL}/health`,
+            { method: "GET" },
+            8000
+        );
+
+        if (!response.ok) {
+            throw new Error(`Health check failed (${response.status})`);
+        }
+
+        setConnectionStatus(true, "Online & ready to listen");
+        return true;
+    } catch (error) {
+        console.warn("MindCare health check failed:", error);
+        setConnectionStatus(false, "Offline — retrying when you send");
+        return false;
+    }
+}
+
 async function createSession() {
     const response =
         await fetchWithTimeout(
@@ -131,6 +172,8 @@ async function createSession() {
 
     sessionId =
         data.session_id;
+
+    setConnectionStatus(true, "Online & ready to listen");
 
     localStorage.setItem(
         "mindcare_session_id",
@@ -239,6 +282,8 @@ function showConnectionError(
         "MindCare API error:",
         error
     );
+
+    setConnectionStatus(false, "Offline — please try again");
 
     addMessage(
         "I couldn't connect to MindCare right now. The service may be waking up. Please wait a few seconds and try again.",
@@ -350,6 +395,7 @@ async function sendMessage(
         const data =
             await response.json();
 
+        setConnectionStatus(true, "Online & ready to listen");
         setTyping(false);
 
         updateRiskBadge(
@@ -552,6 +598,20 @@ newChatButton.addEventListener(
             return;
         }
 
+        const oldSessionId = sessionId;
+
+        if (oldSessionId) {
+            try {
+                await fetchWithTimeout(
+                    `${API_URL}/session/${encodeURIComponent(oldSessionId)}`,
+                    { method: "DELETE" },
+                    8000
+                );
+            } catch (error) {
+                console.warn("Could not delete previous session:", error);
+            }
+        }
+
         localStorage.removeItem(
             "mindcare_session_id"
         );
@@ -630,10 +690,7 @@ window.addEventListener(
         try {
             await ensureSession();
 
-            console.log(
-                "MindCare session ready:",
-                sessionId
-            );
+            console.log("MindCare session ready.");
         } catch (error) {
             console.error(
                 "Session initialization failed:",
@@ -642,6 +699,7 @@ window.addEventListener(
         }
 
         attachSuggestionHandlers();
+        await checkBackendHealth();
 
         setTimeout(() => {
             messageInput.focus({

@@ -115,7 +115,7 @@ class BehaviorEngine:
             except TypeError:
                 try:
                     self.response_engine = ResponseEngine(
-                            user_name=self.user_name
+                        user_name=self.user_name
                     )
                 except Exception:
                     self.response_engine = None
@@ -180,8 +180,6 @@ class BehaviorEngine:
             except Exception:
                 pass
 
-        self._store_reply(reply)
-
         result = {
             "reply": reply,
             "response": reply,
@@ -202,7 +200,7 @@ class BehaviorEngine:
             if crisis_result.get("immediate_guidance", False):
                 try:
                     result["resources"] = (
-                    self.safety_resources.build_crisis_guidance()
+                        self.safety_resources.build_crisis_guidance()
                     )
                 except Exception:
                     pass
@@ -224,8 +222,7 @@ class BehaviorEngine:
             "mode": "normal",
             "topic": state.get("last_topic"),
             "topic_detected": False,
-            "intent": "conversation",
-            "signals": {"advice_request": False},
+            "signals": {},
             "context": self._build_context(),
             "state": state
         }
@@ -314,12 +311,11 @@ class BehaviorEngine:
             signals
         )
 
-        intent = (
-            "advice"
-            if signals.get("advice_request")
-            else "crisis"
-            if signals.get("intent")
-            else "conversation"
+        previous_mood = self.context_state.current_mood or "unknown"
+        mood_intensity = self._estimate_mood_intensity(
+            mood=mood,
+            signals=signals,
+            risk_score=risk_score,
         )
 
         return {
@@ -328,8 +324,10 @@ class BehaviorEngine:
             "risk_score": risk_score,
             "context_risk_boost": context_risk_boost,
             "mood": mood,
+            "mood_intensity": mood_intensity,
+            "mood_previous": previous_mood,
+            "mood_changed": previous_mood not in {"unknown", mood},
             "mode": mode,
-            "intent": intent,
             "topic": topic,
             "detected_topic": detected_topic,
             "topic_detected": detected_topic is not None,
@@ -338,11 +336,47 @@ class BehaviorEngine:
             "context": context
         }
 
+    def _estimate_mood_intensity(
+        self,
+        mood: str,
+        signals: Dict[str, bool],
+        risk_score: float,
+    ) -> str:
+        """Estimate emotional intensity for response style, not diagnosis."""
+        strong = bool(
+            signals.get("crisis")
+            or signals.get("self_harm")
+            or signals.get("plan")
+            or signals.get("hopelessness")
+        )
+        moderate = bool(
+            signals.get("serious")
+            or signals.get("worthlessness")
+            or signals.get("anxiety")
+            or signals.get("sad")
+            or risk_score >= 0.20
+        )
+
+        if strong:
+            return "high"
+        if moderate:
+            return "moderate"
+        if mood == "positive":
+            return "positive"
+        return "low"
+
     def _detect_signals(self, text: str) -> Dict[str, bool]:
-        negated = self._detect_negation(text)
+        """Detect safety-relevant signals conservatively.
+
+        Important: a negation anywhere in a sentence must not erase an
+        explicit suicidal/self-harm statement. For example, "I am suicidal
+        but I won't act" still contains suicidal ideation and should receive
+        a safety-oriented response.
+        """
+        normalized = self._normalize(text)
 
         contextual_suicide = self._contains_any(
-            text,
+            normalized,
             [
                 "movie about suicide",
                 "film about suicide",
@@ -354,48 +388,65 @@ class BehaviorEngine:
                 "article about suicide",
                 "story about suicide",
                 "documentary about suicide",
-                "documentary on suicide"
-            ]
+                "documentary on suicide",
+            ],
         )
 
-        crisis = self._contains_any(
-            text,
-            [
-                "suicide",
-                "kill myself",
-                "killing myself",
-                "end my life",
-                "ending my life",
-                "take my own life",
-                "taking my own life",
-                "want to die",
-                "i want to die",
-                "wish i was dead",
-                "wish i were dead",
-                "better off dead",
-                "don't want to live",
-                "do not want to live",
-                "can't live anymore",
-                "cannot live anymore"
-            ]
-        )
+        # Explicit ideation / self-harm language. These are intentionally
+        # broader than the old keyword list so passive and conversational
+        # formulations are not missed.
+        crisis_patterns = [
+            "suicidal",
+            "suicidal thoughts",
+            "thinking about suicide",
+            "thinking of suicide",
+            "thinking about killing myself",
+            "thinking of killing myself",
+            "thinking about ending my life",
+            "thinking of ending my life",
+            "kill myself",
+            "killing myself",
+            "end my life",
+            "ending my life",
+            "take my own life",
+            "taking my own life",
+            "want to die",
+            "wanna die",
+            "wish i was dead",
+            "wish i were dead",
+            "wish i could die",
+            "better off dead",
+            "no reason to live",
+            "no reason for me to live",
+            "no point in living",
+            "life is not worth living",
+            "life isn't worth living",
+            "don't want to live anymore",
+            "do not want to live anymore",
+            "don't want to be alive",
+            "do not want to be alive",
+            "can't go on living",
+            "cannot go on living",
+        ]
 
-        self_harm = self._contains_any(
-            text,
-            [
-                "hurt myself",
-                "harm myself",
-                "self harm",
-                "self-harm",
-                "cut myself",
-                "cutting myself",
-                "injure myself",
-                "injuring myself"
-            ]
-        )
+        self_harm_patterns = [
+            "hurt myself",
+            "harm myself",
+            "self harm",
+            "self-harm",
+            "cut myself",
+            "cutting myself",
+            "injure myself",
+            "injuring myself",
+            "burn myself",
+            "hit myself",
+        ]
+
+        crisis = self._contains_any(normalized, crisis_patterns)
+        self_harm = self._contains_any(normalized, self_harm_patterns)
 
         serious = self._contains_any(
-            text,
+            normalized,
             [
                 "hopeless",
                 "worthless",
@@ -408,12 +459,13 @@ class BehaviorEngine:
                 "falling apart",
                 "feel trapped",
                 "nothing is working",
-                "everything is falling apart"
-            ]
+                "everything is falling apart",
+                "no way out",
+            ],
         )
 
         sad = self._contains_any(
-            text,
+            normalized,
             [
                 "sad",
                 "sadness",
@@ -431,12 +483,12 @@ class BehaviorEngine:
                 "miserable",
                 "hopeless",
                 "worthless",
-                "useless"
-            ]
+                "useless",
+            ],
         )
 
         anxiety = self._contains_any(
-            text,
+            normalized,
             [
                 "anxious",
                 "anxiety",
@@ -449,12 +501,12 @@ class BehaviorEngine:
                 "stress",
                 "stressed",
                 "stressing",
-                "overwhelmed"
-            ]
+                "overwhelmed",
+            ],
         )
 
         hopelessness = self._contains_any(
-            text,
+            normalized,
             [
                 "hopeless",
                 "no hope",
@@ -463,57 +515,89 @@ class BehaviorEngine:
                 "no point",
                 "pointless",
                 "can't go on",
-                "cannot go on"
-            ]
+                "cannot go on",
+                "no way out",
+            ],
         )
 
         worthlessness = self._contains_any(
-            text,
+            normalized,
             [
                 "worthless",
                 "useless",
                 "good for nothing",
                 "i am a failure",
                 "i'm a failure",
-                "nobody needs me"
-            ]
+                "nobody needs me",
+            ],
         )
 
+        # Intent is stronger when it is explicitly connected to a harmful
+        # action. Generic help-seeking phrases should not be treated as
+        # suicidal intent.
         intent = self._contains_any(
-            text,
+            normalized,
             [
                 "i might do it",
-                "might do it",
                 "i may do it",
-                "may do it",
                 "i could do it",
-                "could do it",
                 "i think i will",
                 "i'm going to do it",
                 "i am going to do it",
-                "i want to do it"
-            ]
+                "i want to do it",
+                "i can't stop myself",
+                "i cannot stop myself",
+                "i don't think i can stop",
+                "i do not think i can stop",
+                "i've decided to die",
+                "i have decided to die",
+                "i've decided to kill myself",
+                "i have decided to kill myself",
+                "i'm going to kill myself",
+                "i am going to kill myself",
+                "i'm going to hurt myself",
+                "i am going to hurt myself",
+                "i plan to kill myself",
+                "i have a plan to kill myself",
+                "i plan to hurt myself",
+                "i have a plan to hurt myself",
+                "suicide plan",
+                "plan to end my life",
+                "plan to die",
+            ],
         )
 
-        advice_request = self._contains_any(
-            text,
+        help_seeking = self._contains_any(
+            normalized,
             [
+                "i need help",
+                "help me",
                 "what should i do",
                 "what can i do",
-                "what do i do",
-                "what should i say",
-                "what can i say",
-                "how should i handle this",
-                "how do i handle this",
-                "what would you do",
-                "any advice",
-                "give me advice",
-                "i need advice"
-            ]
+                "i don't know what to do",
+                "i do not know what to do",
+                "i need someone",
+                "i need support",
+            ],
+        )
+
+        plan = self._contains_any(
+            normalized,
+            [
+                "suicide plan",
+                "plan to kill myself",
+                "plan to hurt myself",
+                "plan to end my life",
+                "plan to die",
+                "have a plan to kill myself",
+                "have a plan to hurt myself",
+                "made a plan to kill myself",
+                "made a plan to hurt myself",
+            ],
         )
 
         protective = self._contains_any(
-            text,
+            normalized,
             [
                 "i want to live",
                 "i want to get better",
@@ -523,12 +607,12 @@ class BehaviorEngine:
                 "i don't want to hurt myself",
                 "i do not want to hurt myself",
                 "i don't want to die",
-                "i do not want to die"
-            ]
+                "i do not want to die",
+            ],
         )
 
         temporal = self._contains_any(
-            text,
+            normalized,
             [
                 "right now",
                 "tonight",
@@ -538,12 +622,12 @@ class BehaviorEngine:
                 "immediately",
                 "soon",
                 "later tonight",
-                "tomorrow"
-            ]
+                "tomorrow",
+            ],
         )
 
         context_reference = self._contains_any(
-            text,
+            normalized,
             [
                 "tell me more",
                 "explain more",
@@ -552,35 +636,80 @@ class BehaviorEngine:
                 "go on",
                 "what else",
                 "more about that",
-                "and then"
-            ]
+                "and then",
+                "what should i do",
+                "what can i do",
+            ],
         )
 
-        if contextual_suicide:
+        # Only suppress an explicit safety signal when the harmful statement
+        # itself is clearly negated. Do NOT use a global negation switch.
+        negated_crisis = self._is_negated_crisis(normalized)
+        negated_self_harm = self._is_negated_self_harm(normalized)
+        negated = negated_crisis or negated_self_harm
+
+        if contextual_suicide and not crisis and not self_harm:
             crisis = False
             self_harm = False
 
-        if negated:
-            crisis = False
+        if negated_crisis:
+            explicit_positive_signal = self._contains_any(
+                normalized,
+                [
+                    "suicidal",
+                    "suicidal thoughts",
+                    "thinking about suicide",
+                    "thinking of suicide",
+                    "thinking about killing myself",
+                    "thinking of killing myself",
+                    "thinking about ending my life",
+                    "thinking of ending my life",
+                    "end my life",
+                    "ending my life",
+                    "want to die",
+                    "no reason to live",
+                    "no reason for me to live",
+                    "life isn't worth living",
+                    "life is not worth living",
+                ],
+            )
+            # The positive phrase "want to die" is itself present inside
+            # "don't want to die", so exact protective statements need an
+            # explicit exception. Mixed statements such as "I'm suicidal
+            # but I don't want to die" remain safety-significant.
+            only_protective = normalized in {
+                "i don't want to die",
+                "i do not want to die",
+                "i don't want to hurt myself",
+                "i do not want to hurt myself",
+                "i'm not suicidal",
+                "i am not suicidal",
+                "not suicidal",
+            }
+            if only_protective or not explicit_positive_signal:
+                crisis = False
+
+        if negated_self_harm:
             self_harm = False
 
         return {
-            "crisis": crisis,
-            "serious": serious,
-            "sad": sad,
-            "anxiety": anxiety,
-            "hopelessness": hopelessness,
-            "worthlessness": worthlessness,
-            "self_harm": self_harm,
-            "intent": intent,
-            "advice_request": advice_request,
-            "temporal": temporal,
-            "protective": protective,
-            "negated": negated,
-            "negated_crisis": self._is_negated_crisis(text),
-            "negated_self_harm": self._is_negated_self_harm(text),
-            "context_reference": context_reference,
-            "contextual_suicide": contextual_suicide
+            "crisis": bool(crisis),
+            "serious": bool(serious),
+            "sad": bool(sad),
+            "anxiety": bool(anxiety),
+            "hopelessness": bool(hopelessness),
+            "worthlessness": bool(worthlessness),
+            "self_harm": bool(self_harm),
+            "intent": bool(intent),
+            "help_seeking": bool(help_seeking),
+            "plan": bool(plan),
+            "temporal": bool(temporal),
+            "protective": bool(protective),
+            "negated": bool(negated),
+            "negated_crisis": bool(negated_crisis),
+            "negated_self_harm": bool(negated_self_harm),
+            "context_reference": bool(context_reference),
+            "contextual_suicide": bool(contextual_suicide),
         }
 
     def _detect_topic(self, text: str) -> Optional[str]:
@@ -760,6 +889,9 @@ class BehaviorEngine:
         if signals["intent"]:
             score += 0.35
 
+        if signals.get("plan"):
+            score += 0.25
+
         if signals["hopelessness"]:
             score += 0.30
         elif signals["worthlessness"]:
@@ -780,16 +912,25 @@ class BehaviorEngine:
         if signals["temporal"] and signals["crisis"]:
             score += 0.10
 
-        if signals["protective"]:
-            score -= 0.15
+        # Protective factors are important context, but they must not erase
+        # an explicit current suicidal/self-harm signal.
+        if signals["protective"] and not (
+            signals["crisis"] or signals["self_harm"] or signals.get("plan")
+        ):
+            score -= 0.10
 
-        if signals["contextual_suicide"]:
+        if signals["contextual_suicide"] and not (
+            signals["crisis"] or signals["self_harm"]
+        ):
             score = 0.0
 
         score += context_risk_boost
 
         if signals["crisis"] or signals["self_harm"]:
             score = max(score, 0.70)
+
+        if signals.get("plan"):
+            score = max(score, 0.85)
 
         return round(
             max(
@@ -812,6 +953,9 @@ class BehaviorEngine:
             return "high"
 
         if signals["self_harm"]:
+            return "high"
+
+        if signals.get("plan"):
             return "high"
 
         if score >= 0.60:
@@ -886,7 +1030,7 @@ class BehaviorEngine:
         if signals["anxiety"]:
             return "anxiety"
 
-        if signals["intent"]:
+        if signals["intent"] or signals.get("help_seeking"):
             return "supportive"
 
         if signals["context_reference"]:
@@ -1030,36 +1174,29 @@ class BehaviorEngine:
             "detected_topic"
         )
 
-        intent = analysis.get(
-            "intent",
-            "conversation"
-        )
-
         if detected_topic is None:
             self.context_state.record_follow_up(
                 mood=mood,
-                risk_level=risk_level,
-                intent=intent
+                risk_level=risk_level
             )
         else:
             self.context_state.update(
                 mood=mood,
                 risk_level=risk_level,
-                topic=detected_topic,
-                intent=intent
+                topic=detected_topic
             )
 
         if self.user_profile is not None:
             try:
                 self.user_profile.add_topic(
-                self.context_state.last_topic
+                    self.context_state.last_topic
                 )
             except Exception:
                 pass
 
             try:
                 self.user_profile.add_mood(
-                self.context_state.current_mood
+                    self.context_state.current_mood
                 )
             except Exception:
                 pass
@@ -1070,17 +1207,10 @@ class BehaviorEngine:
             for item in self.memory[-self.max_memory:]
         ]
 
-        replies = [
-            item["reply"]
-            for item in self.memory[-self.max_memory:]
-            if item.get("reply")
-        ]
-
         return {
             "has_previous_context": bool(messages),
             "message_count": len(messages),
             "recent_user_messages": messages,
-            "recent_assistant_messages": replies,
             "state": self.get_context_state(),
             "user_profile": self._get_profile()
         }
@@ -1120,16 +1250,9 @@ class BehaviorEngine:
             ):
                 boost += 0.10
 
-            if self._contains_any(
-                text,
-                [
-                    "suicide",
-                    "kill myself",
-                    "want to die",
-                    "hurt myself",
-                    "harm myself"
-                ]
-            ):
+            safety_signals = self._detect_signals(text)
+
+            if safety_signals.get("crisis") or safety_signals.get("self_harm"):
                 boost += 0.25
 
         return round(
@@ -1177,16 +1300,6 @@ class BehaviorEngine:
             self.memory = self.memory[
                 -self.max_memory:
             ]
-
-    def _store_reply(
-        self,
-        reply: Any
-    ):
-        if not reply or not self.memory:
-            return
-
-        text = reply if isinstance(reply, str) else str(reply)
-        self.memory[-1]["reply"] = text
 
     def _generate_response(
         self,
@@ -1253,12 +1366,6 @@ class BehaviorEngine:
             return self._anxiety_response(topic)
 
         if mode == "supportive":
-            if analysis.get("intent") == "advice":
-                return self._advice_response(
-                    message,
-                    topic,
-                    context
-                )
             return self._intent_response(topic)
 
         if mode == "contextual":
@@ -1426,90 +1533,6 @@ class BehaviorEngine:
             "at a time. What is worrying you the most?"
         )
 
-    def _advice_response(
-        self,
-        message: str,
-        topic: Optional[str],
-        context: Dict[str, Any]
-    ) -> str:
-        recent_messages = context.get(
-            "recent_user_messages",
-            []
-        )
-
-        previous = (
-            recent_messages[-1]
-            if recent_messages
-            else ""
-        ).lower()
-
-        if topic == "friends" or any(
-            phrase in previous
-            for phrase in [
-                "friend",
-                "friends",
-                "invite me",
-                "left me out",
-                "excluded me",
-                "went out without me"
-            ]
-        ):
-            if any(
-                phrase in previous
-                for phrase in [
-                    "didn't invite me",
-                    "did not invite me",
-                    "went out without me",
-                    "left me out",
-                    "excluded me"
-                ]
-            ):
-                return (
-                    "I'd avoid assuming the worst while you're still hurt. "
-                    "If you want clarity, ask one of them calmly what happened "
-                    "and give them room to explain. Their response will tell "
-                    "you more than guessing will. If this keeps happening, "
-                    "then it may be worth reconsidering how much effort you "
-                    "want to put into that friendship."
-                )
-
-            return (
-                "If you're unsure what to do with your friends, start with "
-                "the smallest honest step: talk to the person you trust most "
-                "and explain how the situation made you feel without blaming "
-                "them. See how they respond before deciding what to do next."
-            )
-
-        if topic == "college":
-            return (
-                "Start with the part of college that needs attention first. "
-                "Pick one concrete problem, decide what you can control today, "
-                "and leave the rest for later. If you tell me what happened, "
-                "I can help you think through the next step."
-            )
-
-        if topic == "work":
-            return (
-                "I'd break the situation into what you can control and what "
-                "you can't. Handle the most immediate task first, then decide "
-                "whether a conversation with the relevant person would help. "
-                "If you tell me what happened, we can work out what to say."
-            )
-
-        if topic == "relationships":
-            return (
-                "Before making a big decision, give yourself a little space "
-                "and separate what you know from what you're assuming. Then "
-                "have a calm conversation about the specific issue rather "
-                "than trying to solve the whole relationship at once."
-            )
-
-        return (
-            "I'd start with the smallest next step instead of trying to solve "
-            "everything at once. Tell me what happened, and I can help you "
-            "compare a couple of realistic options."
-        )
-
     def _intent_response(
         self,
         topic: Optional[str]
@@ -1576,81 +1599,58 @@ class BehaviorEngine:
         topic: Optional[str],
         context: Dict[str, Any]
     ) -> str:
-        streak = context.get(
-            "state",
-            {}
-        ).get(
-            "same_topic_streak",
-            0
-        )
 
         if topic == "college":
-            options = [
-                "What's going on with college today?",
-                "Is the main issue the workload, exams, or something outside academics?",
-                "Let's narrow it down. What's the one college problem you'd most like to change right now?"
-            ]
-            return options[min(max(streak, 0), len(options) - 1)]
+            return (
+                "I'm following your college situation. "
+                "Tell me a little more about your exams, "
+                "studies, or what has been difficult."
+            )
 
         if topic == "work":
-            options = [
-                "What's been going on with work or your career?",
-                "Is the pressure coming more from the work itself, people around you, or uncertainty about what's next?",
-                "Let's focus on one thing. What's the biggest work or career problem on your mind today?"
-            ]
-            return options[min(max(streak, 0), len(options) - 1)]
+            return (
+                "I'm following your work and career situation. "
+                "Tell me a little more about your internship, "
+                "interview, or what has been difficult."
+            )
 
-        if topic == "friends":
-            options = [
-                "I'm listening. What's been happening with your friends that has been sitting with you?",
-                "It sounds like there's something about this friendship situation you haven't quite made sense of yet. What part keeps replaying in your head?",
-                "We can look at this from either side: how it made you feel, or what you might want to do next. Which would help more right now?"
-            ]
-            return options[min(max(streak, 0), len(options) - 1)]
+        if topic == "future":
+            return (
+                "I'm following what you've shared about your "
+                "future. Tell me a little more about what's "
+                "on your mind."
+            )
+
+        if topic == "relationships":
+            return (
+                "I'm following what you've shared about your "
+                "relationship situation. Tell me a little "
+                "more about what happened."
+            )
+
+        if topic == "family":
+            return (
+                "I'm following what you've shared about your "
+                "family situation. Tell me a little more."
+            )
 
         if topic:
-            options = [
-                f"What's been happening with your {self._topic_word(topic)}?",
-                f"What part of your {self._topic_word(topic)} situation is affecting you most?",
-                "Would it help more to talk through what happened, or think about what you could do next?"
-            ]
-            return options[min(max(streak, 0), len(options) - 1)]
+            return (
+                f"I'm following your {topic} situation. "
+                "Tell me a little more about what's happening."
+            )
 
         if context.get(
             "has_previous_context",
             False
         ):
             return (
-                "I'm following you. Rather than making you repeat yourself, "
-                "what do you think is the main thing you need from this "
-                "conversation right now?"
+                "I'm following what you've shared. "
+                "Tell me a little more about what is happening."
             )
 
         return (
-            "I'm here to listen. What's been on your mind today?"
-        )
-
-    def _topic_word(
-        self,
-        topic: Optional[str]
-    ) -> str:
-
-        words = {
-            "college": "college",
-            "work": "your work",
-            "future": "your future",
-            "relationships": "your relationship",
-            "family": "your family",
-            "health": "your health",
-            "finance": "your financial",
-            "friends": "your friendship",
-            "social": "your social",
-            "personal": "your personal"
-        }
-
-        return words.get(
-            topic,
-            str(topic)
+            "I'm here to listen. Tell me what's on your mind."
         )
 
     def _greeting_response(self) -> str:
@@ -1666,44 +1666,20 @@ class BehaviorEngine:
         )
 
     def _crisis_response(self) -> str:
-        resources_line = ""
-
-        if self.safety_resources is not None:
-            try:
-                resources_line = self.safety_resources.format_for_reply()
-            except Exception:
-                resources_line = ""
-
-        if not resources_line:
-            resources_line = (
-                "Find A Helpline (findahelpline.com) can connect you to a "
-                "free, confidential crisis line in your area."
-            )
-
         return (
-            "I'm really glad you told me this, and I'm really sorry "
-            "you're carrying this much pain. Your safety is important, "
-            "and this isn't something you have to get through alone. "
-            f"{resources_line} "
-            "If you feel you might act on these thoughts or you're in "
-            "immediate danger, please reach out to one of those right now, "
-            "or move toward a trusted person nearby. "
-            "I'm still here, and you can keep talking to me while you "
-            "reach out for that support."
+            "I'm really sorry you're going through this. "
+            "Your safety is important. If you think you might "
+            "act on these thoughts or you're in immediate danger, "
+            "please move toward a safe person or place and "
+            "contact your local emergency services or a qualified "
+            "crisis service. You can keep talking to me while "
+            "you reach human support."
         )
 
     def _build_safety_response(
         self,
         risk_level: str
     ) -> Dict[str, Any]:
-
-        resources = None
-
-        if self.safety_resources is not None:
-            try:
-                resources = self.safety_resources.build_crisis_guidance()
-            except Exception:
-                resources = None
 
         return {
             "risk_level": risk_level,
@@ -1715,12 +1691,9 @@ class BehaviorEngine:
             },
             "require_safety_response": True,
             "requires_human_support": True,
-            "resources": resources,
             "emergency_guidance": (
                 "If there is immediate danger, contact local "
-                "emergency services or an appropriate crisis service. "
-                "Find A Helpline (findahelpline.com) can connect you "
-                "to a free, confidential crisis line right now."
+                "emergency services or an appropriate crisis service."
             ),
             "do_not": [
                 "Do not provide instructions for self-harm.",

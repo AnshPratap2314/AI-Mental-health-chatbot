@@ -1,110 +1,54 @@
-# MindCare Frontend
+# MindCare AI Frontend
 
-This is a responsive vanilla HTML/CSS/JavaScript frontend for the Ethical Mental Health Chatbot.
+Static browser frontend for the MindCare AI FastAPI backend.
 
-## Project structure
+## Run locally
 
-frontend/
-├── index.html
-├── style.css
-├── script.js
-└── README.md
+From the repository root:
 
-## 1. Copy the frontend
+```bash
+uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
 
-Put the `frontend` folder inside:
+In a second terminal:
 
-Mental health chatbot/
-
-So the structure becomes:
-
-Mental health chatbot/
-├── app/
-├── tests/
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-└── ...
-
-## 2. Enable CORS in FastAPI
-
-In `app/main.py`, add:
-
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5500",
-        "http://localhost:5500",
-        "http://127.0.0.1:5501",
-        "http://localhost:5501",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-Place this immediately after:
-
-app = FastAPI(...)
-
-and before your routes.
-
-## 3. Start backend
-
-Terminal 1:
-
-cd ~/Downloads/python/PythonProject/"Mental health chatbot"
-source venv/bin/activate
-python -m uvicorn app.main:app --reload
-
-Keep this terminal running.
-
-## 4. Start frontend
-
-Open a second terminal:
-
-cd ~/Downloads/python/PythonProject/"Mental health chatbot"/frontend
+```bash
+cd frontend
 python3 -m http.server 5500
+```
 
-Then open:
+Open:
 
+```text
 http://127.0.0.1:5500
+```
 
-## 5. Test
+## API configuration
 
-1. Enter your name.
-2. Send "I feel lonely".
-3. Send "Tell me more".
-4. Confirm both requests use the same session.
-5. Test "I feel hopeless".
-6. Test "I want to die" only as a safety-system test in a controlled development environment.
+`index.html` defines:
 
-The frontend expects:
+```javascript
+window.MINDCARE_API_URL = "https://<your-backend-domain>";
+```
 
-POST /session
-{
-  "user_name": "friend"
-}
+Change this value when deploying the frontend against another backend. The script also falls back to `127.0.0.1:8000` during local development.
 
-and:
+## Frontend behavior
 
-POST /chat
-{
-  "session_id": "...",
-  "message": "I feel lonely"
-}
+- Creates and stores one session ID in `localStorage`.
+- Deletes the old server-side session when **New conversation** is selected.
+- Automatically creates a replacement session if the server reports that the previous session expired.
+- Performs a backend health check and shows online/offline status.
+- Disables duplicate submissions while a request is in progress.
+- Does not print the session ID to the browser console.
+- Sends plain text to the API and renders bot responses with `textContent`, avoiding HTML injection.
 
-The `/chat` response should contain at least:
+## Production CORS
 
-{
-  "session_id": "...",
-  "mode": "...",
-  "risk_level": "...",
-  "risk_score": 0.0,
-  "signals": {},
-  "context": {},
-  "reply": "..."
-}
+The backend must list the deployed frontend origin in `FRONTEND_URLS`.
+
+Example:
+
+```env
+FRONTEND_URLS=https://your-frontend.example.com
+```

@@ -1,129 +1,173 @@
-<!-- Logo Section -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/AnshPratap2314/AI-Mental-health-chatbot/main/logo%20chatbot.png" width="280" alt="Mental Health Chatbot Logo">
-</p>
+# MindCare AI — Ethical Mental Health Chatbot
 
-<h1 align="center">🧠💬 AI Mental Health & Supportive Chatbot</h1>
+MindCare AI is a supportive conversational application that combines a deterministic safety layer, mood/context analysis, session memory, personalization, and an optional OpenAI LLM for natural, mood-aware responses.
 
-<p align="center">
-  A safe, supportive, and intelligent mental-health companion built using Python & AI.<br>
-  Designed to provide emotional support, mood tracking, crisis detection, and helpful resources with privacy in mind.
-</p>
+> **Important:** MindCare AI is not a medical device, therapist, emergency service, or diagnostic system. Its safety classifier is designed to route conversations conservatively; it must not be treated as a clinical risk assessment.
 
-<!-- Badges -->
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.9-blue">
-  <img src="https://img.shields.io/badge/FastAPI-Framework-green">
-  <img src="https://img.shields.io/badge/AI-Assistant-brightgreen">
-  <img src="https://img.shields.io/badge/NLP-Enabled-purple">
-  <img src="https://img.shields.io/badge/Status-Active%20Development-blueviolet">
-  <img src="https://img.shields.io/badge/Mental%20Health-Supportive-orange">
-</p>
+## Architecture
 
-<hr>
+```text
+User message
+    │
+    ▼
+Input validation / security
+    │
+    ▼
+BehaviorEngine
+    ├── mood detection
+    ├── topic detection
+    ├── contextual state
+    ├── deterministic safety/risk analysis
+    └── crisis policy
+           │
+           ├── Immediate/high risk ──► deterministic safety response
+           │
+           └── non-immediate ───────► ResponseEngine
+                                         │
+                                         ├── LLMEngine (if configured)
+                                         │     ├── current mood
+                                         │     ├── previous mood
+                                         │     ├── mood trend
+                                         │     ├── topic continuity
+                                         │     ├── user tone/language
+                                         │     └── recent context
+                                         │
+                                         └── deterministic fallback
+```
 
-<h2>🌟 Project Overview</h2>
-<p>
-  This AI Mental Health Chatbot is designed to offer a safe and empathetic conversational experience.
-  It detects user emotions, responds supportively, provides coping strategies, and can escalate to crisis protocols when needed.
-  The system is modular, scalable, and aligned with basic ethical guidelines.
-</p>
+### Key design principle
 
-<hr>
+The **LLM generates language; it does not make the safety decision**.
 
-<h2>✨ Features</h2>
-<ul>
-  <li>🗣️ <strong>Natural Language Understanding</strong> – understands user messages meaningfully.</li>
-  <li>😊 <strong>Emotion Detection</strong> – identifies sadness, stress, anxiety, happiness, and more.</li>
-  <li>🤝 <strong>Supportive Responses</strong> – replies in a caring, safe, and non-judgmental manner.</li>
-  <li>🚨 <strong>Crisis Detection & Safety Protocols</strong> – alerts when high-risk messages appear.</li>
-  <li>📚 <strong>Coping Strategies</strong> – provides breathing exercises, grounding techniques, etc.</li>
-  <li>📝 <strong>Conversation Logging</strong> – optional journal-like history.</li>
-  <li>🔐 <strong>User Privacy</strong> – no messages are stored without permission.</li>
-  <li>⚙️ <strong>Modular Architecture</strong> – easy to extend with new models or features.</li>
-</ul>
+High-risk/immediate conversations stay on the deterministic safety path. Moderate-risk conversations may use the LLM for empathetic, mood-aware wording while the deterministic risk decision remains authoritative.
 
-<hr>
+## Mood-aware LLM behavior
 
-<h2>🧭 Project Structure</h2>
+The LLM receives structured conversational context such as:
 
-<pre>
-Mental-Health-Chatbot/
-│── main.py
-│── safety_engine.py
-│── emotion_detection.py
-│── supportive_responses.py
-│── communication/
-│── data/
-│── utils/
-│── tests/
-│── requirements.txt
-│── README.md
-</pre>
+- current mood
+- previous mood
+- recent mood trend
+- mood intensity
+- current topic and previous topic
+- conversation mode
+- user preferred tone/language
+- recent user messages
+- deterministic safety level
 
-<hr>
+Examples of response style:
 
-<h2>🚀 How to Run the Project</h2>
+| Detected mood | Response strategy |
+|---|---|
+| Sad | Validate first; avoid forced positivity |
+| Anxious | Calm language + one small grounding/practical step |
+| Hopeless | Acknowledge heaviness + focus on one manageable next step |
+| Low self-worth | Separate worth from setbacks; avoid empty praise |
+| Reflective | Help the user explore what they mean |
+| Seeking support | Warm + practical |
+| Positive | Acknowledge the positive experience naturally |
+| Neutral | Conversational and curious |
 
-<h3>1. Clone the Repository</h3>
-<pre>
-git clone https://github.com/AnshPratap2314/AI-Mental-health-chatbot.git
-</pre>
+The model is explicitly instructed not to diagnose, invent personal facts, encourage dependency, or provide harmful instructions.
 
-<h3>2. Navigate to the Project</h3>
-<pre>
-cd AI-Mental-health-chatbot
-</pre>
+## LLM setup
 
-<h3>3. Install Dependencies</h3>
-<pre>
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Set:
+
+```env
+OPENAI_API_KEY=your_api_key_here
+OPENAI_MODEL=gpt-5-mini
+ENABLE_LLM=true
+OPENAI_TIMEOUT_SECONDS=20
+```
+
+The API key must remain server-side. **Do not put it in `frontend/script.js` or expose it to the browser.**
+
+If `OPENAI_API_KEY` is missing or the LLM cannot be initialized, MindCare automatically falls back to deterministic responses.
+
+## Run locally
+
+### Backend
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-</pre>
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
 
-<h3>4. Run the Chatbot</h3>
-<pre>
-python3 main.py
-</pre>
+### Frontend
 
-<hr>
+Serve the `frontend` directory with a local static server, for example:
 
-<h2>🧠 How It Works</h2>
-<ul>
-  <li><strong>Input Processing:</strong> User messages are cleaned and analyzed.</li>
-  <li><strong>Emotion Model:</strong> The system identifies emotional tone.</li>
-  <li><strong>Safety Engine:</strong> Detects risky phrases or crisis-level inputs.</li>
-  <li><strong>Response Generator:</strong> Produces helpful and caring replies.</li>
-  <li><strong>Context Manager:</strong> Maintains conversation state.</li>
-</ul>
+```bash
+cd frontend
+python3 -m http.server 5500
+```
 
-<hr>
+The frontend should point to the API URL configured for the deployment.
 
-<h2>📌 Roadmap</h2>
-<ul>
-  <li>🧬 Add advanced LLM integration</li>
-  <li>📱 Build mobile app (Flutter/React Native)</li>
-  <li>🎤 Voice-based support mode</li>
-  <li>📊 Mood tracker dashboard</li>
-  <li>🌐 Multi-language support</li>
-</ul>
+## Environment variables
 
-<hr>
+| Variable | Purpose | Default |
+|---|---|---|
+| `OPENAI_API_KEY` | Server-side LLM authentication | empty |
+| `OPENAI_MODEL` | OpenAI model used for generation | `gpt-5-mini` |
+| `ENABLE_LLM` | Enable/disable LLM generation | inferred from API key |
+| `OPENAI_TIMEOUT_SECONDS` | LLM request timeout | `20` |
+| `FRONTEND_URLS` | Comma-separated allowed browser origins | configured defaults |
+| `API_PUBLIC_URL` | Public API URL shown by status endpoint | local/deployment value |
+| `SESSION_TTL_SECONDS` | Session inactivity timeout | `1800` |
+| `MAX_SESSIONS` | Maximum in-memory sessions | `1000` |
+| `MAX_MEMORY` | User messages retained per session | `20` |
+| `MAX_MESSAGE_LENGTH` | Maximum accepted message size | `4000` |
+| `CHAT_RATE_LIMIT` | Chat requests per client per minute | `30` |
 
-<h2>🤝 Contribution</h2>
-<p>
-  Contributions are welcome! Open features, bug fixes, or improvements.<br>
-  Fork the repo → Create a feature branch → Send a PR.
-</p>
+## Safety behavior
 
-<hr>
-<p>
-  <strong>Author:</strong> Ansh Pratap <br>
-  GitHub: <a href="https://github.com/AnshPratap2314">AnshPratap2314</a> <br>
-  LinkedIn: <a href="https://www.linkedin.com/in/ansh-pratap-68156625b/">View Profile</a>
-</p>
+The deterministic layer handles explicit high-risk signals such as suicidal ideation, self-harm, plans, and immediate-risk language. The LLM is not used to decide whether a user is at risk.
 
-<hr>
+For immediate danger, the application directs the user toward local emergency services, a crisis service, or a trusted person. It does not claim to contact emergency services itself.
 
-<p align="center">
-  🌱 Built with care — for learning, healing, and helping others.
-</p>
+## API endpoints
+
+- `GET /` — service information
+- `GET /health` — health check
+- `GET /health/live` — liveness check
+- `GET /health/ready` — readiness and LLM configuration status
+- `POST /session` — create a conversation session
+- `POST /chat` — send a message
+- `DELETE /session/{session_id}` — delete a conversation session
+- `GET /api/status` — deployment/API information
+
+## Testing
+
+Run the complete suite:
+
+```bash
+python -m pytest -q
+```
+
+Current release verification:
+
+```text
+201 passed
+```
+
+The test suite covers safety detection, nuanced crisis cases, session hardening, API flow, fallback behavior, and mood-aware LLM prompt construction.
+
+## Privacy notes
+
+Conversation state is held in memory for the lifetime of the session and is removed when the session expires, is deleted, or the server process is restarted. The application does not intentionally persist chat messages to a database in this version.
+
+Session IDs should be treated as bearer credentials and must not be logged or shared.
+
+## Production notes
+
+Before using the project with real users, perform a separate security, privacy, clinical-safety, abuse-resistance, and legal review appropriate to the deployment jurisdiction. The current safety layer is not a substitute for professional clinical assessment.
