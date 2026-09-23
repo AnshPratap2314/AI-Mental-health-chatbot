@@ -3,7 +3,7 @@ const API_URL = String(
     (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
         ? "http://127.0.0.1:8000"
-        : "https://mindcare-ai-wff8.onrender.com")
+        : "https://mindcare-ai-semb.onrender.com")
 ).replace(/\/$/, "");
 
 const chatMessages =
