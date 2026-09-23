@@ -37,12 +37,13 @@ ALLOWED_ORIGINS = list(dict.fromkeys([
     "http://127.0.0.1:5500",
     "http://localhost:5501",
     "http://127.0.0.1:5501",
+    "https://mindcare-ai-o1e5.onrender.com",
     *configured_origins,
 ]))
 
 API_PUBLIC_URL = os.getenv(
     "API_PUBLIC_URL",
-    "https://mindcare-ai-wff8.onrender.com",
+    "https://mindcare-ai-semb.onrender.com",
 ).strip().rstrip("/")
 
 
