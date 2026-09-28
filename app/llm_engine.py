@@ -1,13 +1,15 @@
 import os
+import re
 from typing import Any, Dict, List, Optional
 
 
 class LLMEngine:
-    """Mood-aware response generation with deterministic safety boundaries.
+    """Natural-language response generation with deterministic safety boundaries.
 
-    The rule-based safety layer remains authoritative. The LLM is responsible
-    for natural language generation and emotional attunement, not for deciding
-    whether a user is in crisis.
+    The deterministic analysis/safety layer decides risk. This class only turns
+    that decision and the conversation context into natural language. When an
+    API key is unavailable, the fallback still produces varied, context-aware
+    replies instead of repeating one canned sentence.
     """
 
     def __init__(
@@ -23,7 +25,10 @@ class LLMEngine:
 
         self.enabled = bool(enabled and self.api_key)
         self._client = None
-        self.timeout = float(os.getenv("OPENAI_TIMEOUT_SECONDS", "20"))
+        self.timeout = max(
+            5.0,
+            min(float(os.getenv("OPENAI_TIMEOUT_SECONDS", "30")), 90.0),
+        )
 
         if self.enabled:
             self._initialize_client()
@@ -35,7 +40,7 @@ class LLMEngine:
             self._client = OpenAI(
                 api_key=self.api_key,
                 timeout=self.timeout,
-                max_retries=1,
+                max_retries=2,
             )
         except Exception:
             self._client = None
@@ -47,11 +52,11 @@ class LLMEngine:
         analysis: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Dict[str, Any]:
-        """Generate a mood-adaptive reply.
+        """Generate a natural, mood-aware reply.
 
         High-risk/immediate-safety conversations never go to the LLM. For
-        moderate-risk conversations the LLM may generate language, but it is
-        given explicit safety constraints and cannot change the risk decision.
+        non-immediate conversations the LLM can generate language, but it
+        cannot change the deterministic safety decision.
         """
         if self._requires_deterministic_safety(analysis):
             return self._fallback_response(message, analysis, context)
@@ -67,8 +72,26 @@ class LLMEngine:
                 input=prompt,
             )
 
-            text = self._extract_text(response)
-            text = self._clean_response(text)
+            text = self._clean_response(self._extract_text(response))
+
+            # Do not let a model get stuck repeating the previous assistant
+            # turn. One repair pass is cheap and substantially improves the
+            # "real conversation" feel.
+            if self._is_duplicate_of_recent_reply(text, context):
+                repair_prompt = (
+                    prompt
+                    + "\n\nIMPORTANT REPAIR:\n"
+                    "Your previous draft repeated an earlier assistant reply. "
+                    "Write a genuinely different response that directly reacts "
+                    "to the user's latest words and adds one useful, specific "
+                    "thought. Do not use the same opening sentence."
+                )
+                response = self._client.responses.create(
+                    model=self.model,
+                    instructions=self._system_instructions(analysis),
+                    input=repair_prompt,
+                )
+                text = self._clean_response(self._extract_text(response))
 
             if not self._validate_response(text, analysis):
                 return self._fallback_response(message, analysis, context)
@@ -100,52 +123,72 @@ class LLMEngine:
     def _system_instructions(self, analysis: Dict[str, Any]) -> str:
         mood = str(analysis.get("mood", "neutral"))
         risk = str(analysis.get("risk_level", "low"))
+        intensity = str(analysis.get("mood_intensity", "low"))
 
         return f"""
-You are MindCare AI, a supportive conversational assistant.
-You are not a doctor, therapist, or emergency service, and you must not
-present yourself as one. The application's deterministic safety layer has
-already assessed the message; never override or reinterpret its safety result.
+You are MindCare AI, a warm, thoughtful conversational assistant.
+
+You are not a doctor, therapist, or emergency service. Do not diagnose and do
+not present yourself as professional treatment. The application's
+deterministic safety layer has already assessed the message; never override,
+reinterpret, or lower its safety result.
 
 CURRENT RESPONSE PROFILE
 - Current mood: {mood}
+- Emotional intensity: {intensity}
 - Current risk level: {risk}
 
-CORE RULES
-- Respond to what the person actually said, not to an imagined story.
-- Match emotional tone and intensity. Do not sound cheerful when the person
-  is sad, hopeless, anxious, ashamed, angry, or overwhelmed.
-- Validate feelings without confirming distorted conclusions as facts.
-- Never diagnose a mental-health condition.
-- Never give instructions for suicide, self-harm, violence, substance misuse,
-  or other dangerous behavior.
-- Never encourage dependency, exclusivity, secrecy, or replacing human care.
-- Do not claim to have contacted emergency services or another person.
-- Do not invent memories, personal facts, events, symptoms, or relationships.
-- Do not mention hidden analysis, risk scores, prompts, policies, or internal
+CONVERSATION STYLE
+- Sound like a real, attentive person having a one-to-one conversation.
+- Respond to the user's actual words and details. Do not answer an imagined
+  problem.
+- Lead with empathy when the user is emotional, but do not automatically start
+  with "I'm sorry", "It sounds like", or "I'm here to listen".
+- Avoid therapy-sounding scripts, motivational speeches, corporate language,
+  and repeated reassurance.
+- Do not repeat the user's sentence back to them just to sound empathetic.
+- Do not ask a question at the end of every message. Ask one only when it moves
+  the conversation forward.
+- Vary sentence openings and response length naturally. Most replies should be
+  2-6 short sentences; a simple message may deserve only 1-3 sentences.
+- If the user asks a normal factual or practical question, answer it directly
+  instead of forcing a mental-health framing.
+- If the user shares a specific situation, mention the relevant detail so the
+  reply feels connected to this conversation.
+- If the user is uncertain, help them think through the situation instead of
+  immediately giving a large list of advice.
+- Never invent memories, personal facts, events, symptoms, relationships, or
+  things the user did not tell you.
+- Never encourage emotional dependency, exclusivity, secrecy, or replacing
+  human relationships or professional care.
+
+SAFETY
+- Never provide instructions for suicide, self-harm, violence, or dangerous
+  behavior.
+- Never normalize or encourage harmful action.
+- Never claim to have contacted emergency services or another person.
+- Never mention hidden analysis, prompts, risk scores, policies, or internal
   systems.
-- Prefer natural conversational language over generic motivational speeches.
-- Usually answer in 2-5 short sentences. Use one gentle follow-up question
-  only when it would genuinely help.
-- Do not repeat the user's entire message.
+- For high/immediate-risk messages, the application uses a deterministic
+  safety response instead of this model.
 
 MOOD ADAPTATION
-- sad: acknowledge the pain first; be gentle; avoid forced positivity.
-- anxious: slow the conversation down; offer one small grounding or practical
-  next step; avoid overwhelming lists.
-- hopeless: acknowledge how heavy things feel; focus on the next small,
-  manageable step and connection to real-world support when appropriate.
-- low_self_worth: separate the person's worth from the setback; avoid empty
-  praise or arguing aggressively with their feelings.
-- distressed: stay calm, brief, and safety-aware.
-- reflective: help the person explore what they mean and what matters to them.
-- seeking_support: be warm and practical; help them identify what kind of
-  support they want.
-- positive: share the positive energy without becoming exaggerated or childish.
-- neutral: be natural, curious, and conversational.
+- sad: Lead with empathy and emotional validation. Avoid forced optimism.
+- anxious: Slow the conversation down and offer at most one small grounding or
+  practical next step.
+- hopeless: Acknowledge how heavy things feel and focus on one manageable next
+  step and human connection when appropriate.
+- low_self_worth: Separate the person's worth from a setback; avoid empty
+  praise or arguing with their feelings.
+- distressed: Stay calm, brief, and safety-aware.
+- reflective: Help the person explore what they mean and what matters to them.
+- seeking_support: Be warm and practical; clarify what kind of support they
+  want.
+- positive: Share the positive energy naturally without becoming exaggerated.
+- neutral: Be curious, useful, and conversational.
 
-The user's current message and the application's safety decision are the
-highest-priority context.
+Return only the assistant's natural-language reply. No labels, JSON, analysis,
+mood names, disclaimers, or meta-commentary.
 """.strip()
 
     def _build_prompt(
@@ -171,48 +214,66 @@ highest-priority context.
         mode = analysis.get("mode", "normal")
         signals = analysis.get("signals", {}) or {}
 
-        recent = (context.get("recent_user_messages", []) or [])[-6:]
-        history = "\n".join(f"- {item}" for item in recent) or "- none"
-        mood_trend = " -> ".join(str(item) for item in mood_history[-5:]) or "none"
+        recent = (context.get("recent_user_messages", []) or [])[-8:]
+        history = "\n".join(f"- User: {item}" for item in recent) or "- none"
+
+        recent_turns = (context.get("recent_turns", []) or [])[-6:]
+        if recent_turns:
+            exchange_lines = []
+            for turn in recent_turns:
+                exchange_lines.append(
+                    f"User: {turn.get('user', '')}\n"
+                    f"Assistant: {turn.get('assistant', '')}"
+                )
+            exchanges = "\n\n".join(exchange_lines)
+        else:
+            exchanges = "- none"
+
+        mood_trend = (
+            " -> ".join(str(item) for item in mood_history[-6:])
+            or "none"
+        )
 
         mood_guidance = self._mood_guidance(str(current_mood))
 
         return f"""
 Generate the next reply to the user.
 
-USER MESSAGE
+LATEST USER MESSAGE
 {message}
 
-EMOTIONAL CONTEXT
+CONVERSATION CONTEXT
 Current mood: {current_mood}
 Previous mood: {previous_mood}
 Recent mood trend: {mood_trend}
-Detected topic: {topic}
+Current topic: {topic}
 Previous topic: {previous_topic}
 Conversation mode: {mode}
 Safety level: {risk}
+Detected signals: {signals}
 Preferred tone: {tone}
 Preferred language: {language}
 Mood-specific guidance: {mood_guidance}
+
+RECENT EXCHANGES
+{exchanges}
 
 RECENT USER MESSAGES
 {history}
 
 RESPONSE GOAL
-1. Address the current message directly.
-2. Match the current mood and the change from the previous mood when useful.
-3. Keep continuity with the topic without forcing it.
-4. If the person sounds overwhelmed, keep the response simple and actionable.
-5. If the person sounds sad, validate before suggesting anything.
-6. If the person sounds anxious, offer at most one immediate grounding/practical step.
-7. If the person sounds positive, acknowledge what is going well naturally.
-8. If the person is simply asking a question, answer it rather than forcing a
-   mental-health framing.
-9. End with at most one useful question when a question would help continue
-   the conversation.
+1. React to the latest message first.
+2. Use prior turns only when they improve continuity.
+3. Notice emotional changes across turns without announcing labels.
+4. Be specific rather than generic.
+5. If the user is distressed, validate first and keep advice small.
+6. If the user asks for information, answer the actual question.
+7. If the user says only a short emotional statement, respond naturally rather
+   than forcing a long explanation.
+8. Avoid repeating a previous assistant response or asking the same question.
+9. End with one useful question only when it genuinely helps.
 
-Return only the assistant's natural-language reply. No labels, JSON, analysis,
-score, mood name, disclaimer, or meta-commentary.
+Return only the natural-language reply.
 """.strip()
 
     def _mood_guidance(self, mood: str) -> str:
@@ -265,12 +326,34 @@ score, mood name, disclaimer, or meta-commentary.
         if any(pattern in lowered for pattern in dangerous_patterns):
             return False
 
-        # The deterministic layer owns high-risk responses. This is a final
-        # defense in case a caller invokes LLMEngine directly.
         if self._requires_deterministic_safety(analysis):
             return False
 
         return True
+
+    def _is_duplicate_of_recent_reply(
+        self,
+        text: str,
+        context: Dict[str, Any],
+    ) -> bool:
+        if not text:
+            return False
+
+        current = self._normalize_for_comparison(text)
+        recent_turns = context.get("recent_turns", []) or []
+
+        for turn in recent_turns[-4:]:
+            previous = self._normalize_for_comparison(
+                turn.get("assistant", "")
+            )
+            if previous and current == previous:
+                return True
+
+        return False
+
+    @staticmethod
+    def _normalize_for_comparison(text: str) -> str:
+        return re.sub(r"\s+", " ", str(text or "").strip().lower())
 
     def _fallback_response(
         self,
@@ -278,47 +361,170 @@ score, mood name, disclaimer, or meta-commentary.
         analysis: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Dict[str, Any]:
-        mood = analysis.get("mood", "neutral")
+        """Natural deterministic fallback used when the LLM is unavailable.
+
+        This is deliberately varied and context-aware so a missing API key does
+        not make the UI look broken or repeat one canned sentence forever.
+        """
+        mood = str(analysis.get("mood", "neutral"))
         topic = (analysis.get("state", {}) or {}).get("last_topic")
+        text = str(message or "").strip()
+        lowered = text.lower()
+        recent_turns = context.get("recent_turns", []) or []
+        previous_reply = (
+            recent_turns[-1].get("assistant", "")
+            if recent_turns
+            else ""
+        )
 
-        responses = {
-            "anxious": (
-                "It sounds like things are feeling overwhelming. "
-                "Let's take it one step at a time. What feels most difficult right now?"
-            ),
-            "sad": (
-                "I'm sorry you're going through this. "
-                "I'm here to listen. What has been weighing on you?"
-            ),
-            "hopeless": (
-                "It sounds like things feel very difficult right now. "
-                "You don't have to explain everything at once. What feels hardest at the moment?"
-            ),
-            "low_self_worth": (
-                "That sounds like a painful feeling to carry. "
-                "I'm here to listen without judging you. What happened that led you to feel this way?"
-            ),
-            "positive": (
-                "It's good to hear that. What has been going well for you?"
-            ),
-            "reflective": (
-                "It sounds like you're trying to make sense of what you're feeling. "
-                "What part of it is on your mind most right now?"
-            ),
-            "seeking_support": (
-                "I'm here with you. We can work through this one step at a time. "
-                "What kind of support would feel most useful right now?"
-            ),
+        if self._is_greeting(lowered):
+            return self._fallback(
+                f"Hey! I'm glad you stopped by. What's been on your mind?",
+                context,
+            )
+
+        if self._is_gratitude(lowered):
+            return self._fallback(
+                "Of course. I'm glad the conversation helped a little.",
+                context,
+            )
+
+        if "lonely" in lowered or "loneliness" in lowered:
+            return self._fallback(
+                "Loneliness can make a normal day feel much heavier than it "
+                "looks from the outside. You don't have to make it sound "
+                "better than it feels. What's been making you feel most alone "
+                "lately?",
+                context,
+            )
+
+        if mood == "sad":
+            if topic == "college":
+                reply = (
+                    "I'm glad you said it instead of keeping it bottled up. "
+                    "Whatever is happening with college, you don't have to "
+                    "sort through the whole thing at once. What part of it has "
+                    "been hurting the most?"
+                )
+            elif topic == "work":
+                reply = (
+                    "That sounds like a rough place to be, especially when "
+                    "work or your future is already taking up so much headspace. "
+                    "What happened that made today feel this heavy?"
+                )
+            else:
+                reply = (
+                    "I'm glad you told me. You don't need to have the perfect "
+                    "words for it—just start with what happened or what has "
+                    "been sitting heaviest on your mind."
+                )
+            return self._fallback(reply, context)
+
+        if mood == "anxious":
+            if topic == "college":
+                reply = (
+                    "Exam stress can make everything feel urgent at the same "
+                    "time. For the moment, pick the one thing you are most "
+                    "worried about rather than the whole semester. What is it?"
+                )
+            elif topic == "work":
+                reply = (
+                    "When an interview or job situation is hanging over you, "
+                    "your mind can keep rehearsing every possible outcome. "
+                    "Let's narrow it down to the part you can actually work "
+                    "with right now—what is worrying you most?"
+                )
+            else:
+                reply = (
+                    "That sounds like a lot of mental noise to carry at once. "
+                    "Let's narrow it down instead of solving everything "
+                    "together. What thought keeps coming back?"
+                )
+            return self._fallback(reply, context)
+
+        if mood == "hopeless":
+            return self._fallback(
+                "When everything feels pointless, even small tasks can feel "
+                "unreasonably hard. We don't need to solve your whole life in "
+                "one conversation. What feels most impossible right now?",
+                context,
+            )
+
+        if mood == "low_self_worth":
+            return self._fallback(
+                "A painful result can easily turn into a much harsher judgment "
+                "about yourself. The setback and your worth are not the same "
+                "thing. What happened that made you turn this against yourself?",
+                context,
+            )
+
+        if mood == "positive":
+            return self._fallback(
+                "I like hearing that. It sounds like something shifted in a "
+                "good direction. What changed?",
+                context,
+            )
+
+        if self._looks_like_question(lowered):
+            return self._fallback(
+                "Yes, I can help you think that through. Give me a little more "
+                "context about what you're trying to figure out, and I'll work "
+                "through it with you.",
+                context,
+            )
+
+        if previous_reply:
+            return self._fallback(
+                "I’m following you. Let’s stay with what you just said instead "
+                "of jumping to a generic answer. Which part feels most "
+                "important right now?",
+                context,
+            )
+
+        if topic == "college":
+            reply = (
+                "I’m with you. Tell me what is happening with college in your "
+                "own words, and we can work through the part that matters most."
+            )
+        elif topic == "work":
+            reply = (
+                "I’m with you. Tell me what is happening with work, your "
+                "internship, or your career, and we’ll take it from there."
+            )
+        elif topic:
+            reply = (
+                f"I’m following what you shared about your {topic}. "
+                "Tell me what happened, and we can unpack it together."
+            )
+        else:
+            reply = (
+                "I'm listening. Start wherever feels easiest—you can tell me "
+                "what happened, what you're feeling, or simply what you need "
+                "right now."
+            )
+
+        return self._fallback(reply, context)
+
+    @staticmethod
+    def _fallback(text: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        recent_turns = context.get("recent_turns", []) or []
+        recent_replies = {
+            re.sub(r"\s+", " ", str(t.get("assistant", "")).strip().lower())
+            for t in recent_turns[-4:]
+            if t.get("assistant")
         }
+        normalized = re.sub(r"\s+", " ", text.strip().lower())
 
-        text = responses.get(mood)
-        if not text and topic:
-            text = f"Let's stay with your {topic} situation. What part would you like to talk through?"
-        if not text:
-            text = "I'm here to listen. Tell me what's on your mind."
+        # Keep deterministic fallbacks from becoming a visible loop.
+        if normalized in recent_replies:
+            text = (
+                "I don't want to give you the same canned answer again. "
+                "Tell me what has changed since your last message, even if "
+                "it's something small."
+            )
 
         return {
-            "text": text,
+            "text": text.strip(),
             "source": "fallback",
             "model": None,
             "used_llm": False,
@@ -326,6 +532,45 @@ score, mood name, disclaimer, or meta-commentary.
 
     def _clean_response(self, text: str) -> str:
         text = str(text or "").strip()
-        while "\n\n\n" in text:
-            text = text.replace("\n\n\n", "\n\n")
+        # Keep model output readable in the chat UI without changing meaning.
+        text = re.sub(r"\\n{3,}", "\\n\\n", text)
+        text = re.sub(r"[ \\t]{2,}", " ", text)
         return text
+
+    @staticmethod
+    def _is_greeting(text: str) -> bool:
+        return text.strip() in {
+            "hi",
+            "hello",
+            "hey",
+            "good morning",
+            "good afternoon",
+            "good evening",
+        }
+
+    @staticmethod
+    def _is_gratitude(text: str) -> bool:
+        return any(
+            phrase in text
+            for phrase in ("thank you", "thanks", "thx", "thank u")
+        )
+
+    @staticmethod
+    def _looks_like_question(text: str) -> bool:
+        return (
+            text.endswith("?")
+            or text.startswith(
+                (
+                    "what ",
+                    "why ",
+                    "how ",
+                    "when ",
+                    "where ",
+                    "can you ",
+                    "could you ",
+                    "should i ",
+                    "is it ",
+                    "do you ",
+                )
+            )
+        )

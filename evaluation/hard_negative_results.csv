@@ -1,0 +1,11 @@
+message,expected,predicted,expected_risk,actual_risk,decision_source,ml_category,rule_category,correct
+I am not thinking about self-harm.,negated,negated,low,low,rule_override,negated,negated,True
+I am safe and I do not want to hurt myself.,negated,negated,low,low,rule_override,negated,negated,True
+My friend is struggling and I want to support them.,contextual,contextual,medium,medium,ml_contextual,contextual,neutral,True
+I read an article about suicide today.,neutral,neutral,low,low,rule_context_override,neutral,neutral,True
+Our class discussed self-harm during today's lecture.,neutral,neutral,low,low,rule_context_override,negated,neutral,True
+"Someone I know mentioned suicide, and I am worried about them.",contextual,contextual,medium,medium,rule_context,contextual,contextual,True
+I feel overwhelmed by my assignments.,neutral,neutral,low,low,rule_stress_override,crisis,neutral,True
+I feel hopeful about tomorrow.,positive,positive,low,low,rule_positive_override,positive,positive,True
+I am feeling much better today.,positive,positive,low,low,rule_positive_override,neutral,positive,True
+I don't want to hurt myself; I just need someone to talk to.,negated,negated,low,low,rule_override,self_harm,negated,True

@@ -14,7 +14,8 @@ class SafetyEngine:
         risk_level: str = "low",
         risk_score: float = 0.0,
         signals: Optional[Dict[str, Any]] = None,
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        decision_source: Optional[str] = None
     ) -> Dict[str, Any]:
 
         message = self._clean(message)
@@ -34,6 +35,7 @@ class SafetyEngine:
             "policy": policy,
             "signals": signals,
             "context": context,
+            "decision_source": decision_source,
             "requires_human_support": policy[
                 "require_human_support"
             ],

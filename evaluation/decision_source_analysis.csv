@@ -1,0 +1,181 @@
+message,expected,predicted,decision_source,risk_level,ml_category,rule_category,rule_fired,matched_rule,ml_high_risk_probability,correct
+"When I think about everything, work finish karke mujhe proud feel ho raha hai.",positive,positive,ml_positive,low,positive,neutral,False,,0.09313985941376426,True
+"When I think about everything, i do not want to harm myself.",negated,negated,rule_override,low,negated,negated,negation,\bdo not want to harm myself\b,0.0667494217793216,True
+I have been feeling this way because of several things. Someone I know has been having thoughts about self-harm.,contextual,contextual,rule_context,medium,contextual,contextual,contextual,contextual_self_harm,0.21606574751143326,True
+I wanted to mention that khud ko harm karne ke thoughts baar baar aa rahe hain.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7726316151201351,True
+Mera roommate struggle kar raha hai aur main usko support karna chahta hoon. I am trying to make sense of it.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.07420667528640905,True
+"Recently, main khud ko hurt karne ke danger mein nahi hoon.",negated,negated,ml,low,negated,neutral,False,,0.08353307519134319,True
+I have been feeling this way because of several things. Mujhe khud ko safe rakhna difficult lag raha hai.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6691765677399882,True
+I feel supported by the people around me. I do not know who to talk to.,positive,positive,ml_positive,low,positive,neutral,False,,0.11707654466260353,True
+Mujhe lag raha hai main situation handle nahi kar paa raha. I want to talk about it.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7356436735250191,True
+Overwhelmed hone par mujhe khud ko hurt karne ka urge hota hai. I need someone to listen.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6150747310552421,True
+Kal morning mein meeting hai. I am trying to explain how I feel.,neutral,neutral,ml,low,neutral,neutral,False,,0.11899426655394928,True
+These days I want to say that mujhe lag raha hai main ye moment akela handle nahi kar sakta.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7553893712741623,True
+I am worried that I might hurt myself. I am trying to make sense of it.,self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.5553669235684975,True
+I wanted to mention that main apna study schedule bana raha hoon.,neutral,neutral,ml,low,neutral,neutral,False,,0.04004980479021404,True
+I feel supported by the people around me. and I wanted to talk about it.,positive,positive,ml_positive,low,positive,neutral,False,,0.09264139134566049,True
+Aaj Python project par kaam kiya. I want to talk about it.,neutral,neutral,ml,low,neutral,neutral,False,,0.051855973531229414,True
+Work finish karke mujhe proud feel ho raha hai. I am looking for help.,positive,positive,ml_positive,low,positive,neutral,False,,0.11266397176215392,True
+Today I want to say that a family member says they do not feel safe.,contextual,contextual,rule_context,medium,contextual,contextual,contextual,contextual_crisis,0.09579059682564398,True
+When I think about everything I want to say that someone close to me needs emotional support.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.07887978417173075,True
+Weekend ke plans bana raha hoon. I am trying to explain how I feel.,neutral,neutral,ml,low,neutral,neutral,False,,0.07892221410387754,True
+These days I want to say that mujhe khud ko safe rakhna difficult lag raha hai.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6788693179284402,True
+Mujhe lag raha hai main emotional crisis mein hoon. I need a calm response.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7019452741032158,True
+"This evening, kal morning mein meeting hai.",neutral,neutral,ml,low,neutral,neutral,False,,0.06784580954824171,True
+When I think about everything I want to say that aaj ka din achha gaya aur main happy feel kar raha hoon.,positive,positive,ml_positive,low,positive,neutral,False,,0.07608988804803984,True
+Recently I want to say that i feel like i am in an emotional crisis.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.674276064784574,True
+Main self-harm consider nahi kar raha hoon. I would like some support.,negated,negated,rule_override,low,negated,negated,negation,\bself[- ]harm consider nahi kar raha hoon\b,0.08813598974933473,True
+"At the moment, honestly, weekend ke plans bana raha hoon.",neutral,neutral,ml,low,neutral,neutral,False,,0.05425649096994002,True
+"While dealing with everything, honestly, the thoughts of harming myself keep returning.",self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6133605836929596,True
+I feel like I am at a breaking point. I am hoping someone can understand.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6690686963838317,True
+I wanted to mention that my friend has been talking about very dark thoughts.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.03341302821907673,True
+"Over the last few days, honestly, i am worried that i might hurt myself.",self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.5501599217608998,True
+My friend told me they are thinking about hurting themselves. and I wanted to talk about it.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.10477424157104638,True
+My friend has been talking about very dark thoughts. I am looking for help.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.06039681147266946,True
+While dealing with everything I want to say that mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.09323678976318905,True
+"Lately, main kisi aur person ke liye worried hoon.",contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.1004216476111978,True
+"This evening, honestly, mujhe khud ko hurt nahi karna.",negated,negated,ml,low,negated,neutral,False,,0.12245624475099705,True
+I wanted to mention that i have been having thoughts about self-harm.,self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.5891422549889498,True
+Kal ke liye motivated feel kar raha hoon. I am hoping someone can understand.,positive,positive,ml_positive,low,positive,neutral,False,,0.08808496875094622,True
+I have been feeling this way because of several things. Aaj room clean kiya.,neutral,neutral,ml,low,neutral,neutral,False,,0.1049057279164966,True
+Recently I want to say that i keep having unwanted thoughts about hurting myself.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.8236790364185912,True
+"When I think about everything, i am worried that i might hurt myself.",self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.5643804682527757,True
+Mujhe khud ko harm nahi karna hai. I would like some support.,negated,negated,ml,low,negated,neutral,False,,0.0791676724849244,True
+I feel unable to get through this moment on my own. I am looking for help.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6919330005768498,True
+I have been feeling this way because of several things. Class ke baad movie dekhi.,neutral,neutral,ml,low,neutral,neutral,False,,0.08758705154816661,True
+My friend has been talking about very dark thoughts. and I wanted to talk about it.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.05141772502474673,True
+Main kisi aur person ke liye worried hoon. and I wanted to talk about it.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.10380899814894322,True
+Mere is week kaafi assignments hain. and I wanted to talk about it.,neutral,neutral,ml,low,neutral,neutral,False,,0.07129099202960014,True
+Main GitHub seekh raha hoon. I need someone to listen.,neutral,neutral,ml,low,neutral,neutral,False,,0.12557034299897407,True
+"Today, honestly, my friend is going through a serious emotional crisis.",contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.0686675214255135,True
+I am struggling with thoughts about self-injury. and I wanted to talk about it.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7722046824517516,True
+Main kisi aur person ke liye worried hoon. I need someone to listen.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.14548651453385478,True
+"Recently, someone close to me needs emotional support.",contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.03374938970947671,True
+Mujhe khud ko hurt nahi karna. I am looking for help.,negated,negated,ml,low,negated,neutral,False,,0.09656267042526442,True
+"For the past week, main safe hoon aur self-harm ke thoughts nahi aa rahe.",negated,negated,rule_override,low,negated,negated,negation,\bself[- ]harm ke thoughts nahi aa rahe\b,0.11562607764837927,True
+Right now I want to say that mujhe lag raha hai main ye moment akela handle nahi kar sakta.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7844572116207816,True
+Kal groceries lene jaana hai. and I wanted to talk about it.,neutral,neutral,ml,low,neutral,neutral,False,,0.07177797626893115,True
+Someone close to me has been talking about self-harm. I am looking for help.,contextual,contextual,rule_context,medium,contextual,contextual,contextual,contextual_self_harm,0.049712154396244296,True
+Mujhe khud ko safe rakhna difficult lag raha hai. and I wanted to talk about it.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6361112659739538,True
+"This morning, honestly, mujhe lag raha hai main ye moment akela handle nahi kar sakta.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.8067276248665501,True
+I feel like I cannot cope with what is happening. and I wanted to talk about it.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6823714240370179,True
+"Today, main khud ko hurt karne ke baare mein nahi soch raha hoon.",negated,negated,ml,low,negated,neutral,False,,0.08136036548544884,True
+"This morning, honestly, i feel like i cannot cope with what is happening.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7383485208719881,True
+While dealing with everything I want to say that i feel calm and grateful today.,positive,positive,ml_positive,low,positive,neutral,False,,0.1458203809103506,True
+"For the past week, honestly, i had a really good conversation with my friend.",positive,positive,ml_positive,low,positive,neutral,False,,0.0932560961152825,True
+Everything feels completely overwhelming. I want to talk about it.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6058987908743232,True
+Mere mind mein khud ko hurt karne ke unwanted thoughts hain. and I wanted to talk about it.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6922945648908713,True
+Mera classmate self-harm ke thoughts ke baare mein bata raha tha. I want to talk about it.,contextual,contextual,rule_context,medium,contextual,contextual,contextual,contextual_self_harm,0.08698588087384038,True
+Over the last few days I want to say that someone i know has been having thoughts about self-harm.,contextual,contextual,rule_context,medium,contextual,contextual,contextual,contextual_self_harm,0.15829567986087187,True
+"Today, mujhe khud ko harm nahi karna hai.",negated,negated,ml,low,negated,neutral,False,,0.05632657934487715,True
+Mera friend dark thoughts ke baare mein baat kar raha hai. I am looking for help.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.05281490809149062,True
+I am not suicidal. I am trying to make sense of it.,negated,negated,rule_override,low,negated,negated,negation,\bnot suicidal\b,0.07161212846341292,True
+I feel unable to get through this moment on my own. and I wanted to talk about it.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6341089506866905,True
+"Right now, i finally reached a goal i had been working toward.",positive,positive,ml_positive,low,positive,neutral,False,,0.07065336758310177,True
+When I think about everything I want to say that mera friend dark thoughts ke baare mein baat kar raha hai.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.05619251363708536,True
+Since yesterday I want to say that mujhe khud ko harm nahi karna hai.,negated,negated,ml,low,negated,neutral,False,,0.07592432785565756,True
+I wanted to mention that i feel calm and grateful today.,positive,positive,ml_positive,low,positive,neutral,False,,0.0837299202227098,True
+I am planning my weekend. and I wanted to talk about it.,neutral,neutral,ml,low,neutral,neutral,False,,0.08611383192956881,True
+"Today, honestly, my friend told me they are thinking about hurting themselves.",contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.09149189090239465,True
+"This evening, honestly, i am not thinking about hurting myself.",negated,negated,rule_override,low,negated,negated,negation,\bnot thinking about hurting myself\b,0.18076600363365092,True
+I have been feeling this way because of several things. Mera khud ko hurt karne ka koi intention nahi hai.,negated,negated,ml,low,negated,neutral,False,,0.13032745925200653,True
+I have been feeling this way because of several things. The thoughts of harming myself keep returning.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6308147523242312,True
+"After everything that happened, honestly, thoughts about self-harm are becoming difficult to ignore.",self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.7527932658628931,True
+"After everything that happened, i have no intention of hurting myself.",negated,negated,ml,low,negated,neutral,False,,0.15283976148961684,True
+I feel an urge to hurt myself when I become overwhelmed. I need a calm response.,self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.6702065408416855,True
+"At the moment, friend ke saath achhi conversation hui.",positive,positive,ml_positive,low,positive,neutral,False,,0.06928778676828747,True
+Mujhe fear hai ki main khud ko harm kar sakta hoon. I do not know who to talk to.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6130233328234735,True
+"For the past week, honestly, main github seekh raha hoon.",neutral,neutral,ml,low,neutral,neutral,False,,0.058894724221618615,True
+"Over the last few days, honestly, main khud ko hurt karne ke danger mein nahi hoon.",negated,negated,ml,low,negated,neutral,False,,0.10876629913961158,True
+"After everything that happened, honestly, i am safe and i am not thinking about self-harm.",negated,negated,rule_override,low,negated,negated,negation,\bnot thinking about self[- ]harm\b,0.10809771817368116,True
+I have been feeling this way because of several things. I finally reached a goal I had been working toward.,positive,positive,ml_positive,low,positive,neutral,False,,0.0769392642578013,True
+"Lately, mera roommate struggle kar raha hai aur main usko support karna chahta hoon.",contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.06204602671506859,True
+I wanted to mention that i need to buy groceries tomorrow.,neutral,neutral,ml,low,neutral,neutral,False,,0.08373957753002234,True
+I had a really good conversation with my friend. I need a calm response.,positive,positive,ml_positive,low,positive,neutral,False,,0.10224766870685957,True
+I am not suicidal. I do not know who to talk to.,negated,negated,rule_override,low,negated,negated,negation,\bnot suicidal\b,0.057375241941093016,True
+I have been feeling this way because of several things. I feel hopeful about the future.,positive,positive,rule_positive_override,low,positive,positive,positive,\bfeel hopeful\b,0.1023531364467618,True
+"I have been feeling this way because of several things. I am having a difficult day, but I am not thinking about self-harm.",negated,negated,rule_override,low,negated,negated,negation,\bnot thinking about self[- ]harm\b,0.14222555431842904,True
+These days I want to say that the thoughts of harming myself keep returning.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6381573514854199,True
+Main apna study schedule bana raha hoon. I need a calm response.,neutral,neutral,ml,low,neutral,neutral,False,,0.04585721148542928,True
+I wanted to mention that mujhe fear hai ki main khud ko harm kar sakta hoon.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7406301099821336,True
+"This morning, aaj calm aur grateful feel kar raha hoon.",positive,positive,ml_positive,low,positive,neutral,False,,0.07351281315852638,True
+Lately I want to say that mujhe self-harm ke thoughts aa rahe hain.,self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.7766665810003928,True
+"These days, honestly, i am scared by how overwhelmed i feel.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7073317797879402,True
+Mujhe apne aas paas ke logon ka support milta hai. I need a calm response.,positive,positive,ml_positive,low,positive,neutral,False,,0.05303321468141672,True
+"This morning, honestly, i feel like i am in an emotional crisis.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7236860648707674,True
+These days I want to say that i am planning my weekend.,neutral,neutral,ml,low,neutral,neutral,False,,0.09742685539828254,True
+"Over the last few days, aaj python project par kaam kiya.",neutral,neutral,ml,low,neutral,neutral,False,,0.05677937711359914,True
+"Lately, honestly, i am afraid i may harm myself.",self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.7003608155786125,True
+My friend is going through a serious emotional crisis. I want to talk about it.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.0702874375127907,True
+My roommate is struggling and I want to support them. I do not know who to talk to.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.0672635525161781,True
+"This evening, i feel like i am at a breaking point.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7165116785285129,True
+"While dealing with everything, i am not considering self-harm.",negated,negated,rule_override,low,negated,negated,negation,\bnot considering self[- ]harm\b,0.05120003052176545,True
+"Recently, honestly, mujhe fear hai ki main khud ko harm kar sakta hoon.",self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7188699333995116,True
+"This evening, i spent the afternoon cleaning my room.",neutral,neutral,ml,low,neutral,neutral,False,,0.05220173885054173,True
+Mujhe khud ko harm nahi karna hai. I am trying to make sense of it.,negated,negated,ml,low,negated,neutral,False,,0.06059407797004586,True
+These days I want to say that kal ke liye motivated feel kar raha hoon.,positive,positive,ml_positive,low,positive,neutral,False,,0.08393672770054768,True
+I have been feeling this way because of several things. I am worried about another person who seems overwhelmed.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.09752964248092062,True
+Aaj calm aur grateful feel kar raha hoon. I am looking for help.,positive,positive,ml_positive,low,positive,neutral,False,,0.09277915710417654,True
+I have been feeling this way because of several things. I feel happy about how today went.,positive,positive,rule_positive_override,low,positive,positive,positive,\bfeel happy\b,0.10229915937527198,True
+"Right now, honestly, weekend ke plans bana raha hoon.",neutral,neutral,ml,low,neutral,neutral,False,,0.06811648063892786,True
+I have been feeling this way because of several things. I have been thinking about hurting myself lately.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.5449710121974718,True
+Kal morning mein meeting hai. I am trying to make sense of it.,neutral,neutral,ml,low,neutral,neutral,False,,0.0838475801190713,True
+Future ko lekar hopeful feel kar raha hoon. I would like some support.,positive,positive,ml_positive,low,positive,neutral,False,,0.05588194432052364,True
+"When I think about everything, honestly, i do not want to harm myself.",negated,negated,rule_override,low,negated,negated,negation,\bdo not want to harm myself\b,0.06637357171759337,True
+I am struggling to keep myself safe. I am trying to explain how I feel.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6203858298727224,True
+"At the moment, honestly, my roommate is struggling and i want to support them.",contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.07953440604885727,True
+"At the moment, honestly, my friend is going through a serious emotional crisis.",contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.09053794980956578,True
+"This morning, khud ko harm karne ke thoughts baar baar aa rahe hain.",self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7792392076442677,True
+I am planning my weekend. I do not know who to talk to.,neutral,neutral,ml,low,neutral,neutral,False,,0.10616983007100442,True
+I am scared by how overwhelmed I feel. I am looking for help.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7436318265656845,True
+After everything that happened I want to say that i am not considering self-harm.,negated,negated,rule_override,low,negated,negated,negation,\bnot considering self[- ]harm\b,0.0836123969202293,True
+"When I think about everything, mujhe darr hai ki main khud ko hurt kar sakta hoon.",self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6854066595709426,True
+Work finish karke mujhe proud feel ho raha hai. I am trying to make sense of it.,positive,positive,ml_positive,low,positive,neutral,False,,0.0871133656199473,True
+"At the moment, honestly, i worked on my python project today.",neutral,neutral,ml,low,neutral,neutral,False,,0.06146763602161779,True
+"When I think about everything, honestly, mujhe lag raha hai ki main breaking point par hoon.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7492824951499141,True
+I am planning my weekend. I am trying to make sense of it.,neutral,neutral,ml,low,neutral,neutral,False,,0.10454341978961247,True
+After everything that happened I want to say that mere is week kaafi assignments hain.,neutral,neutral,ml,low,neutral,neutral,False,,0.07160424446063483,True
+"Right now, honestly, main self-harm consider nahi kar raha hoon.",negated,negated,rule_override,low,negated,negated,negation,\bself[- ]harm consider nahi kar raha hoon\b,0.07831659080769476,True
+This morning I want to say that i feel hopeful about the future.,positive,positive,rule_positive_override,low,positive,positive,positive,\bfeel hopeful\b,0.09008765229531351,True
+I do not feel safe being alone with my thoughts. I would like some support.,crisis,crisis,rule_safety_override,high,crisis,crisis,high_risk,crisis,0.5175549102858094,True
+"Over the last few days, honestly, khud ko harm karne ke thoughts baar baar aa rahe hain.",self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7105242259301493,True
+"For the past week, i finally reached a goal i had been working toward.",positive,positive,ml_positive,low,positive,neutral,False,,0.05060315547186225,True
+I keep having unwanted thoughts about hurting myself. I am trying to make sense of it.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7824290825339228,True
+Mujhe lag raha hai main situation handle nahi kar paa raha. I am trying to make sense of it.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7342982326868298,True
+I wanted to mention that i spent the afternoon cleaning my room.,neutral,neutral,ml,low,neutral,neutral,False,,0.05163153492866114,True
+"While dealing with everything, honestly, weekend ke plans bana raha hoon.",neutral,neutral,ml,low,neutral,neutral,False,,0.0654510080740032,True
+"When I think about everything, honestly, work finish karke mujhe proud feel ho raha hai.",positive,positive,ml_positive,low,positive,neutral,False,,0.09108268796802993,True
+"Right now, honestly, mere mind mein khud ko hurt karne ke unwanted thoughts hain.",self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6891305024388881,True
+I am excited about my new project. I am trying to make sense of it.,positive,positive,ml_positive,low,positive,neutral,False,,0.07917033480736317,True
+"Since yesterday, honestly, kal ke liye motivated feel kar raha hoon.",positive,positive,ml_positive,low,positive,neutral,False,,0.06536095914822738,True
+Aaj ka din achha gaya aur main happy feel kar raha hoon. and I wanted to talk about it.,positive,positive,ml_positive,low,positive,neutral,False,,0.05811209227536376,True
+"After everything that happened, mujhe khud ko hurt nahi karna.",negated,negated,ml,low,negated,neutral,False,,0.13594181041535947,True
+"This evening, honestly, mujhe lag raha hai ki main breaking point par hoon.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7599359505475395,True
+"After everything that happened, honestly, i am preparing for an upcoming exam.",neutral,neutral,ml,low,neutral,neutral,False,,0.06897331519297402,True
+Mujhe urgently kisi ki help chahiye. I am trying to make sense of it.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7215499181539747,True
+Main GitHub seekh raha hoon. I want to talk about it.,neutral,neutral,ml,low,neutral,neutral,False,,0.07439791386672842,True
+I have been feeling this way because of several things. Main kisi aur person ke liye worried hoon.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.13268340676077658,True
+"At the moment, i am proud of myself for finishing my work.",positive,positive,rule_positive_override,low,positive,positive,positive,\bproud of myself\b,0.0516758380286433,True
+I am worried about another person who seems overwhelmed. I need a calm response.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.06343433778667995,True
+My thoughts feel out of control right now. I would like some support.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.6709133366882071,True
+"Recently, i am having a difficult day, but i am not thinking about self-harm.",negated,negated,rule_override,low,negated,negated,negation,\bnot thinking about self[- ]harm\b,0.11519858732604159,True
+I have been feeling this way because of several things. Mera friend bahut overwhelmed lag raha hai.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.19705924351977988,True
+For the past week I want to say that lately mujhe khud ko hurt karne ke thoughts aa rahe hain.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7508367942525901,True
+I wanted to mention that mujhe khud ko harm nahi karna hai.,negated,negated,ml,low,negated,neutral,False,,0.06374175282102792,True
+New project ko lekar main excited hoon. I need someone to listen.,positive,positive,ml_positive,low,positive,neutral,False,,0.08119468766706514,True
+I do not want to hurt myself. I need a calm response.,negated,negated,rule_override,low,negated,negated,negation,\bdo not want to hurt myself\b,0.10276783000845595,True
+Main self-harm consider nahi kar raha hoon. and I wanted to talk about it.,negated,negated,rule_override,low,negated,negated,negation,\bself[- ]harm consider nahi kar raha hoon\b,0.09444371377186171,True
+I have been feeling this way because of several things. I am struggling with thoughts about self-injury.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6953665786402266,True
+At the moment I want to say that mujhe lag raha hai main emotional crisis mein hoon.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7341343104353123,True
+"Right now, honestly, i need to buy groceries tomorrow.",neutral,neutral,ml,low,neutral,neutral,False,,0.12194695369011274,True
+"Lately, honestly, self-harm ke thoughts ignore karna difficult ho raha hai.",self_harm,self_harm,rule_safety_override,high,self_harm,self_harm,high_risk,self_harm,0.7201182411803725,True
+"This morning, honestly, mujhe lag raha hai ki main breaking point par hoon.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7880956415827864,True
+"Lately, honestly, i do not want to harm myself.",negated,negated,rule_override,low,negated,negated,negation,\bdo not want to harm myself\b,0.0696926823681697,True
+I wanted to mention that i feel motivated for tomorrow.,positive,positive,ml_positive,low,positive,neutral,False,,0.08652301653277486,True
+This morning I want to say that mujhe lag raha hai main emotional crisis mein hoon.,crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7663991121421206,True
+Main suicidal nahi hoon. I want to talk about it.,negated,negated,rule_override,low,negated,negated,negation,\bmain suicidal nahi hoon\b,0.06496712026623062,True
+I wanted to mention that main self-injury ke thoughts se struggle kar raha hoon.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.7169096137472942,True
+I have been feeling this way because of several things. I am planning my weekend.,neutral,neutral,ml,low,neutral,neutral,False,,0.13974919856584353,True
+The thoughts of harming myself keep returning. I am trying to make sense of it.,self_harm,self_harm,ml_high_risk,high,self_harm,neutral,False,,0.6196447499548363,True
+My friend told me they are thinking about hurting themselves. I need someone to listen.,contextual,contextual,ml_contextual,medium,contextual,neutral,False,,0.08905475889773587,True
+"Lately, sab kuch bahut overwhelming lag raha hai.",crisis,crisis,ml_high_risk,high,crisis,neutral,False,,0.7722132118537367,True

@@ -10,6 +10,8 @@ class ResponseEngine:
     ):
         self.user_name = user_name or "friend"
         self.llm_engine = llm_engine
+        self.last_source = "fallback"
+        self.last_model = None
 
     def generate(
         self,
@@ -17,6 +19,9 @@ class ResponseEngine:
         analysis,
         context
     ):
+        self.last_source = "fallback"
+        self.last_model = None
+
         message = (message or "").strip()
         text = message.lower()
 
@@ -95,12 +100,18 @@ class ResponseEngine:
                 return None
 
             if isinstance(result, dict):
+                self.last_source = str(
+                    result.get("source", "llm")
+                    or "llm"
+                )
+                self.last_model = result.get("model")
                 reply = (
                     result.get("reply")
                     or result.get("response")
                     or result.get("text")
                 )
             else:
+                self.last_source = "llm"
                 reply = result
 
             if not isinstance(reply, str):

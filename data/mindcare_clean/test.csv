@@ -1,0 +1,181 @@
+message_id,message,category,risk_level,language,source_type,split,label
+MC-0001,"When I think about everything, work finish karke mujhe proud feel ho raha hai.",positive,low,hinglish,synthetic,test,5
+MC-0017,"When I think about everything, i do not want to harm myself.",negated,low,en,synthetic,test,2
+MC-0023,I have been feeling this way because of several things. Someone I know has been having thoughts about self-harm.,contextual,medium,en,synthetic,test,3
+MC-0026,I wanted to mention that khud ko harm karne ke thoughts baar baar aa rahe hain.,self_harm,high,hinglish,synthetic,test,1
+MC-0034,Mera roommate struggle kar raha hai aur main usko support karna chahta hoon. I am trying to make sense of it.,contextual,medium,hinglish,synthetic,test,3
+MC-0037,"Recently, main khud ko hurt karne ke danger mein nahi hoon.",negated,low,hinglish,synthetic,test,2
+MC-0038,I have been feeling this way because of several things. Mujhe khud ko safe rakhna difficult lag raha hai.,crisis,high,hinglish,synthetic,test,0
+MC-0041,I feel supported by the people around me. I do not know who to talk to.,positive,low,en,synthetic,test,5
+MC-0042,Mujhe lag raha hai main situation handle nahi kar paa raha. I want to talk about it.,crisis,high,hinglish,synthetic,test,0
+MC-0044,Overwhelmed hone par mujhe khud ko hurt karne ka urge hota hai. I need someone to listen.,self_harm,high,hinglish,synthetic,test,1
+MC-0045,Kal morning mein meeting hai. I am trying to explain how I feel.,neutral,low,hinglish,synthetic,test,4
+MC-0048,These days I want to say that mujhe lag raha hai main ye moment akela handle nahi kar sakta.,crisis,high,hinglish,synthetic,test,0
+MC-0056,I am worried that I might hurt myself. I am trying to make sense of it.,self_harm,high,en,synthetic,test,1
+MC-0057,I wanted to mention that main apna study schedule bana raha hoon.,neutral,low,hinglish,synthetic,test,4
+MC-0058,I feel supported by the people around me. and I wanted to talk about it.,positive,low,en,synthetic,test,5
+MC-0079,Aaj Python project par kaam kiya. I want to talk about it.,neutral,low,hinglish,synthetic,test,4
+MC-0086,Work finish karke mujhe proud feel ho raha hai. I am looking for help.,positive,low,hinglish,synthetic,test,5
+MC-0090,Today I want to say that a family member says they do not feel safe.,contextual,medium,en,synthetic,test,3
+MC-0096,When I think about everything I want to say that someone close to me needs emotional support.,contextual,medium,en,synthetic,test,3
+MC-0098,Weekend ke plans bana raha hoon. I am trying to explain how I feel.,neutral,low,hinglish,synthetic,test,4
+MC-0100,These days I want to say that mujhe khud ko safe rakhna difficult lag raha hai.,crisis,high,hinglish,synthetic,test,0
+MC-0102,Mujhe lag raha hai main emotional crisis mein hoon. I need a calm response.,crisis,high,hinglish,synthetic,test,0
+MC-0112,"This evening, kal morning mein meeting hai.",neutral,low,hinglish,synthetic,test,4
+MC-0116,When I think about everything I want to say that aaj ka din achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,test,5
+MC-0118,Recently I want to say that i feel like i am in an emotional crisis.,crisis,high,en,synthetic,test,0
+MC-0121,Main self-harm consider nahi kar raha hoon. I would like some support.,negated,low,hinglish,synthetic,test,2
+MC-0122,"At the moment, honestly, weekend ke plans bana raha hoon.",neutral,low,hinglish,synthetic,test,4
+MC-0127,"While dealing with everything, honestly, the thoughts of harming myself keep returning.",self_harm,high,en,synthetic,test,1
+MC-0128,I feel like I am at a breaking point. I am hoping someone can understand.,crisis,high,en,synthetic,test,0
+MC-0129,I wanted to mention that my friend has been talking about very dark thoughts.,contextual,medium,en,synthetic,test,3
+MC-0134,"Over the last few days, honestly, i am worried that i might hurt myself.",self_harm,high,en,synthetic,test,1
+MC-0137,My friend told me they are thinking about hurting themselves. and I wanted to talk about it.,contextual,medium,en,synthetic,test,3
+MC-0142,My friend has been talking about very dark thoughts. I am looking for help.,contextual,medium,en,synthetic,test,3
+MC-0144,While dealing with everything I want to say that mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,test,3
+MC-0145,"Lately, main kisi aur person ke liye worried hoon.",contextual,medium,hinglish,synthetic,test,3
+MC-0156,"This evening, honestly, mujhe khud ko hurt nahi karna.",negated,low,hinglish,synthetic,test,2
+MC-0157,I wanted to mention that i have been having thoughts about self-harm.,self_harm,high,en,synthetic,test,1
+MC-0163,Kal ke liye motivated feel kar raha hoon. I am hoping someone can understand.,positive,low,hinglish,synthetic,test,5
+MC-0166,I have been feeling this way because of several things. Aaj room clean kiya.,neutral,low,hinglish,synthetic,test,4
+MC-0173,Recently I want to say that i keep having unwanted thoughts about hurting myself.,self_harm,high,en,synthetic,test,1
+MC-0185,"When I think about everything, i am worried that i might hurt myself.",self_harm,high,en,synthetic,test,1
+MC-0190,Mujhe khud ko harm nahi karna hai. I would like some support.,negated,low,hinglish,synthetic,test,2
+MC-0196,I feel unable to get through this moment on my own. I am looking for help.,crisis,high,en,synthetic,test,0
+MC-0201,I have been feeling this way because of several things. Class ke baad movie dekhi.,neutral,low,hinglish,synthetic,test,4
+MC-0207,My friend has been talking about very dark thoughts. and I wanted to talk about it.,contextual,medium,en,synthetic,test,3
+MC-0208,Main kisi aur person ke liye worried hoon. and I wanted to talk about it.,contextual,medium,hinglish,synthetic,test,3
+MC-0214,Mere is week kaafi assignments hain. and I wanted to talk about it.,neutral,low,hinglish,synthetic,test,4
+MC-0215,Main GitHub seekh raha hoon. I need someone to listen.,neutral,low,hinglish,synthetic,test,4
+MC-0219,"Today, honestly, my friend is going through a serious emotional crisis.",contextual,medium,en,synthetic,test,3
+MC-0229,I am struggling with thoughts about self-injury. and I wanted to talk about it.,self_harm,high,en,synthetic,test,1
+MC-0230,Main kisi aur person ke liye worried hoon. I need someone to listen.,contextual,medium,hinglish,synthetic,test,3
+MC-0251,"Recently, someone close to me needs emotional support.",contextual,medium,en,synthetic,test,3
+MC-0268,Mujhe khud ko hurt nahi karna. I am looking for help.,negated,low,hinglish,synthetic,test,2
+MC-0293,"For the past week, main safe hoon aur self-harm ke thoughts nahi aa rahe.",negated,low,hinglish,synthetic,test,2
+MC-0309,Right now I want to say that mujhe lag raha hai main ye moment akela handle nahi kar sakta.,crisis,high,hinglish,synthetic,test,0
+MC-0310,Kal groceries lene jaana hai. and I wanted to talk about it.,neutral,low,hinglish,synthetic,test,4
+MC-0337,Someone close to me has been talking about self-harm. I am looking for help.,contextual,medium,en,synthetic,test,3
+MC-0353,Mujhe khud ko safe rakhna difficult lag raha hai. and I wanted to talk about it.,crisis,high,hinglish,synthetic,test,0
+MC-0356,"This morning, honestly, mujhe lag raha hai main ye moment akela handle nahi kar sakta.",crisis,high,hinglish,synthetic,test,0
+MC-0358,I feel like I cannot cope with what is happening. and I wanted to talk about it.,crisis,high,en,synthetic,test,0
+MC-0361,"Today, main khud ko hurt karne ke baare mein nahi soch raha hoon.",negated,low,hinglish,synthetic,test,2
+MC-0363,"This morning, honestly, i feel like i cannot cope with what is happening.",crisis,high,en,synthetic,test,0
+MC-0373,While dealing with everything I want to say that i feel calm and grateful today.,positive,low,en,synthetic,test,5
+MC-0382,"For the past week, honestly, i had a really good conversation with my friend.",positive,low,en,synthetic,test,5
+MC-0389,Everything feels completely overwhelming. I want to talk about it.,crisis,high,en,synthetic,test,0
+MC-0394,Mere mind mein khud ko hurt karne ke unwanted thoughts hain. and I wanted to talk about it.,self_harm,high,hinglish,synthetic,test,1
+MC-0409,Mera classmate self-harm ke thoughts ke baare mein bata raha tha. I want to talk about it.,contextual,medium,hinglish,synthetic,test,3
+MC-0418,Over the last few days I want to say that someone i know has been having thoughts about self-harm.,contextual,medium,en,synthetic,test,3
+MC-0420,"Today, mujhe khud ko harm nahi karna hai.",negated,low,hinglish,synthetic,test,2
+MC-0429,Mera friend dark thoughts ke baare mein baat kar raha hai. I am looking for help.,contextual,medium,hinglish,synthetic,test,3
+MC-0431,I am not suicidal. I am trying to make sense of it.,negated,low,en,synthetic,test,2
+MC-0440,I feel unable to get through this moment on my own. and I wanted to talk about it.,crisis,high,en,synthetic,test,0
+MC-0442,"Right now, i finally reached a goal i had been working toward.",positive,low,en,synthetic,test,5
+MC-0451,When I think about everything I want to say that mera friend dark thoughts ke baare mein baat kar raha hai.,contextual,medium,hinglish,synthetic,test,3
+MC-0453,Since yesterday I want to say that mujhe khud ko harm nahi karna hai.,negated,low,hinglish,synthetic,test,2
+MC-0455,I wanted to mention that i feel calm and grateful today.,positive,low,en,synthetic,test,5
+MC-0465,I am planning my weekend. and I wanted to talk about it.,neutral,low,en,synthetic,test,4
+MC-0467,"Today, honestly, my friend told me they are thinking about hurting themselves.",contextual,medium,en,synthetic,test,3
+MC-0483,"This evening, honestly, i am not thinking about hurting myself.",negated,low,en,synthetic,test,2
+MC-0489,I have been feeling this way because of several things. Mera khud ko hurt karne ka koi intention nahi hai.,negated,low,hinglish,synthetic,test,2
+MC-0490,I have been feeling this way because of several things. The thoughts of harming myself keep returning.,self_harm,high,en,synthetic,test,1
+MC-0506,"After everything that happened, honestly, thoughts about self-harm are becoming difficult to ignore.",self_harm,high,en,synthetic,test,1
+MC-0508,"After everything that happened, i have no intention of hurting myself.",negated,low,en,synthetic,test,2
+MC-0511,I feel an urge to hurt myself when I become overwhelmed. I need a calm response.,self_harm,high,en,synthetic,test,1
+MC-0522,"At the moment, friend ke saath achhi conversation hui.",positive,low,hinglish,synthetic,test,5
+MC-0527,Mujhe fear hai ki main khud ko harm kar sakta hoon. I do not know who to talk to.,self_harm,high,hinglish,synthetic,test,1
+MC-0534,"For the past week, honestly, main github seekh raha hoon.",neutral,low,hinglish,synthetic,test,4
+MC-0537,"Over the last few days, honestly, main khud ko hurt karne ke danger mein nahi hoon.",negated,low,hinglish,synthetic,test,2
+MC-0540,"After everything that happened, honestly, i am safe and i am not thinking about self-harm.",negated,low,en,synthetic,test,2
+MC-0547,I have been feeling this way because of several things. I finally reached a goal I had been working toward.,positive,low,en,synthetic,test,5
+MC-0553,"Lately, mera roommate struggle kar raha hai aur main usko support karna chahta hoon.",contextual,medium,hinglish,synthetic,test,3
+MC-0554,I wanted to mention that i need to buy groceries tomorrow.,neutral,low,en,synthetic,test,4
+MC-0564,I had a really good conversation with my friend. I need a calm response.,positive,low,en,synthetic,test,5
+MC-0566,I am not suicidal. I do not know who to talk to.,negated,low,en,synthetic,test,2
+MC-0569,I have been feeling this way because of several things. I feel hopeful about the future.,positive,low,en,synthetic,test,5
+MC-0573,"I have been feeling this way because of several things. I am having a difficult day, but I am not thinking about self-harm.",negated,low,en,synthetic,test,2
+MC-0587,These days I want to say that the thoughts of harming myself keep returning.,self_harm,high,en,synthetic,test,1
+MC-0595,Main apna study schedule bana raha hoon. I need a calm response.,neutral,low,hinglish,synthetic,test,4
+MC-0602,I wanted to mention that mujhe fear hai ki main khud ko harm kar sakta hoon.,self_harm,high,hinglish,synthetic,test,1
+MC-0621,"This morning, aaj calm aur grateful feel kar raha hoon.",positive,low,hinglish,synthetic,test,5
+MC-0631,Lately I want to say that mujhe self-harm ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,test,1
+MC-0639,"These days, honestly, i am scared by how overwhelmed i feel.",crisis,high,en,synthetic,test,0
+MC-0643,Mujhe apne aas paas ke logon ka support milta hai. I need a calm response.,positive,low,hinglish,synthetic,test,5
+MC-0647,"This morning, honestly, i feel like i am in an emotional crisis.",crisis,high,en,synthetic,test,0
+MC-0651,These days I want to say that i am planning my weekend.,neutral,low,en,synthetic,test,4
+MC-0653,"Over the last few days, aaj python project par kaam kiya.",neutral,low,hinglish,synthetic,test,4
+MC-0655,"Lately, honestly, i am afraid i may harm myself.",self_harm,high,en,synthetic,test,1
+MC-0694,My friend is going through a serious emotional crisis. I want to talk about it.,contextual,medium,en,synthetic,test,3
+MC-0698,My roommate is struggling and I want to support them. I do not know who to talk to.,contextual,medium,en,synthetic,test,3
+MC-0699,"This evening, i feel like i am at a breaking point.",crisis,high,en,synthetic,test,0
+MC-0711,"While dealing with everything, i am not considering self-harm.",negated,low,en,synthetic,test,2
+MC-0713,"Recently, honestly, mujhe fear hai ki main khud ko harm kar sakta hoon.",self_harm,high,hinglish,synthetic,test,1
+MC-0714,"This evening, i spent the afternoon cleaning my room.",neutral,low,en,synthetic,test,4
+MC-0715,Mujhe khud ko harm nahi karna hai. I am trying to make sense of it.,negated,low,hinglish,synthetic,test,2
+MC-0718,These days I want to say that kal ke liye motivated feel kar raha hoon.,positive,low,hinglish,synthetic,test,5
+MC-0719,I have been feeling this way because of several things. I am worried about another person who seems overwhelmed.,contextual,medium,en,synthetic,test,3
+MC-0722,Aaj calm aur grateful feel kar raha hoon. I am looking for help.,positive,low,hinglish,synthetic,test,5
+MC-0723,I have been feeling this way because of several things. I feel happy about how today went.,positive,low,en,synthetic,test,5
+MC-0728,"Right now, honestly, weekend ke plans bana raha hoon.",neutral,low,hinglish,synthetic,test,4
+MC-0733,I have been feeling this way because of several things. I have been thinking about hurting myself lately.,self_harm,high,en,synthetic,test,1
+MC-0749,Kal morning mein meeting hai. I am trying to make sense of it.,neutral,low,hinglish,synthetic,test,4
+MC-0762,Future ko lekar hopeful feel kar raha hoon. I would like some support.,positive,low,hinglish,synthetic,test,5
+MC-0763,"When I think about everything, honestly, i do not want to harm myself.",negated,low,en,synthetic,test,2
+MC-0781,I am struggling to keep myself safe. I am trying to explain how I feel.,crisis,high,en,synthetic,test,0
+MC-0787,"At the moment, honestly, my roommate is struggling and i want to support them.",contextual,medium,en,synthetic,test,3
+MC-0788,"At the moment, honestly, my friend is going through a serious emotional crisis.",contextual,medium,en,synthetic,test,3
+MC-0796,"This morning, khud ko harm karne ke thoughts baar baar aa rahe hain.",self_harm,high,hinglish,synthetic,test,1
+MC-0810,I am planning my weekend. I do not know who to talk to.,neutral,low,en,synthetic,test,4
+MC-0819,I am scared by how overwhelmed I feel. I am looking for help.,crisis,high,en,synthetic,test,0
+MC-0821,After everything that happened I want to say that i am not considering self-harm.,negated,low,en,synthetic,test,2
+MC-0832,"When I think about everything, mujhe darr hai ki main khud ko hurt kar sakta hoon.",self_harm,high,hinglish,synthetic,test,1
+MC-0833,Work finish karke mujhe proud feel ho raha hai. I am trying to make sense of it.,positive,low,hinglish,synthetic,test,5
+MC-0834,"At the moment, honestly, i worked on my python project today.",neutral,low,en,synthetic,test,4
+MC-0838,"When I think about everything, honestly, mujhe lag raha hai ki main breaking point par hoon.",crisis,high,hinglish,synthetic,test,0
+MC-0841,I am planning my weekend. I am trying to make sense of it.,neutral,low,en,synthetic,test,4
+MC-0852,After everything that happened I want to say that mere is week kaafi assignments hain.,neutral,low,hinglish,synthetic,test,4
+MC-0867,"Right now, honestly, main self-harm consider nahi kar raha hoon.",negated,low,hinglish,synthetic,test,2
+MC-0876,This morning I want to say that i feel hopeful about the future.,positive,low,en,synthetic,test,5
+MC-0882,I do not feel safe being alone with my thoughts. I would like some support.,crisis,high,en,synthetic,test,0
+MC-0883,"Over the last few days, honestly, khud ko harm karne ke thoughts baar baar aa rahe hain.",self_harm,high,hinglish,synthetic,test,1
+MC-0886,"For the past week, i finally reached a goal i had been working toward.",positive,low,en,synthetic,test,5
+MC-0891,I keep having unwanted thoughts about hurting myself. I am trying to make sense of it.,self_harm,high,en,synthetic,test,1
+MC-0896,Mujhe lag raha hai main situation handle nahi kar paa raha. I am trying to make sense of it.,crisis,high,hinglish,synthetic,test,0
+MC-0906,I wanted to mention that i spent the afternoon cleaning my room.,neutral,low,en,synthetic,test,4
+MC-0912,"While dealing with everything, honestly, weekend ke plans bana raha hoon.",neutral,low,hinglish,synthetic,test,4
+MC-0918,"When I think about everything, honestly, work finish karke mujhe proud feel ho raha hai.",positive,low,hinglish,synthetic,test,5
+MC-0919,"Right now, honestly, mere mind mein khud ko hurt karne ke unwanted thoughts hain.",self_harm,high,hinglish,synthetic,test,1
+MC-0928,I am excited about my new project. I am trying to make sense of it.,positive,low,en,synthetic,test,5
+MC-0935,"Since yesterday, honestly, kal ke liye motivated feel kar raha hoon.",positive,low,hinglish,synthetic,test,5
+MC-0936,Aaj ka din achha gaya aur main happy feel kar raha hoon. and I wanted to talk about it.,positive,low,hinglish,synthetic,test,5
+MC-0943,"After everything that happened, mujhe khud ko hurt nahi karna.",negated,low,hinglish,synthetic,test,2
+MC-0947,"This evening, honestly, mujhe lag raha hai ki main breaking point par hoon.",crisis,high,hinglish,synthetic,test,0
+MC-0962,"After everything that happened, honestly, i am preparing for an upcoming exam.",neutral,low,en,synthetic,test,4
+MC-0963,Mujhe urgently kisi ki help chahiye. I am trying to make sense of it.,crisis,high,hinglish,synthetic,test,0
+MC-0969,Main GitHub seekh raha hoon. I want to talk about it.,neutral,low,hinglish,synthetic,test,4
+MC-0978,I have been feeling this way because of several things. Main kisi aur person ke liye worried hoon.,contextual,medium,hinglish,synthetic,test,3
+MC-0989,"At the moment, i am proud of myself for finishing my work.",positive,low,en,synthetic,test,5
+MC-0997,I am worried about another person who seems overwhelmed. I need a calm response.,contextual,medium,en,synthetic,test,3
+MC-1001,My thoughts feel out of control right now. I would like some support.,crisis,high,en,synthetic,test,0
+MC-1003,"Recently, i am having a difficult day, but i am not thinking about self-harm.",negated,low,en,synthetic,test,2
+MC-1032,I have been feeling this way because of several things. Mera friend bahut overwhelmed lag raha hai.,contextual,medium,hinglish,synthetic,test,3
+MC-1037,For the past week I want to say that lately mujhe khud ko hurt karne ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,test,1
+MC-1039,I wanted to mention that mujhe khud ko harm nahi karna hai.,negated,low,hinglish,synthetic,test,2
+MC-1053,New project ko lekar main excited hoon. I need someone to listen.,positive,low,hinglish,synthetic,test,5
+MC-1054,I do not want to hurt myself. I need a calm response.,negated,low,en,synthetic,test,2
+MC-1070,Main self-harm consider nahi kar raha hoon. and I wanted to talk about it.,negated,low,hinglish,synthetic,test,2
+MC-1085,I have been feeling this way because of several things. I am struggling with thoughts about self-injury.,self_harm,high,en,synthetic,test,1
+MC-1124,At the moment I want to say that mujhe lag raha hai main emotional crisis mein hoon.,crisis,high,hinglish,synthetic,test,0
+MC-1129,"Right now, honestly, i need to buy groceries tomorrow.",neutral,low,en,synthetic,test,4
+MC-1138,"Lately, honestly, self-harm ke thoughts ignore karna difficult ho raha hai.",self_harm,high,hinglish,synthetic,test,1
+MC-1139,"This morning, honestly, mujhe lag raha hai ki main breaking point par hoon.",crisis,high,hinglish,synthetic,test,0
+MC-1144,"Lately, honestly, i do not want to harm myself.",negated,low,en,synthetic,test,2
+MC-1152,I wanted to mention that i feel motivated for tomorrow.,positive,low,en,synthetic,test,5
+MC-1153,This morning I want to say that mujhe lag raha hai main emotional crisis mein hoon.,crisis,high,hinglish,synthetic,test,0
+MC-1168,Main suicidal nahi hoon. I want to talk about it.,negated,low,hinglish,synthetic,test,2
+MC-1180,I wanted to mention that main self-injury ke thoughts se struggle kar raha hoon.,self_harm,high,hinglish,synthetic,test,1
+MC-1184,I have been feeling this way because of several things. I am planning my weekend.,neutral,low,en,synthetic,test,4
+MC-1185,The thoughts of harming myself keep returning. I am trying to make sense of it.,self_harm,high,en,synthetic,test,1
+MC-1188,My friend told me they are thinking about hurting themselves. I need someone to listen.,contextual,medium,en,synthetic,test,3
+MC-1189,"Lately, sab kuch bahut overwhelming lag raha hai.",crisis,high,hinglish,synthetic,test,0

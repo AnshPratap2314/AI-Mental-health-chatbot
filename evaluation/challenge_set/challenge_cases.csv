@@ -1,0 +1,21 @@
+message,expected
+"I am completely safe and have no intention of hurting myself.",negated
+"I don't want to die; I just feel exhausted by everything.",negated
+"I am worried about a friend who has been talking about suicide.",contextual
+"My roommate said they don't feel safe tonight.",contextual
+"We learned about suicide prevention in psychology class.",neutral
+"I watched a documentary discussing self-harm.",neutral
+"I read a news article about suicide prevention.",neutral
+"I have three assignments due tomorrow and I feel overwhelmed.",neutral
+"College deadlines are making me really stressed.",neutral
+"I finally feel hopeful about the future.",positive
+"Things are getting much better for me lately.",positive
+"I feel unsafe right now and need immediate help.",crisis
+"I don't feel safe being alone right now.",crisis
+"I am thinking about killing myself.",self_harm
+"I am having thoughts about hurting myself.",self_harm
+"I need someone to talk to because I am struggling emotionally.",neutral
+"I feel lonely after moving to a new city.",neutral
+"My brother is struggling and I want to help him.",contextual
+"Today's lecture covered warning signs and suicide prevention.",neutral
+"I am not suicidal and I feel safe.",negated

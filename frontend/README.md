@@ -25,13 +25,13 @@ http://127.0.0.1:5500
 
 ## API configuration
 
-`index.html` defines:
+The frontend reads an optional runtime value:
 
 ```javascript
 window.MINDCARE_API_URL = "https://<your-backend-domain>";
 ```
 
-Change this value when deploying the frontend against another backend. The script also falls back to `127.0.0.1:8000` during local development.
+If that value is not set, `script.js` uses `127.0.0.1:8000` on localhost and the configured production API fallback elsewhere.
 
 ## Frontend behavior
 

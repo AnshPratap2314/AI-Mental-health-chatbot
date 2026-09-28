@@ -1,0 +1,21 @@
+message,expected,predicted,risk_level,decision_source,ml_category,rule_category,rule_fired,matched_rule,ml_high_risk_probability
+I am completely safe and have no intention of hurting myself.,negated,negated,low,ml,negated,neutral,False,,0.10860288137006013
+I don't want to die; I just feel exhausted by everything.,negated,negated,low,rule_override,crisis,negated,negation,\bdon't want to die\b,0.3931789499256812
+I am worried about a friend who has been talking about suicide.,contextual,contextual,medium,rule_context,contextual,contextual,contextual,contextual_self_harm,0.04869999337817804
+My roommate said they don't feel safe tonight.,contextual,contextual,medium,ml_contextual,contextual,neutral,False,,0.2054646610860632
+We learned about suicide prevention in psychology class.,neutral,neutral,low,rule_context_override,neutral,neutral,informational_context,\blearned about\b,0.12131746261674067
+I watched a documentary discussing self-harm.,neutral,neutral,low,rule_context_override,negated,neutral,informational_context,\bwatched a documentary\b,0.24480717131656807
+I read a news article about suicide prevention.,neutral,neutral,low,rule_context_override,self_harm,neutral,informational_context,\barticle about\b,0.25679041387390256
+I have three assignments due tomorrow and I feel overwhelmed.,neutral,neutral,low,ml,neutral,neutral,False,,0.13950892271547716
+College deadlines are making me really stressed.,neutral,neutral,low,rule_stress_override,positive,neutral,ordinary_stress,\bcollege deadlines\b,0.13628981520436118
+I finally feel hopeful about the future.,positive,positive,low,rule_positive_override,positive,positive,positive,\bfeel hopeful\b,0.04740022588231374
+Things are getting much better for me lately.,positive,positive,low,rule_positive_override,contextual,positive,positive,\bgetting much better\b,0.126141324249772
+I feel unsafe right now and need immediate help.,crisis,crisis,high,rule_safety_override,crisis,crisis,high_risk,crisis,0.5184043521226738
+I don't feel safe being alone right now.,crisis,crisis,high,ml_high_risk,crisis,neutral,False,,0.5925623007901049
+I am thinking about killing myself.,self_harm,self_harm,high,ml,self_harm,neutral,False,,0.44090524756200294
+I am having thoughts about hurting myself.,self_harm,self_harm,high,ml_high_risk,self_harm,neutral,False,,0.7145743139089449
+I need someone to talk to because I am struggling emotionally.,neutral,neutral,low,rule_stress_override,crisis,neutral,ordinary_stress,\bstruggling emotionally\b,0.37315358847681074
+I feel lonely after moving to a new city.,neutral,neutral,low,rule_stress_override,positive,neutral,ordinary_stress,\bfeel lonely\b,0.2009310924779974
+My brother is struggling and I want to help him.,contextual,contextual,medium,ml_contextual,contextual,neutral,False,,0.21920672021372067
+Today's lecture covered warning signs and suicide prevention.,neutral,neutral,low,rule_context_override,positive,neutral,informational_context,\btoday's lecture\b,0.10419560603934351
+I am not suicidal and I feel safe.,negated,negated,low,rule_override,negated,negated,negation,\bnot suicidal\b,0.12930870596487326

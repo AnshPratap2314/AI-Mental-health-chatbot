@@ -1,0 +1,841 @@
+message_id,message,category,risk_level,language,source_type,split,label
+MC-0866,The weather was nice today after class.,neutral,low,en,synthetic,train,4
+MC-0102,Sab kuch abhi bahut unbearable lag raha hai aur mujhe samajh nahi aa raha kya karun right now.,crisis,high,hinglish,synthetic,train,0
+MC-0440,I do not want to hurt myself; I just need someone to listen and I would like a calm response.,negated,low,en,synthetic,train,2
+MC-1121,Aaj ka din really achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,train,5
+MC-0324,Khud ko hurt karne ka urge lately strong ho raha hai lately.,self_harm,high,hinglish,synthetic,train,1
+MC-0412,I do not want to harm myself after talking to someone.,negated,low,en,synthetic,train,2
+MC-0856,The weather was nice today as I try to handle things.,neutral,low,en,synthetic,train,4
+MC-0821,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4
+MC-0045,I feel like I am in a crisis and need someone to help me since yesterday.,crisis,high,en,synthetic,train,0
+MC-0050,I am in a very dark place and need support right now recently.,crisis,high,en,synthetic,train,0
+MC-0171,Mujhe lag raha hai ki main breaking point par hoon aur mujhe immediate help chahiye.,crisis,high,hinglish,synthetic,train,0
+MC-0524,Main safe hoon aur self-harm ke thoughts nahi aa rahe lately.,negated,low,hinglish,synthetic,train,2
+MC-0766,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun after class.,contextual,medium,hinglish,synthetic,train,3
+MC-0424,I am safe right now and I am not thinking about self-harm lately.,negated,low,en,synthetic,train,2
+MC-0610,Someone I care about is struggling and I am looking for supportive words recently.,contextual,medium,en,synthetic,train,3
+MC-0677,My classmate mentioned self-harm and I want to help them safely and I wanted to talk about it.,contextual,medium,en,synthetic,train,3
+MC-0345,Aaj mujhe self-harm ke thoughts aa rahe hain since yesterday.,self_harm,high,hinglish,synthetic,train,1
+MC-0110,Main bahut dark phase mein hoon aur abhi support chahiye recently.,crisis,high,hinglish,synthetic,train,0
+MC-0278,I keep having thoughts about self-injury and I am looking for support.,self_harm,high,en,synthetic,train,1
+MC-0678,I am worried about another person who seems emotionally overwhelmed and I am looking for support.,contextual,medium,en,synthetic,train,3
+MC-0571,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0599,"Din difficult hai, lekin mujhe khud ko hurt karne ka thought nahi aa raha and I wanted to put it into words.",negated,low,hinglish,synthetic,train,2
+MC-0391,Mere mind mein khud ko hurt karne ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,train,1
+MC-0894,I need to remember to buy groceries tomorrow during a stressful week.,neutral,low,en,synthetic,train,4
+MC-0693,My roommate is struggling and I want to know how I can support them while dealing with college.,contextual,medium,en,synthetic,train,3
+MC-0728,Main kisi aur ke liye worried hoon jo emotionally overwhelmed lag raha hai this morning.,contextual,medium,hinglish,synthetic,train,3
+MC-0363,Mujhe darr hai ki main khud ko hurt kar sakta hoon this week.,self_harm,high,hinglish,synthetic,train,1
+MC-0597,Mera khud ko harm karne ka koi intention nahi hai and I wanted to talk about it.,negated,low,hinglish,synthetic,train,2
+MC-0428,I am not feeling suicidal or unsafe this morning.,negated,low,en,synthetic,train,2
+MC-0322,Stress badhta hai to mujhe self-harm ke thoughts aate hain right now.,self_harm,high,hinglish,synthetic,train,1
+MC-1066,I feel calm and grateful this evening after class.,positive,low,en,synthetic,train,5
+MC-0108,Mujhe next few hours safely handle karna difficult lag raha hai this morning.,crisis,high,hinglish,synthetic,train,0
+MC-1109,Aaj mujhe kaafi confidence mila at the moment.,positive,low,hinglish,synthetic,train,5
+MC-0356,Jab main upset hota hoon to khud ko hurt karne ka thought aata hai as I try to handle things.,self_harm,high,hinglish,synthetic,train,1
+MC-0951,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0343,Mujhe darr hai ki main khud ko hurt kar sakta hoon this week.,self_harm,high,hinglish,synthetic,train,1
+MC-0355,Aaj mujhe self-harm ke thoughts aa rahe hain while thinking about things.,self_harm,high,hinglish,synthetic,train,1
+MC-0024,I do not feel safe being alone with my thoughts right now lately.,crisis,high,en,synthetic,train,0
+MC-0044,I do not feel safe being alone with my thoughts right now lately.,crisis,high,en,synthetic,train,0
+MC-0738,Main kisi aur ke liye worried hoon jo emotionally overwhelmed lag raha hai and I am looking for support.,contextual,medium,hinglish,synthetic,train,3
+MC-1136,Aaj evening mein calm aur grateful feel kar raha hoon as I try to handle things.,positive,low,hinglish,synthetic,train,5
+MC-0368,Mere mind mein self-injury ke thoughts baar baar aa rahe hain this morning.,self_harm,high,hinglish,synthetic,train,1
+MC-0164,Mujhe abhi akela rehna safe nahi lag raha lately.,crisis,high,hinglish,synthetic,train,0
+MC-1116,Aaj evening mein calm aur grateful feel kar raha hoon as I try to handle things.,positive,low,hinglish,synthetic,train,5
+MC-0333,Mujhe darr hai ki main khud ko hurt kar sakta hoon while dealing with college.,self_harm,high,hinglish,synthetic,train,1
+MC-0989,Aaj afternoon mein room clean kiya at the moment.,neutral,low,hinglish,synthetic,train,4
+MC-1173,Future ko lekar mujhe hopeful feel ho raha hai while dealing with college.,positive,low,hinglish,synthetic,train,5
+MC-1002,I am proud of myself for finishing my work right now.,positive,low,en,synthetic,train,5
+MC-0378,Mere mind mein self-injury ke thoughts baar baar aa rahe hain and I am looking for support.,self_harm,high,hinglish,synthetic,train,1
+MC-0156,Aaj mere thoughts bahut out of control lag rahe hain as I try to handle things.,crisis,high,hinglish,synthetic,train,0
+MC-0211,I keep thinking about hurting myself.,self_harm,high,en,synthetic,train,1
+MC-0052,Everything feels unbearable right now and I do not know what to do after talking to someone.,crisis,high,en,synthetic,train,0
+MC-0439,"I am having a hard day, but I am not thinking about hurting myself and I wanted to put it into words.",negated,low,en,synthetic,train,2
+MC-0550,"Mujhe khud ko hurt nahi karna, bas kisi ko sunna hai recently.",negated,low,hinglish,synthetic,train,2
+MC-0491,I am not thinking about hurting myself.,negated,low,en,synthetic,train,2
+MC-0136,Aaj mere thoughts bahut out of control lag rahe hain as I try to handle things.,crisis,high,hinglish,synthetic,train,0
+MC-1192,Apna work finish karke mujhe khud par proud feel ho raha hai after talking to someone.,positive,low,hinglish,synthetic,train,5
+MC-0055,I feel like I am in a crisis and need someone to help me while thinking about things.,crisis,high,en,synthetic,train,0
+MC-0079,My thoughts feel out of control and I need immediate help and I wanted to put it into words.,crisis,high,en,synthetic,train,0
+MC-0431,I am not thinking about hurting myself.,negated,low,en,synthetic,train,2
+MC-0185,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye since yesterday.,crisis,high,hinglish,synthetic,train,0
+MC-0057,I feel completely overwhelmed and need urgent support and I wanted to talk about it.,crisis,high,en,synthetic,train,0
+MC-0851,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4
+MC-1164,Aaj friend ke saath bahut achhi conversation hui lately.,positive,low,hinglish,synthetic,train,5
+MC-0845,I am working on a Python project for college since yesterday.,neutral,low,en,synthetic,train,4
+MC-1019,Today gave me a lot of confidence and I wanted to put it into words.,positive,low,en,synthetic,train,5
+MC-1073,I feel hopeful about the future while dealing with college.,positive,low,en,synthetic,train,5
+MC-0175,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye while thinking about things.,crisis,high,hinglish,synthetic,train,0
+MC-1023,I feel hopeful about the future this week.,positive,low,en,synthetic,train,5
+MC-0616,Someone close to me is having a crisis and I do not know how to respond as I try to handle things.,contextual,medium,en,synthetic,train,3
+MC-0514,Main safe hoon aur self-harm ke thoughts nahi aa rahe during a stressful week.,negated,low,hinglish,synthetic,train,2
+MC-0462,I do not want to harm myself right now.,negated,low,en,synthetic,train,2
+MC-0382,Stress badhta hai to mujhe self-harm ke thoughts aate hain right now.,self_harm,high,hinglish,synthetic,train,1
+MC-1008,I am feeling motivated and ready for tomorrow this morning.,positive,low,en,synthetic,train,5
+MC-0671,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-0535,Mere mind mein khud ko hurt karne ke thoughts nahi hain while thinking about things.,negated,low,hinglish,synthetic,train,2
+MC-0910,Weekend ke tasks plan kar raha hoon recently.,neutral,low,hinglish,synthetic,train,4
+MC-0293,I am worried that I might hurt myself while dealing with college.,self_harm,high,en,synthetic,train,1
+MC-0124,Mujhe abhi akela rehna safe nahi lag raha lately.,crisis,high,hinglish,synthetic,train,0
+MC-0141,Mujhe lag raha hai ki main breaking point par hoon aur mujhe immediate help chahiye.,crisis,high,hinglish,synthetic,train,0
+MC-0082,Everything feels unbearable right now and I do not know what to do right now.,crisis,high,en,synthetic,train,0
+MC-0882,I am trying to organize my study schedule right now.,neutral,low,en,synthetic,train,4
+MC-1102,Apna work finish karke mujhe khud par proud feel ho raha hai right now.,positive,low,hinglish,synthetic,train,5
+MC-0937,Kal morning mein ek meeting scheduled hai and I wanted to talk about it.,neutral,low,hinglish,synthetic,train,4
+MC-0890,I am planning my tasks for the weekend recently.,neutral,low,en,synthetic,train,4
+MC-0157,Main bahut zyada pressure mein hoon aur urgent support chahiye and I wanted to talk about it.,crisis,high,hinglish,synthetic,train,0
+MC-0622,I am worried because someone I know has been talking about self-harm right now.,contextual,medium,en,synthetic,train,3
+MC-1038,I am feeling motivated and ready for tomorrow and I am looking for support.,positive,low,en,synthetic,train,5
+MC-0245,I have been thinking about self-harm today since yesterday.,self_harm,high,en,synthetic,train,1
+MC-0159,Mera mind abhi control mein nahi lag raha aur mujhe help chahiye and I wanted to put it into words.,crisis,high,hinglish,synthetic,train,0
+MC-0746,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun after class.,contextual,medium,hinglish,synthetic,train,3
+MC-0193,Main bahut overwhelmed hoon aur mujhe immediate support chahiye while dealing with college.,crisis,high,hinglish,synthetic,train,0
+MC-1004,I had a great conversation with my friend today lately.,positive,low,en,synthetic,train,5
+MC-1070,I feel supported by the people around me recently.,positive,low,en,synthetic,train,5
+MC-0414,I am safe right now and I am not thinking about self-harm during a stressful week.,negated,low,en,synthetic,train,2
+MC-1187,Jo goal set kiya tha woh achieve karke bahut achha laga this evening.,positive,low,hinglish,synthetic,train,5
+MC-0695,I am asking because my friend is going through a difficult time while thinking about things.,contextual,medium,en,synthetic,train,3
+MC-0631,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-0275,I have been thinking about self-harm today while thinking about things.,self_harm,high,en,synthetic,train,1
+MC-1148,Main motivated feel kar raha hoon aur kal ke liye ready hoon this morning.,positive,low,hinglish,synthetic,train,5
+MC-0309,Mujhe fear hai ki overwhelm hone par main khud ko hurt kar sakta hoon at the moment.,self_harm,high,hinglish,synthetic,train,1
+MC-0234,The urge to hurt myself has been getting stronger during a stressful week.,self_harm,high,en,synthetic,train,1
+MC-1048,I am feeling motivated and ready for tomorrow this morning.,positive,low,en,synthetic,train,5
+MC-0623,My roommate is struggling and I want to know how I can support them this week.,contextual,medium,en,synthetic,train,3
+MC-0644,"A family member told me they do not feel safe, and I am concerned lately.",contextual,medium,en,synthetic,train,3
+MC-0479,"I am having a hard day, but I am not thinking about hurting myself and I wanted to put it into words.",negated,low,en,synthetic,train,2
+MC-0926,Aaj weather kaafi nice tha after class.,neutral,low,hinglish,synthetic,train,4
+MC-1098,I am feeling motivated and ready for tomorrow and I am looking for support.,positive,low,en,synthetic,train,5
+MC-0627,My classmate mentioned self-harm and I want to help them safely this evening.,contextual,medium,en,synthetic,train,3
+MC-0768,Main kisi aur ke liye worried hoon jo emotionally overwhelmed lag raha hai this morning.,contextual,medium,hinglish,synthetic,train,3
+MC-0533,Main khud ko hurt karne ke danger mein nahi hoon while dealing with college.,negated,low,hinglish,synthetic,train,2
+MC-0482,I do not want to harm myself right now.,negated,low,en,synthetic,train,2
+MC-1103,Future ko lekar mujhe hopeful feel ho raha hai this week.,positive,low,hinglish,synthetic,train,5
+MC-0315,Aaj mujhe self-harm ke thoughts aa rahe hain while thinking about things.,self_harm,high,hinglish,synthetic,train,1
+MC-0729,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon at the moment.,contextual,medium,hinglish,synthetic,train,3
+MC-0210,Thoughts of self-harm have been coming back lately recently.,self_harm,high,en,synthetic,train,1
+MC-0934,Kal groceries lene jaana hai during a stressful week.,neutral,low,hinglish,synthetic,train,4
+MC-0434,I am safe right now and I am not thinking about self-harm during a stressful week.,negated,low,en,synthetic,train,2
+MC-0329,Mujhe fear hai ki overwhelm hone par main khud ko hurt kar sakta hoon at the moment.,self_harm,high,hinglish,synthetic,train,1
+MC-0261,I keep thinking about hurting myself.,self_harm,high,en,synthetic,train,1
+MC-1117,Jo goal set kiya tha woh achieve karke bahut achha laga and I wanted to talk about it.,positive,low,hinglish,synthetic,train,5
+MC-0307,Main khud ko harm karne ke thoughts se struggle kar raha hoon this evening.,self_harm,high,hinglish,synthetic,train,1
+MC-0928,Main GitHub use karna seekh raha hoon this morning.,neutral,low,hinglish,synthetic,train,4
+MC-1025,I am excited about starting my new project since yesterday.,positive,low,en,synthetic,train,5
+MC-0271,I keep thinking about hurting myself.,self_harm,high,en,synthetic,train,1
+MC-0291,I keep thinking about hurting myself.,self_harm,high,en,synthetic,train,1
+MC-0813,I watched a movie after class today while dealing with college.,neutral,low,en,synthetic,train,4
+MC-0097,I feel completely overwhelmed and need urgent support and I wanted to talk about it.,crisis,high,en,synthetic,train,0
+MC-0032,Everything feels unbearable right now and I do not know what to do after talking to someone.,crisis,high,en,synthetic,train,0
+MC-0763,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon this week.,contextual,medium,hinglish,synthetic,train,3
+MC-0320,Self-harm ke thoughts recently wapas aa gaye hain and I would like a calm response.,self_harm,high,hinglish,synthetic,train,1
+MC-0299,I am afraid I may hurt myself when I feel overwhelmed and I wanted to put it into words.,self_harm,high,en,synthetic,train,1
+MC-0561,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0089,My thoughts feel out of control and I need immediate help at the moment.,crisis,high,en,synthetic,train,0
+MC-0788,Main kisi aur ke liye worried hoon jo emotionally overwhelmed lag raha hai this morning.,contextual,medium,hinglish,synthetic,train,3
+MC-0725,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai since yesterday.,contextual,medium,hinglish,synthetic,train,3
+MC-0827,I have a meeting scheduled for tomorrow morning this evening.,neutral,low,en,synthetic,train,4
+MC-0209,I am afraid I may hurt myself when I feel overwhelmed at the moment.,self_harm,high,en,synthetic,train,1
+MC-0297,I am struggling with thoughts of harming myself and I wanted to talk about it.,self_harm,high,en,synthetic,train,1
+MC-0998,Main GitHub use karna seekh raha hoon and I am looking for support.,neutral,low,hinglish,synthetic,train,4
+MC-0498,I am not feeling suicidal or unsafe and I am looking for support.,negated,low,en,synthetic,train,2
+MC-0835,I am working on a Python project for college while thinking about things.,neutral,low,en,synthetic,train,4
+MC-0430,I do not want to hurt myself; I just need someone to listen recently.,negated,low,en,synthetic,train,2
+MC-0507,Mera khud ko harm karne ka koi intention nahi hai this evening.,negated,low,hinglish,synthetic,train,2
+MC-0011,I feel like I am at a breaking point and need immediate support.,crisis,high,en,synthetic,train,0
+MC-0463,I am not in danger of hurting myself this week.,negated,low,en,synthetic,train,2
+MC-0199,Mera mind abhi control mein nahi lag raha aur mujhe help chahiye and I wanted to put it into words.,crisis,high,hinglish,synthetic,train,0
+MC-0276,I feel drawn toward hurting myself when I am distressed as I try to handle things.,self_harm,high,en,synthetic,train,1
+MC-0809,I spent the afternoon cleaning my room at the moment.,neutral,low,en,synthetic,train,4
+MC-0908,Main GitHub use karna seekh raha hoon this morning.,neutral,low,hinglish,synthetic,train,4
+MC-0658,I am worried about another person who seems emotionally overwhelmed and I am looking for support.,contextual,medium,en,synthetic,train,3
+MC-0957,Kal morning mein ek meeting scheduled hai and I wanted to talk about it.,neutral,low,hinglish,synthetic,train,4
+MC-0789,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon at the moment.,contextual,medium,hinglish,synthetic,train,3
+MC-1191,Aaj ka din really achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,train,5
+MC-0416,I am not considering self-harm as I try to handle things.,negated,low,en,synthetic,train,2
+MC-0935,Main college ke liye Python project bana raha hoon while thinking about things.,neutral,low,hinglish,synthetic,train,4
+MC-0266,I feel drawn toward hurting myself when I am distressed after class.,self_harm,high,en,synthetic,train,1
+MC-0248,I keep having thoughts about self-injury this morning.,self_harm,high,en,synthetic,train,1
+MC-0683,My roommate is struggling and I want to know how I can support them this week.,contextual,medium,en,synthetic,train,3
+MC-0968,Main GitHub use karna seekh raha hoon this morning.,neutral,low,hinglish,synthetic,train,4
+MC-0295,I have been thinking about self-harm today while thinking about things.,self_harm,high,en,synthetic,train,1
+MC-0520,"Mujhe khud ko hurt nahi karna, bas kisi ko sunna hai and I would like a calm response.",negated,low,hinglish,synthetic,train,2
+MC-0771,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0232,I have thoughts about harming myself when things get overwhelming after talking to someone.,self_harm,high,en,synthetic,train,1
+MC-0621,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-0334,Khud ko hurt karne ka urge lately strong ho raha hai during a stressful week.,self_harm,high,hinglish,synthetic,train,1
+MC-0130,Main bahut dark phase mein hoon aur abhi support chahiye recently.,crisis,high,hinglish,synthetic,train,0
+MC-1012,I am proud of myself for finishing my work after talking to someone.,positive,low,en,synthetic,train,5
+MC-0383,Mujhe darr hai ki main khud ko hurt kar sakta hoon this week.,self_harm,high,hinglish,synthetic,train,1
+MC-1194,Aaj friend ke saath bahut achhi conversation hui during a stressful week.,positive,low,hinglish,synthetic,train,5
+MC-0875,I am working on a Python project for college while thinking about things.,neutral,low,en,synthetic,train,4
+MC-0332,Stress badhta hai to mujhe self-harm ke thoughts aate hain after talking to someone.,self_harm,high,hinglish,synthetic,train,1
+MC-0410,I do not want to hurt myself; I just need someone to listen recently.,negated,low,en,synthetic,train,2
+MC-0077,I feel completely overwhelmed and need urgent support and I wanted to talk about it.,crisis,high,en,synthetic,train,0
+MC-0869,I spent the afternoon cleaning my room at the moment.,neutral,low,en,synthetic,train,4
+MC-0139,Mera mind abhi control mein nahi lag raha aur mujhe help chahiye and I wanted to put it into words.,crisis,high,hinglish,synthetic,train,0
+MC-0544,Main safe hoon aur self-harm ke thoughts nahi aa rahe lately.,negated,low,hinglish,synthetic,train,2
+MC-0674,"A family member told me they do not feel safe, and I am concerned during a stressful week.",contextual,medium,en,synthetic,train,3
+MC-0717,Mere classmate ne self-harm mention kiya aur main safely support karna chahta hoon and I wanted to talk about it.,contextual,medium,hinglish,synthetic,train,3
+MC-0364,Khud ko hurt karne ka urge lately strong ho raha hai lately.,self_harm,high,hinglish,synthetic,train,1
+MC-0140,Main bahut dark phase mein hoon aur abhi support chahiye and I would like a calm response.,crisis,high,hinglish,synthetic,train,0
+MC-0885,I am working on a Python project for college since yesterday.,neutral,low,en,synthetic,train,4
+MC-1042,I am proud of myself for finishing my work right now.,positive,low,en,synthetic,train,5
+MC-0225,I have been thinking about self-harm today since yesterday.,self_harm,high,en,synthetic,train,1
+MC-0267,I am struggling with thoughts of harming myself this evening.,self_harm,high,en,synthetic,train,1
+MC-1170,Mujhe apne aas-paas ke logon ka support feel hota hai recently.,positive,low,hinglish,synthetic,train,5
+MC-0487,I have no intention of harming myself this evening.,negated,low,en,synthetic,train,2
+MC-0618,I am worried about another person who seems emotionally overwhelmed and I am looking for support.,contextual,medium,en,synthetic,train,3
+MC-0668,I am worried about another person who seems emotionally overwhelmed this morning.,contextual,medium,en,synthetic,train,3
+MC-0775,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai while thinking about things.,contextual,medium,hinglish,synthetic,train,3
+MC-0554,Main safe hoon aur self-harm ke thoughts nahi aa rahe during a stressful week.,negated,low,hinglish,synthetic,train,2
+MC-0576,Main self-harm consider nahi kar raha hoon as I try to handle things.,negated,low,hinglish,synthetic,train,2
+MC-0915,Main college ke liye Python project bana raha hoon while thinking about things.,neutral,low,hinglish,synthetic,train,4
+MC-0466,I am not considering self-harm after class.,negated,low,en,synthetic,train,2
+MC-0765,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai since yesterday.,contextual,medium,hinglish,synthetic,train,3
+MC-0635,I am asking because my friend is going through a difficult time while thinking about things.,contextual,medium,en,synthetic,train,3
+MC-0838,I am learning how to use GitHub and I am looking for support.,neutral,low,en,synthetic,train,4
+MC-1101,Aaj ka din really achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,train,5
+MC-0004,I do not feel safe being alone with my thoughts right now lately.,crisis,high,en,synthetic,train,0
+MC-0603,My roommate is struggling and I want to know how I can support them this week.,contextual,medium,en,synthetic,train,3
+MC-1034,I had a great conversation with my friend today during a stressful week.,positive,low,en,synthetic,train,5
+MC-0844,I need to remember to buy groceries tomorrow lately.,neutral,low,en,synthetic,train,4
+MC-0784,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai lately.",contextual,medium,hinglish,synthetic,train,3
+MC-1074,I had a great conversation with my friend today during a stressful week.,positive,low,en,synthetic,train,5
+MC-0443,I am not in danger of hurting myself this week.,negated,low,en,synthetic,train,2
+MC-0436,I am not considering self-harm as I try to handle things.,negated,low,en,synthetic,train,2
+MC-0773,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon while dealing with college.,contextual,medium,hinglish,synthetic,train,3
+MC-0807,I have a meeting scheduled for tomorrow morning this evening.,neutral,low,en,synthetic,train,4
+MC-1142,Apna work finish karke mujhe khud par proud feel ho raha hai right now.,positive,low,hinglish,synthetic,train,5
+MC-0846,The weather was nice today after class.,neutral,low,en,synthetic,train,4
+MC-0987,Kal morning mein ek meeting scheduled hai this evening.,neutral,low,hinglish,synthetic,train,4
+MC-1193,Future ko lekar mujhe hopeful feel ho raha hai while dealing with college.,positive,low,hinglish,synthetic,train,5
+MC-0925,Main college ke liye Python project bana raha hoon since yesterday.,neutral,low,hinglish,synthetic,train,4
+MC-0068,I do not know how to get through the next few hours safely this morning.,crisis,high,en,synthetic,train,0
+MC-0212,I have thoughts about harming myself when things get overwhelming after talking to someone.,self_harm,high,en,synthetic,train,1
+MC-0013,I am overwhelmed and scared about what I might do next while dealing with college.,crisis,high,en,synthetic,train,0
+MC-0411,I am not thinking about hurting myself.,negated,low,en,synthetic,train,2
+MC-0757,Mere classmate ne self-harm mention kiya aur main safely support karna chahta hoon and I wanted to talk about it.,contextual,medium,hinglish,synthetic,train,3
+MC-1151,Aaj ka din really achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,train,5
+MC-0724,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai lately.",contextual,medium,hinglish,synthetic,train,3
+MC-1016,I feel calm and grateful this evening as I try to handle things.,positive,low,en,synthetic,train,5
+MC-0600,"Mujhe khud ko hurt nahi karna, bas kisi ko sunna hai and I would like a calm response.",negated,low,hinglish,synthetic,train,2
+MC-1120,Mujhe apne aas-paas ke logon ka support feel hota hai and I would like a calm response.,positive,low,hinglish,synthetic,train,5
+MC-0567,Mera khud ko harm karne ka koi intention nahi hai this evening.,negated,low,hinglish,synthetic,train,2
+MC-0731,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0274,The urge to hurt myself has been getting stronger during a stressful week.,self_harm,high,en,synthetic,train,1
+MC-0967,Kal morning mein ek meeting scheduled hai this evening.,neutral,low,hinglish,synthetic,train,4
+MC-0238,I keep having thoughts about self-injury and I am looking for support.,self_harm,high,en,synthetic,train,1
+MC-0406,I am not considering self-harm after class.,negated,low,en,synthetic,train,2
+MC-1091,I feel really happy about how today went.,positive,low,en,synthetic,train,5
+MC-0722,Main worried hoon kyunki mera friend self-harm ki baat kar raha hai right now.,contextual,medium,hinglish,synthetic,train,3
+MC-0216,I feel drawn toward hurting myself when I am distressed as I try to handle things.,self_harm,high,en,synthetic,train,1
+MC-1086,I feel calm and grateful this evening after class.,positive,low,en,synthetic,train,5
+MC-0028,I do not know how to get through the next few hours safely this morning.,crisis,high,en,synthetic,train,0
+MC-1158,Main motivated feel kar raha hoon aur kal ke liye ready hoon and I am looking for support.,positive,low,hinglish,synthetic,train,5
+MC-0362,Stress badhta hai to mujhe self-harm ke thoughts aate hain right now.,self_harm,high,hinglish,synthetic,train,1
+MC-0823,I watched a movie after class today this week.,neutral,low,en,synthetic,train,4
+MC-0454,I am safe right now and I am not thinking about self-harm during a stressful week.,negated,low,en,synthetic,train,2
+MC-0536,Main self-harm consider nahi kar raha hoon as I try to handle things.,negated,low,hinglish,synthetic,train,2
+MC-1050,I feel supported by the people around me recently.,positive,low,en,synthetic,train,5
+MC-0399,Mujhe fear hai ki overwhelm hone par main khud ko hurt kar sakta hoon and I wanted to put it into words.,self_harm,high,hinglish,synthetic,train,1
+MC-0292,I have thoughts about harming myself when things get overwhelming after talking to someone.,self_harm,high,en,synthetic,train,1
+MC-0026,I am struggling to keep myself safe right now after class.,crisis,high,en,synthetic,train,0
+MC-0048,I do not know how to get through the next few hours safely this morning.,crisis,high,en,synthetic,train,0
+MC-0107,Main bahut zyada pressure mein hoon aur urgent support chahiye this evening.,crisis,high,hinglish,synthetic,train,0
+MC-0523,Main khud ko hurt karne ke danger mein nahi hoon this week.,negated,low,hinglish,synthetic,train,2
+MC-0214,The urge to hurt myself has been getting stronger during a stressful week.,self_harm,high,en,synthetic,train,1
+MC-0121,Mujhe lag raha hai ki main breaking point par hoon aur mujhe immediate help chahiye.,crisis,high,hinglish,synthetic,train,0
+MC-0918,Main GitHub use karna seekh raha hoon and I am looking for support.,neutral,low,hinglish,synthetic,train,4
+MC-1068,I am feeling motivated and ready for tomorrow this morning.,positive,low,en,synthetic,train,5
+MC-1118,Main motivated feel kar raha hoon aur kal ke liye ready hoon and I am looking for support.,positive,low,hinglish,synthetic,train,5
+MC-0747,Mere classmate ne self-harm mention kiya aur main safely support karna chahta hoon this evening.,contextual,medium,hinglish,synthetic,train,3
+MC-0716,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun as I try to handle things.,contextual,medium,hinglish,synthetic,train,3
+MC-1082,I am proud of myself for finishing my work right now.,positive,low,en,synthetic,train,5
+MC-0553,Main khud ko hurt karne ke danger mein nahi hoon while dealing with college.,negated,low,hinglish,synthetic,train,2
+MC-0425,I do not have thoughts of hurting myself since yesterday.,negated,low,en,synthetic,train,2
+MC-1014,I had a great conversation with my friend today during a stressful week.,positive,low,en,synthetic,train,5
+MC-0326,Jab main upset hota hoon to khud ko hurt karne ka thought aata hai after class.,self_harm,high,hinglish,synthetic,train,1
+MC-0924,Kal groceries lene jaana hai lately.,neutral,low,hinglish,synthetic,train,4
+MC-0317,Main khud ko harm karne ke thoughts se struggle kar raha hoon and I wanted to talk about it.,self_harm,high,hinglish,synthetic,train,1
+MC-1163,Future ko lekar mujhe hopeful feel ho raha hai this week.,positive,low,hinglish,synthetic,train,5
+MC-0529,"Din difficult hai, lekin mujhe khud ko hurt karne ka thought nahi aa raha at the moment.",negated,low,hinglish,synthetic,train,2
+MC-0715,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai while thinking about things.,contextual,medium,hinglish,synthetic,train,3
+MC-0061,I feel like I am at a breaking point and need immediate support.,crisis,high,en,synthetic,train,0
+MC-0723,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon this week.,contextual,medium,hinglish,synthetic,train,3
+MC-0093,I am overwhelmed and scared about what I might do next while dealing with college.,crisis,high,en,synthetic,train,0
+MC-0858,I am learning how to use GitHub and I am looking for support.,neutral,low,en,synthetic,train,4
+MC-0352,Stress badhta hai to mujhe self-harm ke thoughts aate hain after talking to someone.,self_harm,high,hinglish,synthetic,train,1
+MC-0933,Aaj class ke baad maine movie dekhi while dealing with college.,neutral,low,hinglish,synthetic,train,4
+MC-1115,New project start karne ko lekar main excited hoon while thinking about things.,positive,low,hinglish,synthetic,train,5
+MC-0360,Self-harm ke thoughts recently wapas aa gaye hain and I would like a calm response.,self_harm,high,hinglish,synthetic,train,1
+MC-0423,I am not in danger of hurting myself this week.,negated,low,en,synthetic,train,2
+MC-0527,Mera khud ko harm karne ka koi intention nahi hai this evening.,negated,low,hinglish,synthetic,train,2
+MC-0478,I am not feeling suicidal or unsafe and I am looking for support.,negated,low,en,synthetic,train,2
+MC-1095,I am excited about starting my new project while thinking about things.,positive,low,en,synthetic,train,5
+MC-1092,I am proud of myself for finishing my work after talking to someone.,positive,low,en,synthetic,train,5
+MC-0433,I am not in danger of hurting myself while dealing with college.,negated,low,en,synthetic,train,2
+MC-0111,Mujhe lag raha hai ki main breaking point par hoon aur mujhe immediate help chahiye.,crisis,high,hinglish,synthetic,train,0
+MC-0371,Mere mind mein khud ko hurt karne ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,train,1
+MC-0240,Thoughts of self-harm have been coming back lately and I would like a calm response.,self_harm,high,en,synthetic,train,1
+MC-0709,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon at the moment.,contextual,medium,hinglish,synthetic,train,3
+MC-0630,Someone I care about is struggling and I am looking for supportive words recently.,contextual,medium,en,synthetic,train,3
+MC-0594,Main safe hoon aur self-harm ke thoughts nahi aa rahe during a stressful week.,negated,low,hinglish,synthetic,train,2
+MC-0486,I am not considering self-harm after class.,negated,low,en,synthetic,train,2
+MC-0701,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0480,I do not want to hurt myself; I just need someone to listen and I would like a calm response.,negated,low,en,synthetic,train,2
+MC-0650,Someone I care about is struggling and I am looking for supportive words recently.,contextual,medium,en,synthetic,train,3
+MC-0340,Self-harm ke thoughts recently wapas aa gaye hain and I would like a calm response.,self_harm,high,hinglish,synthetic,train,1
+MC-0669,My friend has been having dark thoughts and I want to support them at the moment.,contextual,medium,en,synthetic,train,3
+MC-0552,Mujhe khud ko harm nahi karna hai after talking to someone.,negated,low,hinglish,synthetic,train,2
+MC-0459,"I am having a hard day, but I am not thinking about hurting myself and I wanted to put it into words.",negated,low,en,synthetic,train,2
+MC-0184,Mujhe abhi akela rehna safe nahi lag raha lately.,crisis,high,hinglish,synthetic,train,0
+MC-0138,Mujhe next few hours safely handle karna difficult lag raha hai and I am looking for support.,crisis,high,hinglish,synthetic,train,0
+MC-0707,Mere classmate ne self-harm mention kiya aur main safely support karna chahta hoon this evening.,contextual,medium,hinglish,synthetic,train,3
+MC-0582,Mujhe khud ko harm nahi karna hai right now.,negated,low,hinglish,synthetic,train,2
+MC-0769,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon at the moment.,contextual,medium,hinglish,synthetic,train,3
+MC-0870,I am planning my tasks for the weekend recently.,neutral,low,en,synthetic,train,4
+MC-0030,I am in a very dark place and need support right now recently.,crisis,high,en,synthetic,train,0
+MC-0166,Aaj mere thoughts bahut out of control lag rahe hain after class.,crisis,high,hinglish,synthetic,train,0
+MC-0249,I am afraid I may hurt myself when I feel overwhelmed at the moment.,self_harm,high,en,synthetic,train,1
+MC-0308,Mere mind mein self-injury ke thoughts baar baar aa rahe hain this morning.,self_harm,high,hinglish,synthetic,train,1
+MC-0347,Main khud ko harm karne ke thoughts se struggle kar raha hoon this evening.,self_harm,high,hinglish,synthetic,train,1
+MC-0335,Aaj mujhe self-harm ke thoughts aa rahe hain while thinking about things.,self_harm,high,hinglish,synthetic,train,1
+MC-0950,Weekend ke tasks plan kar raha hoon recently.,neutral,low,hinglish,synthetic,train,4
+MC-0468,I am not feeling suicidal or unsafe this morning.,negated,low,en,synthetic,train,2
+MC-1037,I finally achieved something I had been working toward and I wanted to talk about it.,positive,low,en,synthetic,train,5
+MC-0913,Aaj class ke baad maine movie dekhi while dealing with college.,neutral,low,hinglish,synthetic,train,4
+MC-0756,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun as I try to handle things.,contextual,medium,hinglish,synthetic,train,3
+MC-0945,Main college ke liye Python project bana raha hoon since yesterday.,neutral,low,hinglish,synthetic,train,4
+MC-0614,"A family member told me they do not feel safe, and I am concerned during a stressful week.",contextual,medium,en,synthetic,train,3
+MC-0802,I am trying to organize my study schedule right now.,neutral,low,en,synthetic,train,4
+MC-0689,My friend has been having dark thoughts and I want to support them at the moment.,contextual,medium,en,synthetic,train,3
+MC-0066,I am struggling to keep myself safe right now after class.,crisis,high,en,synthetic,train,0
+MC-0794,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai during a stressful week.",contextual,medium,hinglish,synthetic,train,3
+MC-0744,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai lately.",contextual,medium,hinglish,synthetic,train,3
+MC-0568,Main suicidal ya unsafe feel nahi kar raha hoon this morning.,negated,low,hinglish,synthetic,train,2
+MC-1084,I had a great conversation with my friend today lately.,positive,low,en,synthetic,train,5
+MC-0255,I have been thinking about self-harm today while thinking about things.,self_harm,high,en,synthetic,train,1
+MC-0959,Aaj afternoon mein room clean kiya and I wanted to put it into words.,neutral,low,hinglish,synthetic,train,4
+MC-1024,I had a great conversation with my friend today lately.,positive,low,en,synthetic,train,5
+MC-0313,Mujhe darr hai ki main khud ko hurt kar sakta hoon while dealing with college.,self_harm,high,hinglish,synthetic,train,1
+MC-0530,"Mujhe khud ko hurt nahi karna, bas kisi ko sunna hai recently.",negated,low,hinglish,synthetic,train,2
+MC-0222,I have thoughts about harming myself when things get overwhelming right now.,self_harm,high,en,synthetic,train,1
+MC-0236,I feel drawn toward hurting myself when I am distressed as I try to handle things.,self_harm,high,en,synthetic,train,1
+MC-0810,I am planning my tasks for the weekend recently.,neutral,low,en,synthetic,train,4
+MC-0483,I am not in danger of hurting myself this week.,negated,low,en,synthetic,train,2
+MC-0713,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon while dealing with college.,contextual,medium,hinglish,synthetic,train,3
+MC-0306,Jab main upset hota hoon to khud ko hurt karne ka thought aata hai after class.,self_harm,high,hinglish,synthetic,train,1
+MC-1111,Aaj ka din really achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,train,5
+MC-1090,I feel supported by the people around me recently.,positive,low,en,synthetic,train,5
+MC-0772,Main worried hoon kyunki mera friend self-harm ki baat kar raha hai after talking to someone.,contextual,medium,hinglish,synthetic,train,3
+MC-1139,Aaj mujhe kaafi confidence mila and I wanted to put it into words.,positive,low,hinglish,synthetic,train,5
+MC-0760,Mera close person struggle kar raha hai aur mujhe supportive words chahiye and I would like a calm response.,contextual,medium,hinglish,synthetic,train,3
+MC-0595,Mere mind mein khud ko hurt karne ke thoughts nahi hain while thinking about things.,negated,low,hinglish,synthetic,train,2
+MC-0072,Everything feels unbearable right now and I do not know what to do after talking to someone.,crisis,high,en,synthetic,train,0
+MC-0095,I feel like I am in a crisis and need someone to help me while thinking about things.,crisis,high,en,synthetic,train,0
+MC-0546,Main self-harm consider nahi kar raha hoon after class.,negated,low,hinglish,synthetic,train,2
+MC-0862,I am trying to organize my study schedule right now.,neutral,low,en,synthetic,train,4
+MC-0579,"Din difficult hai, lekin mujhe khud ko hurt karne ka thought nahi aa raha and I wanted to put it into words.",negated,low,hinglish,synthetic,train,2
+MC-0449,"I am having a hard day, but I am not thinking about hurting myself at the moment.",negated,low,en,synthetic,train,2
+MC-0446,I am not considering self-harm after class.,negated,low,en,synthetic,train,2
+MC-0824,I need to remember to buy groceries tomorrow lately.,neutral,low,en,synthetic,train,4
+MC-0586,Main self-harm consider nahi kar raha hoon after class.,negated,low,hinglish,synthetic,train,2
+MC-0812,I am trying to organize my study schedule after talking to someone.,neutral,low,en,synthetic,train,4
+MC-0078,I do not know how to get through the next few hours safely and I am looking for support.,crisis,high,en,synthetic,train,0
+MC-0085,I feel like I am in a crisis and need someone to help me since yesterday.,crisis,high,en,synthetic,train,0
+MC-0539,"Din difficult hai, lekin mujhe khud ko hurt karne ka thought nahi aa raha and I wanted to put it into words.",negated,low,hinglish,synthetic,train,2
+MC-0083,I am overwhelmed and scared about what I might do next this week.,crisis,high,en,synthetic,train,0
+MC-0458,I am not feeling suicidal or unsafe and I am looking for support.,negated,low,en,synthetic,train,2
+MC-1138,Main motivated feel kar raha hoon aur kal ke liye ready hoon and I am looking for support.,positive,low,hinglish,synthetic,train,5
+MC-0615,I am asking because my friend is going through a difficult time while thinking about things.,contextual,medium,en,synthetic,train,3
+MC-0737,Mere classmate ne self-harm mention kiya aur main safely support karna chahta hoon and I wanted to talk about it.,contextual,medium,hinglish,synthetic,train,3
+MC-0437,I have no intention of harming myself and I wanted to talk about it.,negated,low,en,synthetic,train,2
+MC-0555,Mere mind mein khud ko hurt karne ke thoughts nahi hain while thinking about things.,negated,low,hinglish,synthetic,train,2
+MC-1080,I feel supported by the people around me and I would like a calm response.,positive,low,en,synthetic,train,5
+MC-1062,I am proud of myself for finishing my work right now.,positive,low,en,synthetic,train,5
+MC-0351,Mere mind mein khud ko hurt karne ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,train,1
+MC-0197,Main bahut zyada pressure mein hoon aur urgent support chahiye and I wanted to talk about it.,crisis,high,hinglish,synthetic,train,0
+MC-0589,"Din difficult hai, lekin mujhe khud ko hurt karne ka thought nahi aa raha at the moment.",negated,low,hinglish,synthetic,train,2
+MC-0311,Mere mind mein khud ko hurt karne ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,train,1
+MC-0662,I am worried because someone I know has been talking about self-harm right now.,contextual,medium,en,synthetic,train,3
+MC-1196,Aaj evening mein calm aur grateful feel kar raha hoon as I try to handle things.,positive,low,hinglish,synthetic,train,5
+MC-1044,I had a great conversation with my friend today lately.,positive,low,en,synthetic,train,5
+MC-0105,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye since yesterday.,crisis,high,hinglish,synthetic,train,0
+MC-0537,Mera khud ko harm karne ka koi intention nahi hai and I wanted to talk about it.,negated,low,hinglish,synthetic,train,2
+MC-0606,Someone close to me is having a crisis and I do not know how to respond after class.,contextual,medium,en,synthetic,train,3
+MC-0063,I am overwhelmed and scared about what I might do next this week.,crisis,high,en,synthetic,train,0
+MC-1056,I feel calm and grateful this evening as I try to handle things.,positive,low,en,synthetic,train,5
+MC-0239,I am afraid I may hurt myself when I feel overwhelmed and I wanted to put it into words.,self_harm,high,en,synthetic,train,1
+MC-0224,The urge to hurt myself has been getting stronger lately.,self_harm,high,en,synthetic,train,1
+MC-0146,Aaj mere thoughts bahut out of control lag rahe hain after class.,crisis,high,hinglish,synthetic,train,0
+MC-1119,Aaj mujhe kaafi confidence mila and I wanted to put it into words.,positive,low,hinglish,synthetic,train,5
+MC-0374,Khud ko hurt karne ka urge lately strong ho raha hai during a stressful week.,self_harm,high,hinglish,synthetic,train,1
+MC-0119,Mera mind abhi control mein nahi lag raha aur mujhe help chahiye and I wanted to put it into words.,crisis,high,hinglish,synthetic,train,0
+MC-0803,I watched a movie after class today this week.,neutral,low,en,synthetic,train,4
+MC-1157,Jo goal set kiya tha woh achieve karke bahut achha laga and I wanted to talk about it.,positive,low,hinglish,synthetic,train,5
+MC-0010,I am in a very dark place and need support right now recently.,crisis,high,en,synthetic,train,0
+MC-0450,I do not want to hurt myself; I just need someone to listen recently.,negated,low,en,synthetic,train,2
+MC-0874,I need to remember to buy groceries tomorrow during a stressful week.,neutral,low,en,synthetic,train,4
+MC-0390,Self-harm ke thoughts recently wapas aa gaye hain recently.,self_harm,high,hinglish,synthetic,train,1
+MC-0502,Mujhe khud ko harm nahi karna hai right now.,negated,low,hinglish,synthetic,train,2
+MC-1108,Main motivated feel kar raha hoon aur kal ke liye ready hoon this morning.,positive,low,hinglish,synthetic,train,5
+MC-1051,I feel really happy about how today went.,positive,low,en,synthetic,train,5
+MC-0584,Main safe hoon aur self-harm ke thoughts nahi aa rahe lately.,negated,low,hinglish,synthetic,train,2
+MC-1195,New project start karne ko lekar main excited hoon while thinking about things.,positive,low,hinglish,synthetic,train,5
+MC-0008,I do not know how to get through the next few hours safely this morning.,crisis,high,en,synthetic,train,0
+MC-0574,Main safe hoon aur self-harm ke thoughts nahi aa rahe during a stressful week.,negated,low,hinglish,synthetic,train,2
+MC-0843,I watched a movie after class today this week.,neutral,low,en,synthetic,train,4
+MC-0330,Self-harm ke thoughts recently wapas aa gaye hain recently.,self_harm,high,hinglish,synthetic,train,1
+MC-0259,I am afraid I may hurt myself when I feel overwhelmed and I wanted to put it into words.,self_harm,high,en,synthetic,train,1
+MC-0891,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4
+MC-0834,I need to remember to buy groceries tomorrow during a stressful week.,neutral,low,en,synthetic,train,4
+MC-1188,Main motivated feel kar raha hoon aur kal ke liye ready hoon this morning.,positive,low,hinglish,synthetic,train,5
+MC-0814,I need to remember to buy groceries tomorrow during a stressful week.,neutral,low,en,synthetic,train,4
+MC-0732,Main worried hoon kyunki mera friend self-harm ki baat kar raha hai after talking to someone.,contextual,medium,hinglish,synthetic,train,3
+MC-1141,Aaj ka din really achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,train,5
+MC-0441,I am not thinking about hurting myself.,negated,low,en,synthetic,train,2
+MC-0532,Mujhe khud ko harm nahi karna hai after talking to someone.,negated,low,hinglish,synthetic,train,2
+MC-0229,I am afraid I may hurt myself when I feel overwhelmed at the moment.,self_harm,high,en,synthetic,train,1
+MC-0592,Mujhe khud ko harm nahi karna hai after talking to someone.,negated,low,hinglish,synthetic,train,2
+MC-0708,Main kisi aur ke liye worried hoon jo emotionally overwhelmed lag raha hai this morning.,contextual,medium,hinglish,synthetic,train,3
+MC-0134,Mujhe abhi akela rehna safe nahi lag raha during a stressful week.,crisis,high,hinglish,synthetic,train,0
+MC-0782,Main worried hoon kyunki mera friend self-harm ki baat kar raha hai right now.,contextual,medium,hinglish,synthetic,train,3
+MC-0409,"I am having a hard day, but I am not thinking about hurting myself at the moment.",negated,low,en,synthetic,train,2
+MC-0970,Weekend ke tasks plan kar raha hoon recently.,neutral,low,hinglish,synthetic,train,4
+MC-0508,Main suicidal ya unsafe feel nahi kar raha hoon this morning.,negated,low,hinglish,synthetic,train,2
+MC-0877,I have a meeting scheduled for tomorrow morning and I wanted to talk about it.,neutral,low,en,synthetic,train,4
+MC-0505,Mere mind mein khud ko hurt karne ke thoughts nahi hain since yesterday.,negated,low,hinglish,synthetic,train,2
+MC-0719,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon and I wanted to put it into words.,contextual,medium,hinglish,synthetic,train,3
+MC-0387,Main khud ko harm karne ke thoughts se struggle kar raha hoon this evening.,self_harm,high,hinglish,synthetic,train,1
+MC-0001,I feel like I am at a breaking point and need immediate support.,crisis,high,en,synthetic,train,0
+MC-1134,Aaj friend ke saath bahut achhi conversation hui during a stressful week.,positive,low,hinglish,synthetic,train,5
+MC-0778,Main kisi aur ke liye worried hoon jo emotionally overwhelmed lag raha hai and I am looking for support.,contextual,medium,hinglish,synthetic,train,3
+MC-0754,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai during a stressful week.",contextual,medium,hinglish,synthetic,train,3
+MC-0173,Main bahut overwhelmed hoon aur mujhe immediate support chahiye while dealing with college.,crisis,high,hinglish,synthetic,train,0
+MC-0126,Aaj mere thoughts bahut out of control lag rahe hain after class.,crisis,high,hinglish,synthetic,train,0
+MC-0931,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0531,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-1162,Apna work finish karke mujhe khud par proud feel ho raha hai right now.,positive,low,hinglish,synthetic,train,5
+MC-0182,Sab kuch abhi bahut unbearable lag raha hai aur mujhe samajh nahi aa raha kya karun right now.,crisis,high,hinglish,synthetic,train,0
+MC-1027,I finally achieved something I had been working toward this evening.,positive,low,en,synthetic,train,5
+MC-1000,Weekend ke tasks plan kar raha hoon and I would like a calm response.,neutral,low,hinglish,synthetic,train,4
+MC-0252,I have thoughts about harming myself when things get overwhelming after talking to someone.,self_harm,high,en,synthetic,train,1
+MC-0132,Sab kuch abhi bahut unbearable lag raha hai aur mujhe samajh nahi aa raha kya karun after talking to someone.,crisis,high,hinglish,synthetic,train,0
+MC-1133,Future ko lekar mujhe hopeful feel ho raha hai while dealing with college.,positive,low,hinglish,synthetic,train,5
+MC-0500,I do not want to hurt myself; I just need someone to listen and I would like a calm response.,negated,low,en,synthetic,train,2
+MC-0666,Someone close to me is having a crisis and I do not know how to respond after class.,contextual,medium,en,synthetic,train,3
+MC-0339,Mujhe fear hai ki overwhelm hone par main khud ko hurt kar sakta hoon and I wanted to put it into words.,self_harm,high,hinglish,synthetic,train,1
+MC-0964,Kal groceries lene jaana hai lately.,neutral,low,hinglish,synthetic,train,4
+MC-0165,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye since yesterday.,crisis,high,hinglish,synthetic,train,0
+MC-0517,Mera khud ko harm karne ka koi intention nahi hai and I wanted to talk about it.,negated,low,hinglish,synthetic,train,2
+MC-1104,Aaj friend ke saath bahut achhi conversation hui lately.,positive,low,hinglish,synthetic,train,5
+MC-0174,Mujhe abhi akela rehna safe nahi lag raha during a stressful week.,crisis,high,hinglish,synthetic,train,0
+MC-0519,"Din difficult hai, lekin mujhe khud ko hurt karne ka thought nahi aa raha and I wanted to put it into words.",negated,low,hinglish,synthetic,train,2
+MC-0969,Aaj afternoon mein room clean kiya at the moment.,neutral,low,hinglish,synthetic,train,4
+MC-0492,I do not want to harm myself after talking to someone.,negated,low,en,synthetic,train,2
+MC-0981,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0588,Main suicidal ya unsafe feel nahi kar raha hoon this morning.,negated,low,hinglish,synthetic,train,2
+MC-0235,I have been thinking about self-harm today while thinking about things.,self_harm,high,en,synthetic,train,1
+MC-0215,I have been thinking about self-harm today while thinking about things.,self_harm,high,en,synthetic,train,1
+MC-0947,Kal morning mein ek meeting scheduled hai this evening.,neutral,low,hinglish,synthetic,train,4
+MC-1156,Aaj evening mein calm aur grateful feel kar raha hoon as I try to handle things.,positive,low,hinglish,synthetic,train,5
+MC-0733,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon while dealing with college.,contextual,medium,hinglish,synthetic,train,3
+MC-0941,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0186,Aaj mere thoughts bahut out of control lag rahe hain after class.,crisis,high,hinglish,synthetic,train,0
+MC-0042,Everything feels unbearable right now and I do not know what to do right now.,crisis,high,en,synthetic,train,0
+MC-0109,Mera mind abhi control mein nahi lag raha aur mujhe help chahiye at the moment.,crisis,high,hinglish,synthetic,train,0
+MC-0569,"Din difficult hai, lekin mujhe khud ko hurt karne ka thought nahi aa raha at the moment.",negated,low,hinglish,synthetic,train,2
+MC-0651,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-0484,I am safe right now and I am not thinking about self-harm lately.,negated,low,en,synthetic,train,2
+MC-0469,"I am having a hard day, but I am not thinking about hurting myself at the moment.",negated,low,en,synthetic,train,2
+MC-0025,I feel like I am in a crisis and need someone to help me since yesterday.,crisis,high,en,synthetic,train,0
+MC-0680,Someone I care about is struggling and I am looking for supportive words and I would like a calm response.,contextual,medium,en,synthetic,train,3
+MC-0753,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon while dealing with college.,contextual,medium,hinglish,synthetic,train,3
+MC-0994,Kal groceries lene jaana hai during a stressful week.,neutral,low,hinglish,synthetic,train,4
+MC-0367,Main khud ko harm karne ke thoughts se struggle kar raha hoon this evening.,self_harm,high,hinglish,synthetic,train,1
+MC-0840,I am planning my tasks for the weekend and I would like a calm response.,neutral,low,en,synthetic,train,4
+MC-1053,I feel hopeful about the future while dealing with college.,positive,low,en,synthetic,train,5
+MC-0455,I do not have thoughts of hurting myself while thinking about things.,negated,low,en,synthetic,train,2
+MC-0761,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0980,Weekend ke tasks plan kar raha hoon and I would like a calm response.,neutral,low,hinglish,synthetic,train,4
+MC-0742,Main worried hoon kyunki mera friend self-harm ki baat kar raha hai right now.,contextual,medium,hinglish,synthetic,train,3
+MC-0177,Main bahut zyada pressure mein hoon aur urgent support chahiye and I wanted to talk about it.,crisis,high,hinglish,synthetic,train,0
+MC-0815,I am working on a Python project for college while thinking about things.,neutral,low,en,synthetic,train,4
+MC-0596,Main self-harm consider nahi kar raha hoon as I try to handle things.,negated,low,hinglish,synthetic,train,2
+MC-0062,Everything feels unbearable right now and I do not know what to do right now.,crisis,high,en,synthetic,train,0
+MC-0273,I am worried that I might hurt myself while dealing with college.,self_harm,high,en,synthetic,train,1
+MC-1126,Aaj evening mein calm aur grateful feel kar raha hoon after class.,positive,low,hinglish,synthetic,train,5
+MC-0279,I am afraid I may hurt myself when I feel overwhelmed and I wanted to put it into words.,self_harm,high,en,synthetic,train,1
+MC-0369,Mujhe fear hai ki overwhelm hone par main khud ko hurt kar sakta hoon at the moment.,self_harm,high,hinglish,synthetic,train,1
+MC-0887,I have a meeting scheduled for tomorrow morning this evening.,neutral,low,en,synthetic,train,4
+MC-1015,I am excited about starting my new project while thinking about things.,positive,low,en,synthetic,train,5
+MC-0860,I am planning my tasks for the weekend and I would like a calm response.,neutral,low,en,synthetic,train,4
+MC-0721,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0826,The weather was nice today after class.,neutral,low,en,synthetic,train,4
+MC-0548,Main suicidal ya unsafe feel nahi kar raha hoon this morning.,negated,low,hinglish,synthetic,train,2
+MC-0880,I am planning my tasks for the weekend and I would like a calm response.,neutral,low,en,synthetic,train,4
+MC-0900,I am planning my tasks for the weekend and I would like a calm response.,neutral,low,en,synthetic,train,4
+MC-0676,Someone close to me is having a crisis and I do not know how to respond as I try to handle things.,contextual,medium,en,synthetic,train,3
+MC-0912,Main apna study schedule organize kar raha hoon after talking to someone.,neutral,low,hinglish,synthetic,train,4
+MC-0965,Main college ke liye Python project bana raha hoon since yesterday.,neutral,low,hinglish,synthetic,train,4
+MC-0376,Jab main upset hota hoon to khud ko hurt karne ka thought aata hai as I try to handle things.,self_harm,high,hinglish,synthetic,train,1
+MC-0413,I am not in danger of hurting myself while dealing with college.,negated,low,en,synthetic,train,2
+MC-0075,I feel like I am in a crisis and need someone to help me while thinking about things.,crisis,high,en,synthetic,train,0
+MC-1122,Apna work finish karke mujhe khud par proud feel ho raha hai right now.,positive,low,hinglish,synthetic,train,5
+MC-0501,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0942,Main apna study schedule organize kar raha hoon right now.,neutral,low,hinglish,synthetic,train,4
+MC-0115,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye while thinking about things.,crisis,high,hinglish,synthetic,train,0
+MC-0602,I am worried because someone I know has been talking about self-harm right now.,contextual,medium,en,synthetic,train,3
+MC-1149,Aaj mujhe kaafi confidence mila at the moment.,positive,low,hinglish,synthetic,train,5
+MC-0499,"I am having a hard day, but I am not thinking about hurting myself and I wanted to put it into words.",negated,low,en,synthetic,train,2
+MC-0876,The weather was nice today as I try to handle things.,neutral,low,en,synthetic,train,4
+MC-0927,Kal morning mein ek meeting scheduled hai this evening.,neutral,low,hinglish,synthetic,train,4
+MC-0012,Everything feels unbearable right now and I do not know what to do after talking to someone.,crisis,high,en,synthetic,train,0
+MC-0397,Main khud ko harm karne ke thoughts se struggle kar raha hoon and I wanted to talk about it.,self_harm,high,hinglish,synthetic,train,1
+MC-0417,I have no intention of harming myself and I wanted to talk about it.,negated,low,en,synthetic,train,2
+MC-0577,Mera khud ko harm karne ka koi intention nahi hai and I wanted to talk about it.,negated,low,hinglish,synthetic,train,2
+MC-0268,I keep having thoughts about self-injury this morning.,self_harm,high,en,synthetic,train,1
+MC-0691,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-0675,I am asking because my friend is going through a difficult time while thinking about things.,contextual,medium,en,synthetic,train,3
+MC-0690,Someone I care about is struggling and I am looking for supportive words recently.,contextual,medium,en,synthetic,train,3
+MC-1055,I am excited about starting my new project while thinking about things.,positive,low,en,synthetic,train,5
+MC-1177,Jo goal set kiya tha woh achieve karke bahut achha laga and I wanted to talk about it.,positive,low,hinglish,synthetic,train,5
+MC-1035,I am excited about starting my new project while thinking about things.,positive,low,en,synthetic,train,5
+MC-0336,Jab main upset hota hoon to khud ko hurt karne ka thought aata hai as I try to handle things.,self_harm,high,hinglish,synthetic,train,1
+MC-0902,Main apna study schedule organize kar raha hoon right now.,neutral,low,hinglish,synthetic,train,4
+MC-0325,Aaj mujhe self-harm ke thoughts aa rahe hain since yesterday.,self_harm,high,hinglish,synthetic,train,1
+MC-0608,I am worried about another person who seems emotionally overwhelmed this morning.,contextual,medium,en,synthetic,train,3
+MC-1054,I had a great conversation with my friend today during a stressful week.,positive,low,en,synthetic,train,5
+MC-0791,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0223,I am worried that I might hurt myself this week.,self_harm,high,en,synthetic,train,1
+MC-0180,Main bahut dark phase mein hoon aur abhi support chahiye and I would like a calm response.,crisis,high,hinglish,synthetic,train,0
+MC-0100,I am in a very dark place and need support right now and I would like a calm response.,crisis,high,en,synthetic,train,0
+MC-0023,I am overwhelmed and scared about what I might do next this week.,crisis,high,en,synthetic,train,0
+MC-0357,Main khud ko harm karne ke thoughts se struggle kar raha hoon and I wanted to talk about it.,self_harm,high,hinglish,synthetic,train,1
+MC-0734,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai during a stressful week.",contextual,medium,hinglish,synthetic,train,3
+MC-1094,I had a great conversation with my friend today during a stressful week.,positive,low,en,synthetic,train,5
+MC-1112,Apna work finish karke mujhe khud par proud feel ho raha hai after talking to someone.,positive,low,hinglish,synthetic,train,5
+MC-0612,I am worried because someone I know has been talking about self-harm after talking to someone.,contextual,medium,en,synthetic,train,3
+MC-1010,I feel supported by the people around me recently.,positive,low,en,synthetic,train,5
+MC-0341,Mere mind mein khud ko hurt karne ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,train,1
+MC-0432,I do not want to harm myself after talking to someone.,negated,low,en,synthetic,train,2
+MC-0962,Main apna study schedule organize kar raha hoon right now.,neutral,low,hinglish,synthetic,train,4
+MC-0218,I keep having thoughts about self-injury and I am looking for support.,self_harm,high,en,synthetic,train,1
+MC-0204,The urge to hurt myself has been getting stronger lately.,self_harm,high,en,synthetic,train,1
+MC-0923,Aaj class ke baad maine movie dekhi this week.,neutral,low,hinglish,synthetic,train,4
+MC-0094,I do not feel safe being alone with my thoughts right now during a stressful week.,crisis,high,en,synthetic,train,0
+MC-0911,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0069,My thoughts feel out of control and I need immediate help at the moment.,crisis,high,en,synthetic,train,0
+MC-0895,I am working on a Python project for college while thinking about things.,neutral,low,en,synthetic,train,4
+MC-0697,My classmate mentioned self-harm and I want to help them safely and I wanted to talk about it.,contextual,medium,en,synthetic,train,3
+MC-0086,I am struggling to keep myself safe right now after class.,crisis,high,en,synthetic,train,0
+MC-0435,I do not have thoughts of hurting myself while thinking about things.,negated,low,en,synthetic,train,2
+MC-0154,Mujhe abhi akela rehna safe nahi lag raha during a stressful week.,crisis,high,hinglish,synthetic,train,0
+MC-0076,I am struggling to keep myself safe right now as I try to handle things.,crisis,high,en,synthetic,train,0
+MC-1043,I feel hopeful about the future this week.,positive,low,en,synthetic,train,5
+MC-0581,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0189,Mera mind abhi control mein nahi lag raha aur mujhe help chahiye at the moment.,crisis,high,hinglish,synthetic,train,0
+MC-0488,I am not feeling suicidal or unsafe this morning.,negated,low,en,synthetic,train,2
+MC-0118,Mujhe next few hours safely handle karna difficult lag raha hai and I am looking for support.,crisis,high,hinglish,synthetic,train,0
+MC-1128,Main motivated feel kar raha hoon aur kal ke liye ready hoon this morning.,positive,low,hinglish,synthetic,train,5
+MC-0751,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0513,Main khud ko hurt karne ke danger mein nahi hoon while dealing with college.,negated,low,hinglish,synthetic,train,2
+MC-0634,"A family member told me they do not feel safe, and I am concerned during a stressful week.",contextual,medium,en,synthetic,train,3
+MC-1007,I finally achieved something I had been working toward this evening.,positive,low,en,synthetic,train,5
+MC-0853,I watched a movie after class today while dealing with college.,neutral,low,en,synthetic,train,4
+MC-0117,Main bahut zyada pressure mein hoon aur urgent support chahiye and I wanted to talk about it.,crisis,high,hinglish,synthetic,train,0
+MC-0474,I am safe right now and I am not thinking about self-harm during a stressful week.,negated,low,en,synthetic,train,2
+MC-0741,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-0993,Aaj class ke baad maine movie dekhi while dealing with college.,neutral,low,hinglish,synthetic,train,4
+MC-0058,I do not know how to get through the next few hours safely and I am looking for support.,crisis,high,en,synthetic,train,0
+MC-0787,Mere classmate ne self-harm mention kiya aur main safely support karna chahta hoon this evening.,contextual,medium,hinglish,synthetic,train,3
+MC-0971,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0903,Aaj class ke baad maine movie dekhi this week.,neutral,low,hinglish,synthetic,train,4
+MC-0922,Main apna study schedule organize kar raha hoon right now.,neutral,low,hinglish,synthetic,train,4
+MC-0106,Aaj mere thoughts bahut out of control lag rahe hain after class.,crisis,high,hinglish,synthetic,train,0
+MC-0636,Someone close to me is having a crisis and I do not know how to respond as I try to handle things.,contextual,medium,en,synthetic,train,3
+MC-0370,Self-harm ke thoughts recently wapas aa gaye hain recently.,self_harm,high,hinglish,synthetic,train,1
+MC-0269,I am afraid I may hurt myself when I feel overwhelmed at the moment.,self_harm,high,en,synthetic,train,1
+MC-0656,Someone close to me is having a crisis and I do not know how to respond as I try to handle things.,contextual,medium,en,synthetic,train,3
+MC-0047,I feel completely overwhelmed and need urgent support this evening.,crisis,high,en,synthetic,train,0
+MC-0350,Self-harm ke thoughts recently wapas aa gaye hain recently.,self_harm,high,hinglish,synthetic,train,1
+MC-0774,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai during a stressful week.",contextual,medium,hinglish,synthetic,train,3
+MC-0196,Aaj mere thoughts bahut out of control lag rahe hain as I try to handle things.,crisis,high,hinglish,synthetic,train,0
+MC-0620,Someone I care about is struggling and I am looking for supportive words and I would like a calm response.,contextual,medium,en,synthetic,train,3
+MC-0991,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0053,I am overwhelmed and scared about what I might do next while dealing with college.,crisis,high,en,synthetic,train,0
+MC-0264,The urge to hurt myself has been getting stronger lately.,self_harm,high,en,synthetic,train,1
+MC-1093,I feel hopeful about the future while dealing with college.,positive,low,en,synthetic,train,5
+MC-0972,Main apna study schedule organize kar raha hoon after talking to someone.,neutral,low,hinglish,synthetic,train,4
+MC-0847,I have a meeting scheduled for tomorrow morning this evening.,neutral,low,en,synthetic,train,4
+MC-0305,Aaj mujhe self-harm ke thoughts aa rahe hain since yesterday.,self_harm,high,hinglish,synthetic,train,1
+MC-0342,Stress badhta hai to mujhe self-harm ke thoughts aate hain right now.,self_harm,high,hinglish,synthetic,train,1
+MC-0867,I have a meeting scheduled for tomorrow morning this evening.,neutral,low,en,synthetic,train,4
+MC-0314,Khud ko hurt karne ka urge lately strong ho raha hai during a stressful week.,self_harm,high,hinglish,synthetic,train,1
+MC-0150,Main bahut dark phase mein hoon aur abhi support chahiye recently.,crisis,high,hinglish,synthetic,train,0
+MC-0125,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye since yesterday.,crisis,high,hinglish,synthetic,train,0
+MC-1063,I feel hopeful about the future this week.,positive,low,en,synthetic,train,5
+MC-0575,Mere mind mein khud ko hurt karne ke thoughts nahi hain while thinking about things.,negated,low,hinglish,synthetic,train,2
+MC-0698,I am worried about another person who seems emotionally overwhelmed and I am looking for support.,contextual,medium,en,synthetic,train,3
+MC-0051,I feel like I am at a breaking point and need immediate support.,crisis,high,en,synthetic,train,0
+MC-0354,Khud ko hurt karne ka urge lately strong ho raha hai during a stressful week.,self_harm,high,hinglish,synthetic,train,1
+MC-1153,Future ko lekar mujhe hopeful feel ho raha hai while dealing with college.,positive,low,hinglish,synthetic,train,5
+MC-0471,I am not thinking about hurting myself.,negated,low,en,synthetic,train,2
+MC-0654,"A family member told me they do not feel safe, and I am concerned during a stressful week.",contextual,medium,en,synthetic,train,3
+MC-0400,Self-harm ke thoughts recently wapas aa gaye hain and I would like a calm response.,self_harm,high,hinglish,synthetic,train,1
+MC-0938,Main GitHub use karna seekh raha hoon and I am looking for support.,neutral,low,hinglish,synthetic,train,4
+MC-0685,I am asking because my friend is going through a difficult time since yesterday.,contextual,medium,en,synthetic,train,3
+MC-0036,I am struggling to keep myself safe right now as I try to handle things.,crisis,high,en,synthetic,train,0
+MC-0825,I am working on a Python project for college since yesterday.,neutral,low,en,synthetic,train,4
+MC-1071,I feel really happy about how today went.,positive,low,en,synthetic,train,5
+MC-0759,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon and I wanted to put it into words.,contextual,medium,hinglish,synthetic,train,3
+MC-0893,I watched a movie after class today while dealing with college.,neutral,low,en,synthetic,train,4
+MC-0176,Aaj mere thoughts bahut out of control lag rahe hain as I try to handle things.,crisis,high,hinglish,synthetic,train,0
+MC-0246,I feel drawn toward hurting myself when I am distressed after class.,self_harm,high,en,synthetic,train,1
+MC-1085,I am excited about starting my new project since yesterday.,positive,low,en,synthetic,train,5
+MC-0785,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai since yesterday.,contextual,medium,hinglish,synthetic,train,3
+MC-1185,New project start karne ko lekar main excited hoon since yesterday.,positive,low,hinglish,synthetic,train,5
+MC-0490,I do not want to hurt myself; I just need someone to listen recently.,negated,low,en,synthetic,train,2
+MC-0155,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye while thinking about things.,crisis,high,hinglish,synthetic,train,0
+MC-0639,My friend has been having dark thoughts and I want to support them and I wanted to put it into words.,contextual,medium,en,synthetic,train,3
+MC-0663,My roommate is struggling and I want to know how I can support them this week.,contextual,medium,en,synthetic,train,3
+MC-0854,I need to remember to buy groceries tomorrow during a stressful week.,neutral,low,en,synthetic,train,4
+MC-0288,I keep having thoughts about self-injury this morning.,self_harm,high,en,synthetic,train,1
+MC-0626,Someone close to me is having a crisis and I do not know how to respond after class.,contextual,medium,en,synthetic,train,3
+MC-0686,Someone close to me is having a crisis and I do not know how to respond after class.,contextual,medium,en,synthetic,train,3
+MC-0873,I watched a movie after class today while dealing with college.,neutral,low,en,synthetic,train,4
+MC-0570,"Mujhe khud ko hurt nahi karna, bas kisi ko sunna hai recently.",negated,low,hinglish,synthetic,train,2
+MC-1144,Aaj friend ke saath bahut achhi conversation hui lately.,positive,low,hinglish,synthetic,train,5
+MC-0735,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai while thinking about things.,contextual,medium,hinglish,synthetic,train,3
+MC-0793,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon while dealing with college.,contextual,medium,hinglish,synthetic,train,3
+MC-0018,I do not know how to get through the next few hours safely and I am looking for support.,crisis,high,en,synthetic,train,0
+MC-0128,Mujhe next few hours safely handle karna difficult lag raha hai this morning.,crisis,high,hinglish,synthetic,train,0
+MC-0323,Mujhe darr hai ki main khud ko hurt kar sakta hoon this week.,self_harm,high,hinglish,synthetic,train,1
+MC-0256,I feel drawn toward hurting myself when I am distressed as I try to handle things.,self_harm,high,en,synthetic,train,1
+MC-0191,Mujhe lag raha hai ki main breaking point par hoon aur mujhe immediate help chahiye.,crisis,high,hinglish,synthetic,train,0
+MC-0116,Aaj mere thoughts bahut out of control lag rahe hain as I try to handle things.,crisis,high,hinglish,synthetic,train,0
+MC-1174,Aaj friend ke saath bahut achhi conversation hui during a stressful week.,positive,low,hinglish,synthetic,train,5
+MC-0889,I spent the afternoon cleaning my room at the moment.,neutral,low,en,synthetic,train,4
+MC-0181,Mujhe lag raha hai ki main breaking point par hoon aur mujhe immediate help chahiye.,crisis,high,hinglish,synthetic,train,0
+MC-0302,Stress badhta hai to mujhe self-harm ke thoughts aate hain right now.,self_harm,high,hinglish,synthetic,train,1
+MC-0497,I have no intention of harming myself and I wanted to talk about it.,negated,low,en,synthetic,train,2
+MC-0745,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai since yesterday.,contextual,medium,hinglish,synthetic,train,3
+MC-0518,Main suicidal ya unsafe feel nahi kar raha hoon and I am looking for support.,negated,low,hinglish,synthetic,train,2
+MC-0373,Mujhe darr hai ki main khud ko hurt kar sakta hoon while dealing with college.,self_harm,high,hinglish,synthetic,train,1
+MC-0046,I am struggling to keep myself safe right now after class.,crisis,high,en,synthetic,train,0
+MC-0477,I have no intention of harming myself and I wanted to talk about it.,negated,low,en,synthetic,train,2
+MC-0158,Mujhe next few hours safely handle karna difficult lag raha hai and I am looking for support.,crisis,high,hinglish,synthetic,train,0
+MC-1047,I finally achieved something I had been working toward this evening.,positive,low,en,synthetic,train,5
+MC-0017,I feel completely overwhelmed and need urgent support and I wanted to talk about it.,crisis,high,en,synthetic,train,0
+MC-0049,My thoughts feel out of control and I need immediate help at the moment.,crisis,high,en,synthetic,train,0
+MC-0192,Sab kuch abhi bahut unbearable lag raha hai aur mujhe samajh nahi aa raha kya karun after talking to someone.,crisis,high,hinglish,synthetic,train,0
+MC-0547,Mera khud ko harm karne ka koi intention nahi hai this evening.,negated,low,hinglish,synthetic,train,2
+MC-0978,Main GitHub use karna seekh raha hoon and I am looking for support.,neutral,low,hinglish,synthetic,train,4
+MC-0939,Aaj afternoon mein room clean kiya and I wanted to put it into words.,neutral,low,hinglish,synthetic,train,4
+MC-0984,Kal groceries lene jaana hai lately.,neutral,low,hinglish,synthetic,train,4
+MC-0284,The urge to hurt myself has been getting stronger lately.,self_harm,high,en,synthetic,train,1
+MC-1030,I feel supported by the people around me recently.,positive,low,en,synthetic,train,5
+MC-0940,Weekend ke tasks plan kar raha hoon and I would like a calm response.,neutral,low,hinglish,synthetic,train,4
+MC-0226,I feel drawn toward hurting myself when I am distressed after class.,self_harm,high,en,synthetic,train,1
+MC-0027,I feel completely overwhelmed and need urgent support this evening.,crisis,high,en,synthetic,train,0
+MC-0283,I am worried that I might hurt myself this week.,self_harm,high,en,synthetic,train,1
+MC-1150,Mujhe apne aas-paas ke logon ka support feel hota hai recently.,positive,low,hinglish,synthetic,train,5
+MC-1168,Main motivated feel kar raha hoon aur kal ke liye ready hoon this morning.,positive,low,hinglish,synthetic,train,5
+MC-0230,Thoughts of self-harm have been coming back lately recently.,self_harm,high,en,synthetic,train,1
+MC-0038,I do not know how to get through the next few hours safely and I am looking for support.,crisis,high,en,synthetic,train,0
+MC-0750,Mera close person struggle kar raha hai aur mujhe supportive words chahiye recently.,contextual,medium,hinglish,synthetic,train,3
+MC-1181,Aaj ka din really achha gaya aur main happy feel kar raha hoon.,positive,low,hinglish,synthetic,train,5
+MC-0375,Aaj mujhe self-harm ke thoughts aa rahe hain while thinking about things.,self_harm,high,hinglish,synthetic,train,1
+MC-0470,I do not want to hurt myself; I just need someone to listen recently.,negated,low,en,synthetic,train,2
+MC-0883,I watched a movie after class today this week.,neutral,low,en,synthetic,train,4
+MC-1011,I feel really happy about how today went.,positive,low,en,synthetic,train,5
+MC-1176,Aaj evening mein calm aur grateful feel kar raha hoon as I try to handle things.,positive,low,hinglish,synthetic,train,5
+MC-0195,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye while thinking about things.,crisis,high,hinglish,synthetic,train,0
+MC-0504,Main safe hoon aur self-harm ke thoughts nahi aa rahe lately.,negated,low,hinglish,synthetic,train,2
+MC-0916,Aaj weather kaafi nice tha as I try to handle things.,neutral,low,hinglish,synthetic,train,4
+MC-1183,Future ko lekar mujhe hopeful feel ho raha hai this week.,positive,low,hinglish,synthetic,train,5
+MC-0801,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4
+MC-0580,"Mujhe khud ko hurt nahi karna, bas kisi ko sunna hai and I would like a calm response.",negated,low,hinglish,synthetic,train,2
+MC-0681,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-0163,Main bahut overwhelmed hoon aur mujhe immediate support chahiye this week.,crisis,high,hinglish,synthetic,train,0
+MC-0822,I am trying to organize my study schedule right now.,neutral,low,en,synthetic,train,4
+MC-0706,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun after class.,contextual,medium,hinglish,synthetic,train,3
+MC-1009,Today gave me a lot of confidence at the moment.,positive,low,en,synthetic,train,5
+MC-0878,I am learning how to use GitHub and I am looking for support.,neutral,low,en,synthetic,train,4
+MC-0896,The weather was nice today as I try to handle things.,neutral,low,en,synthetic,train,4
+MC-0914,Kal groceries lene jaana hai during a stressful week.,neutral,low,hinglish,synthetic,train,4
+MC-0153,Main bahut overwhelmed hoon aur mujhe immediate support chahiye while dealing with college.,crisis,high,hinglish,synthetic,train,0
+MC-1003,I feel hopeful about the future this week.,positive,low,en,synthetic,train,5
+MC-0510,"Mujhe khud ko hurt nahi karna, bas kisi ko sunna hai recently.",negated,low,hinglish,synthetic,train,2
+MC-0227,I am struggling with thoughts of harming myself this evening.,self_harm,high,en,synthetic,train,1
+MC-0104,Mujhe abhi akela rehna safe nahi lag raha lately.,crisis,high,hinglish,synthetic,train,0
+MC-0422,I do not want to harm myself right now.,negated,low,en,synthetic,train,2
+MC-0420,I do not want to hurt myself; I just need someone to listen and I would like a calm response.,negated,low,en,synthetic,train,2
+MC-0587,Mera khud ko harm karne ka koi intention nahi hai this evening.,negated,low,hinglish,synthetic,train,2
+MC-1061,I feel really happy about how today went.,positive,low,en,synthetic,train,5
+MC-0920,Weekend ke tasks plan kar raha hoon and I would like a calm response.,neutral,low,hinglish,synthetic,train,4
+MC-0120,Main bahut dark phase mein hoon aur abhi support chahiye and I would like a calm response.,crisis,high,hinglish,synthetic,train,0
+MC-0152,Sab kuch abhi bahut unbearable lag raha hai aur mujhe samajh nahi aa raha kya karun after talking to someone.,crisis,high,hinglish,synthetic,train,0
+MC-0404,I am safe right now and I am not thinking about self-harm lately.,negated,low,en,synthetic,train,2
+MC-1189,Aaj mujhe kaafi confidence mila at the moment.,positive,low,hinglish,synthetic,train,5
+MC-1135,New project start karne ko lekar main excited hoon while thinking about things.,positive,low,hinglish,synthetic,train,5
+MC-0659,My friend has been having dark thoughts and I want to support them and I wanted to put it into words.,contextual,medium,en,synthetic,train,3
+MC-0233,I am worried that I might hurt myself while dealing with college.,self_harm,high,en,synthetic,train,1
+MC-0009,My thoughts feel out of control and I need immediate help at the moment.,crisis,high,en,synthetic,train,0
+MC-0160,Main bahut dark phase mein hoon aur abhi support chahiye and I would like a calm response.,crisis,high,hinglish,synthetic,train,0
+MC-0037,I feel completely overwhelmed and need urgent support and I wanted to talk about it.,crisis,high,en,synthetic,train,0
+MC-0453,I am not in danger of hurting myself while dealing with college.,negated,low,en,synthetic,train,2
+MC-0254,The urge to hurt myself has been getting stronger during a stressful week.,self_harm,high,en,synthetic,train,1
+MC-0304,Khud ko hurt karne ka urge lately strong ho raha hai lately.,self_harm,high,hinglish,synthetic,train,1
+MC-0897,I have a meeting scheduled for tomorrow morning and I wanted to talk about it.,neutral,low,en,synthetic,train,4
+MC-0881,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4
+MC-1145,New project start karne ko lekar main excited hoon since yesterday.,positive,low,hinglish,synthetic,train,5
+MC-1146,Aaj evening mein calm aur grateful feel kar raha hoon after class.,positive,low,hinglish,synthetic,train,5
+MC-0263,I am worried that I might hurt myself this week.,self_harm,high,en,synthetic,train,1
+MC-0611,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-0415,I do not have thoughts of hurting myself while thinking about things.,negated,low,en,synthetic,train,2
+MC-0151,Mujhe lag raha hai ki main breaking point par hoon aur mujhe immediate help chahiye.,crisis,high,hinglish,synthetic,train,0
+MC-0946,Aaj weather kaafi nice tha after class.,neutral,low,hinglish,synthetic,train,4
+MC-0473,I am not in danger of hurting myself while dealing with college.,negated,low,en,synthetic,train,2
+MC-0988,Main GitHub use karna seekh raha hoon this morning.,neutral,low,hinglish,synthetic,train,4
+MC-0779,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon and I wanted to put it into words.,contextual,medium,hinglish,synthetic,train,3
+MC-0641,My friend told me that they are thinking about hurting themselves.,contextual,medium,en,synthetic,train,3
+MC-1190,Mujhe apne aas-paas ke logon ka support feel hota hai recently.,positive,low,hinglish,synthetic,train,5
+MC-0551,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0640,Someone I care about is struggling and I am looking for supportive words and I would like a calm response.,contextual,medium,en,synthetic,train,3
+MC-0929,Aaj afternoon mein room clean kiya at the moment.,neutral,low,hinglish,synthetic,train,4
+MC-0820,I am planning my tasks for the weekend and I would like a calm response.,neutral,low,en,synthetic,train,4
+MC-0711,Mere friend ne bola ki woh khud ko hurt karne ke baare mein soch raha hai.,contextual,medium,hinglish,synthetic,train,3
+MC-1081,I feel really happy about how today went.,positive,low,en,synthetic,train,5
+MC-0148,Mujhe next few hours safely handle karna difficult lag raha hai this morning.,crisis,high,hinglish,synthetic,train,0
+MC-0147,Main bahut zyada pressure mein hoon aur urgent support chahiye this evening.,crisis,high,hinglish,synthetic,train,0
+MC-0963,Aaj class ke baad maine movie dekhi this week.,neutral,low,hinglish,synthetic,train,4
+MC-0932,Main apna study schedule organize kar raha hoon after talking to someone.,neutral,low,hinglish,synthetic,train,4
+MC-0955,Main college ke liye Python project bana raha hoon while thinking about things.,neutral,low,hinglish,synthetic,train,4
+MC-1125,New project start karne ko lekar main excited hoon since yesterday.,positive,low,hinglish,synthetic,train,5
+MC-0660,Someone I care about is struggling and I am looking for supportive words and I would like a calm response.,contextual,medium,en,synthetic,train,3
+MC-0464,I am safe right now and I am not thinking about self-harm lately.,negated,low,en,synthetic,train,2
+MC-0187,Main bahut zyada pressure mein hoon aur urgent support chahiye this evening.,crisis,high,hinglish,synthetic,train,0
+MC-0609,My friend has been having dark thoughts and I want to support them at the moment.,contextual,medium,en,synthetic,train,3
+MC-0144,Mujhe abhi akela rehna safe nahi lag raha lately.,crisis,high,hinglish,synthetic,train,0
+MC-0752,Main worried hoon kyunki mera friend self-harm ki baat kar raha hai after talking to someone.,contextual,medium,hinglish,synthetic,train,3
+MC-0982,Main apna study schedule organize kar raha hoon right now.,neutral,low,hinglish,synthetic,train,4
+MC-0198,Mujhe next few hours safely handle karna difficult lag raha hai and I am looking for support.,crisis,high,hinglish,synthetic,train,0
+MC-0884,I need to remember to buy groceries tomorrow lately.,neutral,low,en,synthetic,train,4
+MC-0280,Thoughts of self-harm have been coming back lately and I would like a calm response.,self_harm,high,en,synthetic,train,1
+MC-0294,The urge to hurt myself has been getting stronger during a stressful week.,self_harm,high,en,synthetic,train,1
+MC-0123,Main bahut overwhelmed hoon aur mujhe immediate support chahiye this week.,crisis,high,hinglish,synthetic,train,0
+MC-0203,I am worried that I might hurt myself this week.,self_harm,high,en,synthetic,train,1
+MC-0836,The weather was nice today as I try to handle things.,neutral,low,en,synthetic,train,4
+MC-0247,I am struggling with thoughts of harming myself this evening.,self_harm,high,en,synthetic,train,1
+MC-1140,Mujhe apne aas-paas ke logon ka support feel hota hai and I would like a calm response.,positive,low,hinglish,synthetic,train,5
+MC-0385,Aaj mujhe self-harm ke thoughts aa rahe hain since yesterday.,self_harm,high,hinglish,synthetic,train,1
+MC-0855,I am working on a Python project for college while thinking about things.,neutral,low,en,synthetic,train,4
+MC-0220,Thoughts of self-harm have been coming back lately and I would like a calm response.,self_harm,high,en,synthetic,train,1
+MC-0113,Main bahut overwhelmed hoon aur mujhe immediate support chahiye while dealing with college.,crisis,high,hinglish,synthetic,train,0
+MC-0699,My friend has been having dark thoughts and I want to support them and I wanted to put it into words.,contextual,medium,en,synthetic,train,3
+MC-0664,"A family member told me they do not feel safe, and I am concerned lately.",contextual,medium,en,synthetic,train,3
+MC-1197,Jo goal set kiya tha woh achieve karke bahut achha laga and I wanted to talk about it.,positive,low,hinglish,synthetic,train,5
+MC-0318,Mere mind mein self-injury ke thoughts baar baar aa rahe hain and I am looking for support.,self_harm,high,hinglish,synthetic,train,1
+MC-0710,Mera close person struggle kar raha hai aur mujhe supportive words chahiye recently.,contextual,medium,hinglish,synthetic,train,3
+MC-0973,Aaj class ke baad maine movie dekhi while dealing with college.,neutral,low,hinglish,synthetic,train,4
+MC-0633,My roommate is struggling and I want to know how I can support them while dealing with college.,contextual,medium,en,synthetic,train,3
+MC-1172,Apna work finish karke mujhe khud par proud feel ho raha hai after talking to someone.,positive,low,hinglish,synthetic,train,5
+MC-1107,Jo goal set kiya tha woh achieve karke bahut achha laga this evening.,positive,low,hinglish,synthetic,train,5
+MC-0796,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun as I try to handle things.,contextual,medium,hinglish,synthetic,train,3
+MC-0646,Someone close to me is having a crisis and I do not know how to respond after class.,contextual,medium,en,synthetic,train,3
+MC-1013,I feel hopeful about the future while dealing with college.,positive,low,en,synthetic,train,5
+MC-0578,Main suicidal ya unsafe feel nahi kar raha hoon and I am looking for support.,negated,low,hinglish,synthetic,train,2
+MC-0525,Mere mind mein khud ko hurt karne ke thoughts nahi hain since yesterday.,negated,low,hinglish,synthetic,train,2
+MC-0541,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0749,Mere friend ke dark thoughts chal rahe hain aur main usko support karna chahta hoon at the moment.,contextual,medium,hinglish,synthetic,train,3
+MC-1110,Mujhe apne aas-paas ke logon ka support feel hota hai recently.,positive,low,hinglish,synthetic,train,5
+MC-0096,I am struggling to keep myself safe right now as I try to handle things.,crisis,high,en,synthetic,train,0
+MC-1021,I feel really happy about how today went.,positive,low,en,synthetic,train,5
+MC-0564,Main safe hoon aur self-harm ke thoughts nahi aa rahe lately.,negated,low,hinglish,synthetic,train,2
+MC-0864,I need to remember to buy groceries tomorrow lately.,neutral,low,en,synthetic,train,4
+MC-1039,Today gave me a lot of confidence and I wanted to put it into words.,positive,low,en,synthetic,train,5
+MC-0393,Mujhe darr hai ki main khud ko hurt kar sakta hoon while dealing with college.,self_harm,high,hinglish,synthetic,train,1
+MC-0795,Main apne friend ke liye pooch raha hoon jo difficult phase se guzar raha hai while thinking about things.,contextual,medium,hinglish,synthetic,train,3
+MC-0871,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4
+MC-0398,Mere mind mein self-injury ke thoughts baar baar aa rahe hain and I am looking for support.,self_harm,high,hinglish,synthetic,train,1
+MC-1100,I feel supported by the people around me and I would like a calm response.,positive,low,en,synthetic,train,5
+MC-1029,Today gave me a lot of confidence at the moment.,positive,low,en,synthetic,train,5
+MC-0643,My roommate is struggling and I want to know how I can support them this week.,contextual,medium,en,synthetic,train,3
+MC-0961,Mere paas is week bahut assignments hain.,neutral,low,hinglish,synthetic,train,4
+MC-0726,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun after class.,contextual,medium,hinglish,synthetic,train,3
+MC-0099,My thoughts feel out of control and I need immediate help and I wanted to put it into words.,crisis,high,en,synthetic,train,0
+MC-0805,I am working on a Python project for college since yesterday.,neutral,low,en,synthetic,train,4
+MC-0407,I have no intention of harming myself this evening.,negated,low,en,synthetic,train,2
+MC-0503,Main khud ko hurt karne ke danger mein nahi hoon this week.,negated,low,hinglish,synthetic,train,2
+MC-1072,I am proud of myself for finishing my work after talking to someone.,positive,low,en,synthetic,train,5
+MC-1057,I finally achieved something I had been working toward and I wanted to talk about it.,positive,low,en,synthetic,train,5
+MC-0930,Weekend ke tasks plan kar raha hoon recently.,neutral,low,hinglish,synthetic,train,4
+MC-0780,Mera close person struggle kar raha hai aur mujhe supportive words chahiye and I would like a calm response.,contextual,medium,hinglish,synthetic,train,3
+MC-0135,Mujhe lag raha hai main crisis mein hoon aur kisi ki help chahiye while thinking about things.,crisis,high,hinglish,synthetic,train,0
+MC-1052,I am proud of myself for finishing my work after talking to someone.,positive,low,en,synthetic,train,5
+MC-0041,I feel like I am at a breaking point and need immediate support.,crisis,high,en,synthetic,train,0
+MC-1018,I am feeling motivated and ready for tomorrow and I am looking for support.,positive,low,en,synthetic,train,5
+MC-0231,I keep thinking about hurting myself.,self_harm,high,en,synthetic,train,1
+MC-0379,Mujhe fear hai ki overwhelm hone par main khud ko hurt kar sakta hoon and I wanted to put it into words.,self_harm,high,hinglish,synthetic,train,1
+MC-0289,I am afraid I may hurt myself when I feel overwhelmed at the moment.,self_harm,high,en,synthetic,train,1
+MC-1087,I finally achieved something I had been working toward this evening.,positive,low,en,synthetic,train,5
+MC-0648,I am worried about another person who seems emotionally overwhelmed this morning.,contextual,medium,en,synthetic,train,3
+MC-0521,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0065,I feel like I am in a crisis and need someone to help me since yesterday.,crisis,high,en,synthetic,train,0
+MC-1065,I am excited about starting my new project since yesterday.,positive,low,en,synthetic,train,5
+MC-0493,I am not in danger of hurting myself while dealing with college.,negated,low,en,synthetic,train,2
+MC-0188,Mujhe next few hours safely handle karna difficult lag raha hai this morning.,crisis,high,hinglish,synthetic,train,0
+MC-0764,"Mere family member ne bola ki woh safe feel nahi kar raha, mujhe concern hai lately.",contextual,medium,hinglish,synthetic,train,3
+MC-0217,I am struggling with thoughts of harming myself and I wanted to talk about it.,self_harm,high,en,synthetic,train,1
+MC-1077,I finally achieved something I had been working toward and I wanted to talk about it.,positive,low,en,synthetic,train,5
+MC-0338,Mere mind mein self-injury ke thoughts baar baar aa rahe hain and I am looking for support.,self_harm,high,hinglish,synthetic,train,1
+MC-0296,I feel drawn toward hurting myself when I am distressed as I try to handle things.,self_harm,high,en,synthetic,train,1
+MC-1017,I finally achieved something I had been working toward and I wanted to talk about it.,positive,low,en,synthetic,train,5
+MC-0456,I am not considering self-harm as I try to handle things.,negated,low,en,synthetic,train,2
+MC-0816,The weather was nice today as I try to handle things.,neutral,low,en,synthetic,train,4
+MC-0270,Thoughts of self-harm have been coming back lately recently.,self_harm,high,en,synthetic,train,1
+MC-0996,Aaj weather kaafi nice tha as I try to handle things.,neutral,low,hinglish,synthetic,train,4
+MC-0202,I have thoughts about harming myself when things get overwhelming right now.,self_harm,high,en,synthetic,train,1
+MC-0162,Sab kuch abhi bahut unbearable lag raha hai aur mujhe samajh nahi aa raha kya karun right now.,crisis,high,hinglish,synthetic,train,0
+MC-0730,Mera close person struggle kar raha hai aur mujhe supportive words chahiye recently.,contextual,medium,hinglish,synthetic,train,3
+MC-0703,Mera roommate struggle kar raha hai aur main uski help karna chahta hoon this week.,contextual,medium,hinglish,synthetic,train,3
+MC-1130,Mujhe apne aas-paas ke logon ka support feel hota hai recently.,positive,low,hinglish,synthetic,train,5
+MC-0566,Main self-harm consider nahi kar raha hoon after class.,negated,low,hinglish,synthetic,train,2
+MC-1026,I feel calm and grateful this evening after class.,positive,low,en,synthetic,train,5
+MC-0776,Mera close friend crisis mein hai aur mujhe samajh nahi aa raha kaise help karun as I try to handle things.,contextual,medium,hinglish,synthetic,train,3
+MC-1184,Aaj friend ke saath bahut achhi conversation hui lately.,positive,low,hinglish,synthetic,train,5
+MC-0092,Everything feels unbearable right now and I do not know what to do after talking to someone.,crisis,high,en,synthetic,train,0
+MC-0898,I am learning how to use GitHub and I am looking for support.,neutral,low,en,synthetic,train,4
+MC-0565,Mere mind mein khud ko hurt karne ke thoughts nahi hain since yesterday.,negated,low,hinglish,synthetic,train,2
+MC-0777,Mere classmate ne self-harm mention kiya aur main safely support karna chahta hoon and I wanted to talk about it.,contextual,medium,hinglish,synthetic,train,3
+MC-0242,I have thoughts about harming myself when things get overwhelming right now.,self_harm,high,en,synthetic,train,1
+MC-0014,I do not feel safe being alone with my thoughts right now during a stressful week.,crisis,high,en,synthetic,train,0
+MC-0388,Mere mind mein self-injury ke thoughts baar baar aa rahe hain this morning.,self_harm,high,hinglish,synthetic,train,1
+MC-0841,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4
+MC-0021,I feel like I am at a breaking point and need immediate support.,crisis,high,en,synthetic,train,0
+MC-1155,New project start karne ko lekar main excited hoon while thinking about things.,positive,low,hinglish,synthetic,train,5
+MC-0832,I am trying to organize my study schedule after talking to someone.,neutral,low,en,synthetic,train,4
+MC-0563,Main khud ko hurt karne ke danger mein nahi hoon this week.,negated,low,hinglish,synthetic,train,2
+MC-0687,My classmate mentioned self-harm and I want to help them safely this evening.,contextual,medium,en,synthetic,train,3
+MC-0958,Main GitHub use karna seekh raha hoon and I am looking for support.,neutral,low,hinglish,synthetic,train,4
+MC-0700,Someone I care about is struggling and I am looking for supportive words and I would like a calm response.,contextual,medium,en,synthetic,train,3
+MC-0511,Main khud ko hurt karne ke baare mein nahi soch raha hoon.,negated,low,hinglish,synthetic,train,2
+MC-0475,I do not have thoughts of hurting myself while thinking about things.,negated,low,en,synthetic,train,2
+MC-0748,Main kisi aur ke liye worried hoon jo emotionally overwhelmed lag raha hai this morning.,contextual,medium,hinglish,synthetic,train,3
+MC-0022,Everything feels unbearable right now and I do not know what to do right now.,crisis,high,en,synthetic,train,0
+MC-0460,I do not want to hurt myself; I just need someone to listen and I would like a calm response.,negated,low,en,synthetic,train,2
+MC-0277,I am struggling with thoughts of harming myself and I wanted to talk about it.,self_harm,high,en,synthetic,train,1
+MC-0956,Aaj weather kaafi nice tha as I try to handle things.,neutral,low,hinglish,synthetic,train,4
+MC-0386,Jab main upset hota hoon to khud ko hurt karne ka thought aata hai after class.,self_harm,high,hinglish,synthetic,train,1
+MC-0806,The weather was nice today after class.,neutral,low,en,synthetic,train,4
+MC-0770,Mera close person struggle kar raha hai aur mujhe supportive words chahiye recently.,contextual,medium,hinglish,synthetic,train,3
+MC-0872,I am trying to organize my study schedule after talking to someone.,neutral,low,en,synthetic,train,4
+MC-1124,Aaj friend ke saath bahut achhi conversation hui lately.,positive,low,hinglish,synthetic,train,5
+MC-0088,I do not know how to get through the next few hours safely this morning.,crisis,high,en,synthetic,train,0
+MC-0331,Mere mind mein khud ko hurt karne ke thoughts aa rahe hain.,self_harm,high,hinglish,synthetic,train,1
+MC-1045,I am excited about starting my new project since yesterday.,positive,low,en,synthetic,train,5
+MC-1096,I feel calm and grateful this evening as I try to handle things.,positive,low,en,synthetic,train,5
+MC-0861,I have a lot of assignments to finish this week.,neutral,low,en,synthetic,train,4

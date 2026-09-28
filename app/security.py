@@ -1,3 +1,4 @@
+import hmac
 import os
 import secrets
 
@@ -61,6 +62,39 @@ class SecurityManager:
         return bool(
             value
             and value != "your_api_key_here"
+        )
+
+    def audit_api_key_configured(self) -> bool:
+
+        value = os.getenv(
+            "MINDCARE_AUDIT_API_KEY",
+            ""
+        ).strip()
+
+        return bool(value)
+
+    def validate_audit_api_key(
+        self,
+        provided_key: str
+    ) -> bool:
+
+        configured_key = os.getenv(
+            "MINDCARE_AUDIT_API_KEY",
+            ""
+        ).strip()
+
+        if not configured_key:
+            return False
+
+        if not isinstance(
+            provided_key,
+            str
+        ):
+            return False
+
+        return hmac.compare_digest(
+            provided_key,
+            configured_key
         )
 
     def is_safe_environment(self) -> bool:

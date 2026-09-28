@@ -1,0 +1,27 @@
+services:
+  mindcare-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mindcare-api
+    ports:
+      - "8001:8000"
+    environment:
+      MINDCARE_AUDIT_FILE: "/app/logs/safety_audit.jsonl"
+      MINDCARE_LOG_DIR: "/app/logs"
+      MINDCARE_AUDIT_API_KEY: "${MINDCARE_AUDIT_API_KEY}"
+    volumes:
+      - mindcare_logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - "CMD"
+        - "python"
+        - "-c"
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+volumes:
+  mindcare_logs:
