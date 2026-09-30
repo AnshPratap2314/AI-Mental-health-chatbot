@@ -3,6 +3,8 @@ import time
 from collections import defaultdict, deque
 from threading import RLock
 from typing import Deque, Dict, Optional
+from dotenv import load_dotenv
+load_dotenv()
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,10 +18,12 @@ from app.security import SecurityManager
 from app.session_manager import SessionManager
 
 
+
+
 APP_VERSION = "1.2.0"
 
 DEFAULT_FRONTEND_URLS = [
-    "https://ai-mental-health-chatbot-nm2r.onrender.com",
+    "https://mindcare-ai-o1e5.onrender.com",
 ]
 
 _raw_frontend_urls = (
@@ -27,14 +31,11 @@ _raw_frontend_urls = (
     or os.getenv("FRONTEND_URL", "")
 )
 
-if _raw_frontend_urls.strip():
-    configured_origins = [
-        item.strip().rstrip("/")
-        for item in _raw_frontend_urls.split(",")
-        if item.strip()
-    ]
-else:
-    configured_origins = DEFAULT_FRONTEND_URLS
+configured_origins = [
+    item.strip().rstrip("/")
+    for item in _raw_frontend_urls.split(",")
+    if item.strip()
+]
 
 ALLOWED_ORIGINS = list(
     dict.fromkeys(
@@ -43,7 +44,7 @@ ALLOWED_ORIGINS = list(
             "http://127.0.0.1:5500",
             "http://localhost:5501",
             "http://127.0.0.1:5501",
-            "https://mindcare-ai-o1e5.onrender.com",
+            *DEFAULT_FRONTEND_URLS,
             *configured_origins,
         ]
     )

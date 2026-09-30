@@ -300,7 +300,27 @@ class BehaviorEngine:
 
         )
 
-        if self.personalization_engine is not None:
+        # Final safety/provenance invariant: authoritative high-risk
+        # analysis always owns both the response content and its provenance.
+        authoritative_high_risk = (
+            analysis.get("risk_level") == "high"
+            or bool(analysis.get("signals", {}).get("crisis"))
+            or bool(analysis.get("signals", {}).get("self_harm"))
+            or bool(analysis.get("signals", {}).get("plan"))
+            or bool(analysis.get("signals", {}).get("contextual_suicide"))
+            or bool(crisis_result.get("immediate_guidance", False))
+        )
+
+        if authoritative_high_risk:
+            reply = self._crisis_response()
+            if self.response_engine is not None:
+                try:
+                    self.response_engine.last_source = "safety"
+                    self.response_engine.last_model = None
+                except Exception:
+                    pass
+
+        if self.personalization_engine is not None and not authoritative_high_risk:
 
             try:
 
@@ -324,22 +344,36 @@ class BehaviorEngine:
 
         self._store_assistant_reply(message, reply)
 
+        # Normalize response provenance one last time before exposing it.
+        # This is derived from the authoritative BehaviorEngine risk result,
+        # never from the trained response model.
+        response_source = self._response_source()
+        response_model = self._response_model()
+
+        if authoritative_high_risk:
+            response_source = "safety"
+            response_model = None
+        elif response_source == "safety":
+            response_source = "fallback"
+            response_model = None
+
         result = {
-
             "reply": reply,
-
             "response": reply,
 
-            "mode": analysis["mode"],
+            # Authoritative risk metadata from BehaviorEngine.
+            "risk_level": analysis.get("risk_level", "low"),
+            "risk_score": float(analysis.get("risk_score", 0.0) or 0.0),
+            "decision_source": analysis.get("decision_source"),
+
+            # Useful safety/routing metadata for API consumers.
+            "signals": analysis.get("signals", {}),
+            "mode": analysis.get("mode", "normal"),
 
             "analysis": analysis,
-
             "state": analysis["state"],
-
-            "response_source": self._response_source(),
-
-            "response_model": self._response_model(),
-
+            "response_source": response_source,
+            "response_model": response_model,
         }
 
         if analysis["risk_level"] == "high":
@@ -416,17 +450,17 @@ class BehaviorEngine:
         )
 
         return {
-
             "reply": reply,
-
             "response": reply,
-
+            "risk_level": analysis.get("risk_level", "low"),
+            "risk_score": float(analysis.get("risk_score", 0.0) or 0.0),
+            "decision_source": analysis.get("decision_source"),
+            "signals": analysis.get("signals", {}),
             "mode": "normal",
-
             "analysis": analysis,
-
-            "state": state
-
+            "state": state,
+            "response_source": "fallback",
+            "response_model": None,
         }
 
     def _clean_message(self, message: str) -> str:
@@ -549,8 +583,31 @@ class BehaviorEngine:
 
             )
 
-        if not decision_source:
+        # Decision-source consistency invariant: a source that says
+        # "high risk" must never be exposed when the authoritative final
+        # risk level is low/moderate. Hybrid/ML predictions remain useful
+        # metadata, but BehaviorEngine owns the final risk decision.
+        normalized_decision_source = str(
+            decision_source or ""
+        ).strip().lower()
+        ml_high_risk_sources = {
+            "ml_high_risk",
+            "hybrid_high_risk",
+            "model_high_risk",
+        }
 
+        if (
+            risk_level != "high"
+            and normalized_decision_source in ml_high_risk_sources
+        ):
+            decision_source = "ml_contextual"
+        elif (
+            risk_level == "high"
+            and not str(decision_source or "").startswith("rule_")
+        ):
+            decision_source = "rule_safety_override"
+
+        if not decision_source:
             decision_source = "rule_engine"
 
         mood = self._detect_mood(

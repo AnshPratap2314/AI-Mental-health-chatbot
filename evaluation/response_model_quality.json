@@ -1,0 +1,26 @@
+{
+  "validation": {
+    "rows": 1000,
+    "intent_accuracy": 1.0,
+    "mood_accuracy": 0.68,
+    "topic_accuracy": 0.72,
+    "risk_accuracy": 1.0,
+    "retrieval": {
+      "with_examples": 1000,
+      "mean_top_similarity": 0.850826,
+      "mean_top_retrieval_score": 1.127146
+    }
+  },
+  "test": {
+    "rows": 1000,
+    "intent_accuracy": 1.0,
+    "mood_accuracy": 0.683,
+    "topic_accuracy": 0.718,
+    "risk_accuracy": 1.0,
+    "retrieval": {
+      "with_examples": 1000,
+      "mean_top_similarity": 0.8537962,
+      "mean_top_retrieval_score": 1.1304362
+    }
+  }
+}

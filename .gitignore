@@ -27,8 +27,6 @@ htmlcov/
 .tox/
 .nox/
 
-.env
-.envrc
 .venv
 env/
 venv/
@@ -47,5 +45,19 @@ venv.bak/
 
 .cursorignore
 .cursorindexingignore
+
+# Runtime logs and audit data
+logs/
+*.log
+*.jsonl
+
+# Temporary source backups
+*.backup
+*.before_*
+*_backup.py
+
+# Environment / secrets
 .env
 .env.*
+!.env.example
+.envrc

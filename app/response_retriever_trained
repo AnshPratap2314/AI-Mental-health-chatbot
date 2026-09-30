@@ -1,0 +1,75 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+from app.response_model import TrainedResponseModel
+
+
+class ResponseRetriever:
+    """Production wrapper around the trained 10K response model.
+
+    The model improves semantic response retrieval and metadata prediction.
+    It never owns safety decisions. High-risk requests return no normal
+    response examples so the existing deterministic safety flow remains
+    authoritative.
+    """
+
+    DEFAULT_MODEL_DIR = (
+        Path(__file__).resolve().parent.parent / "models" / "response_model"
+    )
+
+    def __init__(self, model_dir: Optional[str] = None, top_k: int = 3):
+        self.model = TrainedResponseModel(
+            model_dir=model_dir or str(self.DEFAULT_MODEL_DIR),
+            top_k=top_k,
+        )
+
+    def find_examples(
+        self,
+        message: str,
+        mood: Optional[str] = None,
+        topic: Optional[str] = None,
+        intent: Optional[str] = None,
+        risk_level: Optional[str] = None,
+        top_k: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
+        return self.model.find_examples(
+            message=message,
+            mood=mood,
+            topic=topic,
+            intent=intent,
+            risk_level=risk_level,
+            top_k=top_k,
+        )
+
+    def predict_metadata(self, message: str) -> Dict[str, Any]:
+        return self.model.predict_metadata(message)
+
+    def build_context(
+        self,
+        message: str,
+        mood: Optional[str] = None,
+        topic: Optional[str] = None,
+        intent: Optional[str] = None,
+        risk_level: Optional[str] = None,
+        top_k: Optional[int] = None,
+    ) -> str:
+        return self.model.build_context(
+            message=message,
+            mood=mood,
+            topic=topic,
+            intent=intent,
+            risk_level=risk_level,
+            top_k=top_k,
+        )
+
+    def stats(self) -> Dict[str, Any]:
+        records = self.model.index.get("records", [])
+        return {
+            "loaded": True,
+            "rows": len(records),
+            "model_dir": str(self.model.root),
+            "targets": self.model.classifier["targets"],
+            "safety_boundary": "high-risk bypass",
+        }

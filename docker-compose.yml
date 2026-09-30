@@ -3,16 +3,33 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+
     container_name: mindcare-api
+
     ports:
       - "8001:8000"
+
     environment:
+      ENVIRONMENT: "production"
+      DEBUG: "false"
+      API_PUBLIC_URL: "https://mindcare-ai-semb.onrender.com"
+      FRONTEND_URL: "${FRONTEND_URL:-}"
+      FRONTEND_URLS: "${FRONTEND_URLS}"
+      ENABLE_LLM: "${ENABLE_LLM:-false}"
+      MAX_MESSAGE_LENGTH: "${MAX_MESSAGE_LENGTH:-4000}"
+      MAX_MEMORY: "${MAX_MEMORY:-20}"
+      SESSION_TTL_SECONDS: "${SESSION_TTL_SECONDS:-7200}"
+      MAX_SESSIONS: "${MAX_SESSIONS:-1000}"
+
+      MINDCARE_AUDIT_API_KEY: "${MINDCARE_AUDIT_API_KEY:?MINDCARE_AUDIT_API_KEY must be set}"
       MINDCARE_AUDIT_FILE: "/app/logs/safety_audit.jsonl"
       MINDCARE_LOG_DIR: "/app/logs"
-      MINDCARE_AUDIT_API_KEY: "${MINDCARE_AUDIT_API_KEY}"
+
     volumes:
       - mindcare_logs:/app/logs
+
     restart: unless-stopped
+
     healthcheck:
       test:
         - "CMD"
@@ -23,5 +40,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+
 volumes:
   mindcare_logs:

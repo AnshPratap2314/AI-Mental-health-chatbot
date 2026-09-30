@@ -1,0 +1,136 @@
+{
+  "dataset": {
+    "train": 8000,
+    "validation": 1000,
+    "test": 1000,
+    "total": 10000,
+    "unique_train_messages": 8000,
+    "unique_validation_messages": 1000,
+    "unique_test_messages": 1000,
+    "unique_train_responses": 1000
+  },
+  "environment": {
+    "scikit_learn": "1.6.1"
+  },
+  "model": {
+    "version": "mindcare-response-model-v2",
+    "features": "word+char TF-IDF",
+    "classifier": "LogisticRegression",
+    "random_state": 42
+  },
+  "metrics": {
+    "intent": {
+      "validation_accuracy": 1.0,
+      "validation_macro_f1": 1.0,
+      "test_accuracy": 1.0,
+      "test_macro_f1": 1.0
+    },
+    "mood": {
+      "validation_accuracy": 0.716,
+      "validation_macro_f1": 0.6999212258494667,
+      "test_accuracy": 0.724,
+      "test_macro_f1": 0.7147714569156821
+    },
+    "topic": {
+      "validation_accuracy": 0.726,
+      "validation_macro_f1": 0.7208454604840114,
+      "test_accuracy": 0.75,
+      "test_macro_f1": 0.7482853056939428
+    },
+    "risk_level": {
+      "validation_accuracy": 1.0,
+      "validation_macro_f1": 1.0,
+      "test_accuracy": 1.0,
+      "test_macro_f1": 1.0
+    },
+    "retrieval_top1": {
+      "intent_match": 1.0,
+      "mood_match": 0.705,
+      "topic_match": 0.717,
+      "risk_match": 1.0,
+      "exact_response_match": 0.017,
+      "mean_similarity": 0.886463030116318
+    }
+  },
+  "dataset_integrity": {
+    "train": 8000,
+    "validation": 1000,
+    "test": 1000,
+    "train_validation_overlap": 0,
+    "train_test_overlap": 0,
+    "validation_test_overlap": 0,
+    "train_duplicate_messages": 0,
+    "validation_duplicate_messages": 0,
+    "test_duplicate_messages": 0,
+    "intent_distribution": {
+      "train": {
+        "anger": 400,
+        "anxiety": 400,
+        "career": 400,
+        "casual": 400,
+        "exam_stress": 400,
+        "family": 400,
+        "gratitude": 400,
+        "greeting": 400,
+        "high_risk": 400,
+        "loneliness": 400,
+        "motivation": 400,
+        "negated_distress": 400,
+        "overwhelm": 400,
+        "positive": 400,
+        "relationship": 400,
+        "sadness": 400,
+        "self_reflection": 400,
+        "sleep": 400,
+        "uncertainty": 400,
+        "work_stress": 400
+      },
+      "validation": {
+        "anger": 50,
+        "anxiety": 50,
+        "career": 50,
+        "casual": 50,
+        "exam_stress": 50,
+        "family": 50,
+        "gratitude": 50,
+        "greeting": 50,
+        "high_risk": 50,
+        "loneliness": 50,
+        "motivation": 50,
+        "negated_distress": 50,
+        "overwhelm": 50,
+        "positive": 50,
+        "relationship": 50,
+        "sadness": 50,
+        "self_reflection": 50,
+        "sleep": 50,
+        "uncertainty": 50,
+        "work_stress": 50
+      },
+      "test": {
+        "anger": 50,
+        "anxiety": 50,
+        "career": 50,
+        "casual": 50,
+        "exam_stress": 50,
+        "family": 50,
+        "gratitude": 50,
+        "greeting": 50,
+        "high_risk": 50,
+        "loneliness": 50,
+        "motivation": 50,
+        "negated_distress": 50,
+        "overwhelm": 50,
+        "positive": 50,
+        "relationship": 50,
+        "sadness": 50,
+        "self_reflection": 50,
+        "sleep": 50,
+        "uncertainty": 50,
+        "work_stress": 50
+      }
+    }
+  },
+  "backup_directory": "/Users/anshshakya/Downloads/python/PythonProject/AI-Mental-health-chatbot/models/response_model_backup_20260929_225655",
+  "safety_note": "Synthetic, non-clinical response dataset. Safety/risk decisions remain owned by the deterministic MindCare safety layer. The normal response model must not override authoritative crisis/self-harm/plan detection."
+}

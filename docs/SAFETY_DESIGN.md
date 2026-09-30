@@ -1,169 +1,217 @@
-# MindCare AI --- Safety Design
+# MindCare AI — Safety Design
 
-## Scope
+## 1. Purpose
 
-MindCare is a supportive conversational AI prototype, not a medical
-device, diagnostic system, therapist, or emergency service.
+MindCare AI is designed as a supportive conversational system with
+safety-oriented risk detection and response routing.
 
-## 1. Safety Principles
+The system does not treat machine-learning predictions as the sole
+authority for safety-critical decisions.
 
-1.  Deterministic safety controls have authority over normal generation.
-2.  ML predictions are evidence, not unconditional safety decisions.
-3.  LLM output is subject to a safety gate.
-4.  High-risk messages follow a deterministic response path.
-5.  Safety decisions are auditable without storing the original message.
-6.  Safety behavior is regression-tested.
-7.  Benchmark results are not clinical validation.
+Safety-critical rules have priority over ordinary ML classification
+and response generation.
 
-## 2. Safety Flow
+---
 
-``` text
-User message
-     ↓
-Rule analysis + ML + context
-     ↓
-Hybrid analysis
-     ↓
-Safety precedence
-     ↓
-┌───────────────┬───────────────┐
-│ High risk     │ Normal        │
-├───────────────┼───────────────┤
-│ Deterministic │ Normal        │
-│ safety reply  │ response path │
-│ Support flag  │ Safety gate   │
-│ Guidance flag │ Audit         │
-│ Audit         │               │
-└───────────────┴───────────────┘
-```
+## 2. Safety Architecture
 
-## 3. Authoritative Signals
+The high-level processing flow is:
 
-Configured signals include:
+User Message
+    ↓
+Input Validation / Sanitization
+    ↓
+Context & State Analysis
+    ↓
+Risk Detection
+    ↓
+Authoritative Safety Rules
+    ↓
+Hybrid / ML Risk Analysis
+    ↓
+Safety Decision
+    ↓
+Response Routing
+    ↓
+Safety Audit
+    ↓
+API Response
 
--   crisis
--   self-harm
--   intent
--   plan
--   temporal indicators
--   contextual suicide
--   negation
--   protective signals
+---
 
-Safety precedence prevents ordinary ML classification from overriding
-authoritative safety rules.
+## 3. Safety Decision Priority
 
-## 4. LLM Boundary
+The system uses explicit safety overrides.
 
-The LLM is not the final safety authority.
+The effective decision source follows this priority:
 
-``` text
-Safety Policy
-     ↓
-LLM permitted?
-  ├── NO  → deterministic safety response
-  └── YES → LLM generation
-```
+1. Contextual suicide override
+2. Crisis override
+3. Self-harm override
+4. Plan-related override
+5. High-risk safety override
+6. Hybrid/ML decision
+7. Rule engine fallback
 
-Configured dangerous instructional patterns are rejected.
+This ordering prevents a low-confidence ML prediction from
+overriding an authoritative safety signal.
 
-## 5. High-Risk Policy
+---
 
-A high-risk result requires:
+## 4. High-Risk Response Isolation
 
--   deterministic safety response
--   human-support flag
--   immediate-guidance flag
--   crisis mode
--   audit record
+When a message is classified as high risk through an authoritative
+safety rule:
 
-## 6. Negation and Context
+- `response_source` must be `safety`
+- `response_model` must be `None`
+- the safety response must not originate from the trained response model
+- ordinary response retrieval must not replace the safety response
+- the corresponding `decision_source` must identify the authoritative
+  safety rule
 
-The system must distinguish direct statements from negated or contextual
-statements.
+This provides response provenance for safety-critical interactions.
 
-Examples represented in testing include:
+---
 
-``` text
-"I want to hurt myself."
-```
+## 5. ML Role
 
-versus:
+The ML components are used for:
 
-``` text
-"I am not thinking about hurting myself."
-```
+- contextual classification
+- risk estimation
+- response intent classification
+- response retrieval
+- metadata prediction
 
-and discussion of another person's situation.
+ML predictions are not permitted to suppress an authoritative
+crisis or self-harm rule.
 
-## 7. Audit
+The system therefore follows a hybrid architecture:
 
-The audit stores:
+    Deterministic Safety Rules
+              +
+           ML Models
+              ↓
+       Safety-aware routing
 
--   timestamp
--   risk level
--   risk score
--   action
--   mode
--   signals
--   decision source
--   human-support requirement
--   immediate-guidance requirement
+---
 
-It intentionally excludes the original message, username, IP address,
-credentials and full session ID.
+## 6. Response Routing
 
-## 8. Safety Testing
+Responses are selected in the following general order:
 
-The test suite includes low-, moderate- and high-risk behavior, crisis
-overrides, negation, contextual cases, hard negatives, API-level safety
-flow and persistent audit behavior.
+1. Safety response for high-risk situations
+2. Deterministic safety/support response where applicable
+3. Follow-up, greeting, or gratitude response
+4. LLM response when safely configured
+5. Trained response model
+6. Safe fallback response
 
-Current regression result:
+The safety layer is evaluated before normal response generation.
 
-``` text
-230 passed
-```
+---
 
-## 9. Limitations
+## 7. Provenance
 
-Potential failure modes include:
+Every generated response should have enough metadata to explain
+where the decision originated.
 
--   ambiguous wording
--   indirect language
--   novel expressions
--   cultural context
--   multilingual/code-switched language outside the benchmark
--   sarcasm
--   missing context
--   adversarial input
+Relevant fields include:
 
-Real-world deployment would require additional validation and qualified
-domain expertise.
+- `risk_level`
+- `risk_score`
+- `decision_source`
+- `response_source`
+- `response_model`
 
-## 10. Responsible Claims
+For high-risk responses, provenance must remain consistent with the
+authoritative safety decision.
 
-Prefer:
+---
 
-> The system demonstrates deterministic-first safety engineering on a
-> synthetic benchmark.
+## 8. Audit Logging
 
-Avoid:
+Safety decisions are recorded using the safety audit system.
 
-> The system guarantees safety.
+The audit record contains safety metadata rather than the user's
+message content.
 
-Prefer:
+Recorded information may include:
 
-> The classifier achieved 100% accuracy on the current synthetic test
-> set.
+- timestamp
+- risk level
+- risk score
+- action
+- mode
+- detected signals
+- decision source
+- human-support requirement
+- immediate-guidance requirement
 
-Avoid:
+Sensitive conversational content should not be written to the
+safety audit log.
 
-> The system has 100% real-world crisis detection accuracy.
+---
 
-## 11. Emergency Scope
+## 9. Determinism
 
-MindCare should never be presented as an emergency response service.
-When immediate danger is discussed, users should be directed toward
-appropriate local emergency services or qualified crisis support rather
-than being encouraged to rely on the chatbot alone.
+Safety-critical classification should be deterministic for the same
+input and equivalent state.
+
+Regression tests verify that repeated evaluation of the same message
+does not unexpectedly change:
+
+- risk level
+- risk score
+- decision source
+- safety response provenance
+
+---
+
+## 10. Fail-Safe Principle
+
+If an authoritative safety rule detects a critical condition, normal
+ML response generation must not override it.
+
+Safety routing takes precedence over conversational personalization,
+retrieval, or ordinary language-model generation.
+
+---
+
+## 11. Testing Requirements
+
+Safety-related changes must preserve:
+
+- crisis detection
+- self-harm detection
+- plan-related detection
+- high-risk response isolation
+- response provenance
+- risk determinism
+- audit behavior
+- API security behavior
+
+The complete automated test suite should pass before deployment.
+
+---
+
+## 12. Limitations
+
+MindCare AI is a software project and should not be treated as a
+replacement for qualified human support, professional assessment,
+emergency services, or clinical care.
+
+Model metrics and automated tests demonstrate software behavior under
+the tested conditions; they do not establish clinical effectiveness.
+
+---
+
+## 13. Change Management
+
+Changes to safety rules, risk thresholds, safety response routing,
+or high-risk provenance should be accompanied by regression tests.
+
+A safety-related change should not be merged solely because the
+application starts successfully. The full automated test suite should
+also pass.

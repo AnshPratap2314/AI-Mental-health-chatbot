@@ -421,14 +421,14 @@ python -m pytest -q
 Current verified regression result:
 
 ``` text
-230 passed
+238 passed
 ```
 
 Coverage includes behavior, context, conversation flow, safety,
 sessions, LLM safety, API security, session hardening, and persistent
 safety-audit end-to-end behavior.
 
-The 230-test result is a software regression result, not clinical
+The 238-test result is a software regression result, not clinical
 validation.
 
 ## Project Structure
@@ -454,6 +454,9 @@ AI-Mental-health-chatbot/
 │   ├── privacy_manager.py
 │   ├── production_config.py
 │   ├── response_engine.py
+│   ├── response_model.py
+│   ├── response_retriever.py
+│   ├── response_retriever_trained
 │   ├── risk_engine.py
 │   ├── safety_audit.py
 │   ├── safety_engine.py
@@ -464,13 +467,15 @@ AI-Mental-health-chatbot/
 │   ├── session_manager.py
 │   └── logging_config.py
 ├── data/
+│   ├── mindcare_clean/
+│   └── mindcare_responses/
 ├── evaluation/
 ├── models/
+│   └── response_model/
 ├── scripts/
 ├── frontend/
 ├── tests/
 ├── docs/
-├── logs/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── .dockerignore
@@ -559,7 +564,7 @@ template.
 > rules instead of being delegated entirely to an LLM. I also
 > implemented API security, rate limiting, persistent safety auditing,
 > automated regression testing and Docker deployment. The current suite
-> has 230 passing tests, and the ML benchmark achieved 100% test
+> has 238 passing tests, and the ML benchmark achieved 100% test
 > accuracy on a synthetic, non-clinical dataset.
 
 ### Hardest engineering problem
@@ -587,6 +592,48 @@ template.
 **ML:** TF-IDF + Logistic Regression\
 **Safety:** Deterministic + hybrid decision architecture\
 **Audit:** Persistent JSONL\
-**Testing:** 230 passing tests\
+**Testing:** 238 passing tests\
 **Deployment:** Docker Compose + Gunicorn + Uvicorn\
 **Dataset:** 1,200 synthetic, non-clinical examples
+
+
+## Reproducible Verification Checklist
+
+Run the complete release verification from the project root:
+
+```bash
+bash scripts/verify_release.sh
+```
+
+The verification script checks:
+
+1. Full automated test suite.
+2. Exact production dependency versions: NumPy `2.0.2`, SciPy `1.13.1`, scikit-learn `1.6.1`, and joblib `1.5.3`.
+3. Docker Compose configuration validity.
+4. Docker container status and health.
+5. Trained response-model artifact loading.
+6. Normal response routing through `mindcare-response-10k`.
+7. Crisis routing through the deterministic safety layer.
+8. Self-harm routing through the deterministic safety layer.
+
+Expected safety-routing invariants:
+
+```text
+Normal message
+  -> response_source=trained_response_model
+  -> response_model=mindcare-response-10k
+
+Crisis message
+  -> risk_level=high
+  -> response_source=safety
+  -> response_model=None
+  -> decision_source=rule_crisis_override
+
+Self-harm message
+  -> risk_level=high
+  -> response_source=safety
+  -> response_model=None
+  -> decision_source=rule_self_harm_override
+```
+
+The verification script must pass before a release commit is created.
