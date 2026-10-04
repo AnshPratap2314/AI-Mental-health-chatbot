@@ -1,4 +1,7 @@
+import re
+import unicodedata
 from collections import deque
+
 from typing import Any, Dict, Optional
 
 try:
@@ -8,10 +11,6 @@ try:
 except Exception:
 
     TrainedResponseModel = None
-
-
-
-
 
 class ResponseEngine:
 
@@ -51,7 +50,7 @@ class ResponseEngine:
 
     """
 
-    RESPONSE_MODEL_NAME = "mindcare-response-10k"
+    RESPONSE_MODEL_NAME = "mindcare-response-50k"
 
     def __init__(
 
@@ -72,25 +71,99 @@ class ResponseEngine:
         self.last_model = None
 
         self.response_model = None
+        self.response_model_load_error = None
 
         # Per-session response history prevents immediate repetition while
         # keeping selection bounded to relevant candidates.
         self._recent_trained_responses = deque(maxlen=8)
 
-        if TrainedResponseModel is not None:
+        self._load_response_model()
 
-            try:
+    def _load_response_model(self) -> bool:
+        """Load the 50K response model without breaking the main router."""
+        if TrainedResponseModel is None:
+            self.response_model_load_error = "TrainedResponseModel import unavailable"
+            return False
 
-                self.response_model = TrainedResponseModel()
-
-            except Exception:
-
-                self.response_model = None
+        try:
+            self.response_model = TrainedResponseModel()
+            self.response_model_load_error = None
+            return True
+        except Exception as exc:
+            # Keep production chat alive, but retain a diagnostic for local
+            # verification instead of silently hiding initialization failures.
+            self.response_model = None
+            self.response_model_load_error = f"{type(exc).__name__}: {exc}"
+            return False
 
 # =====================================================================
 # MAIN RESPONSE ROUTER
 # =====================================================================
     def generate(
+        self,
+        message,
+        analysis,
+        context,
+    ):
+        """Generate a response and apply a mandatory final cleanup boundary."""
+        response = self._generate_raw(message, analysis, context)
+        return self._finalize_response(response)
+
+    @classmethod
+    def _finalize_response(cls, response: Optional[str]) -> Optional[str]:
+        """Apply the authoritative final text sanitizer to every response path."""
+        if response is None:
+            return None
+
+        text = unicodedata.normalize("NFKC", str(response))
+        text = re.sub(r"[\u200b-\u200f\u2060\ufeff]", "", text)
+        text = cls._clean_response_text(text)
+
+        explicit_repairs = (
+            ("orsomething", "or something"),
+            ("Orsomething", "Or something"),
+            ("ORSOMETHING", "OR SOMETHING"),
+            ("isto", "is to"),
+            ("Isto", "Is to"),
+            ("ISTO", "IS TO"),
+            ("immediatedanger", "immediate danger"),
+            ("Immediatedanger", "Immediate danger"),
+            ("IMMEDIATEDANGER", "IMMEDIATE DANGER"),
+            ("practicaloption", "practical option"),
+            ("Practicaloption", "Practical option"),
+            ("PRACTICALOPTION", "PRACTICAL OPTION"),
+            ("worryingyou", "worrying you"),
+            ("Worryingyou", "Worrying you"),
+            ("whatkind", "what kind"),
+            ("Whatkind", "What kind"),
+            ("atime", "a time"),
+            ("Atime", "A time"),
+            ("onestep", "one step"),
+            ("Onestep", "One step"),
+            ("onesmall", "one small"),
+            ("Onesmall", "One small"),
+            ("mightreach", "might reach"),
+            ("Mightreach", "Might reach"),
+            ("mightfind", "might find"),
+            ("Mightfind", "Might find"),
+            ("togive", "to give"),
+            ("Togive", "To give"),
+            ("tostart", "to start"),
+            ("Tostart", "To start"),
+            ("tounderstanding", "to understanding"),
+            ("Tounderstanding", "To understanding"),
+            ("onunderstanding", "on understanding"),
+            ("Onunderstanding", "On understanding"),
+        )
+
+        for bad, good in explicit_repairs:
+            text = text.replace(bad, good)
+
+        text = re.sub(r"\s+([,.!?;:])", r"\1", text)
+        text = re.sub(r"([.!?])(?=[A-Za-z])", r"\1 ", text)
+        return " ".join(text.split()).strip()
+
+    def _generate_raw(
 
         self,
 
@@ -185,7 +258,6 @@ class ResponseEngine:
             or signals.get("self_harm")
 
             or signals.get("plan")
-            or signals.get("contextual_suicide")
 
         ):
 
@@ -229,6 +301,14 @@ class ResponseEngine:
             self.last_model = None
 
             return self._gratitude_response()
+
+        if self._is_short_uncertainty(text):
+
+            self.last_source = "fallback"
+
+            self.last_model = None
+
+            return self._uncertainty_response()
 
 # ================================================================
 # 3. REAL LLM
@@ -278,7 +358,7 @@ class ResponseEngine:
 
             self.last_model = self.RESPONSE_MODEL_NAME
 
-            return trained_reply
+            return str(trained_reply)
 
 # ================================================================
 # 5. MODERATE / SERIOUS DETERMINISTIC FALLBACK
@@ -378,239 +458,297 @@ class ResponseEngine:
 # TRAINED RESPONSE MODEL
 # =====================================================================
     def _trained_response(
-
         self,
-
         message: str,
-
         analysis: Dict[str, Any],
-
         context: Dict[str, Any],
-
     ) -> Optional[str]:
+        """Select a safe, semantically relevant response from the 50K bank.
 
-        """Select a trained response only when relevance is sufficiently strong."""
+        BehaviorEngine owns safety. This method only decides whether a normal
+        response-bank example is relevant enough to use.
+        """
+        if self.response_model is None:
+            self._load_response_model()
 
         model = self.response_model
-
         if model is None:
-
             return None
 
-        risk_level = str(
-
-            analysis.get("risk_level", "low") or "low"
-
-        ).lower()
-
+        risk_level = str(analysis.get("risk_level", "low") or "low").lower()
         signals = analysis.get("signals", {})
-
         if not isinstance(signals, dict):
-
             signals = {}
 
-# The response model can never override authoritative safety.
+        # Never use the normal response bank for authoritative safety cases.
         if (
-
             risk_level == "high"
-
             or signals.get("crisis")
-
             or signals.get("self_harm")
-
             or signals.get("plan")
-
+            or signals.get("contextual_suicide")
         ):
-
             return None
 
-# Preserve stable deterministic behavior for the simplest direct
-# emotional statement.
-        if message.lower().strip() in {
-
-            "i feel lonely",
-
-            "i'm lonely",
-
-            "im lonely",
-
-            "i am lonely",
-
+        normalized = " ".join(message.lower().strip().split())
+        if normalized in {
+            "hi", "hii", "hiii", "hello", "helo", "hey", "heyy",
+            "heyyy", "hiya", "yo", "hmm", "hmmm", "hm", "umm", "um",
+            "uh", "uhh", "idk", "i dk", "idontknow", "i dont know",
+            "i don't know", "not sure", "unsure", "no idea",
         }:
-
             return None
 
         try:
-
             metadata = model.predict_metadata(message)
-
-        except Exception:
-
+            self.response_model_last_error = None
+        except Exception as exc:
+            self.response_model_last_error = (
+                f"metadata: {type(exc).__name__}: {exc}"
+            )
             metadata = {}
 
         if not isinstance(metadata, dict):
-
             metadata = {}
 
-        requested_mood = analysis.get("mood") or metadata.get("mood")
+        state = analysis.get("state", {})
+        if not isinstance(state, dict):
+            state = {}
 
-        requested_intent = analysis.get("intent") or metadata.get("intent")
-
+        requested_mood = metadata.get("mood") or analysis.get("mood")
+        requested_intent = metadata.get("intent") or analysis.get("intent")
         requested_topic = (
-
-            analysis.get("topic")
-
-            or analysis.get("state", {}).get("last_topic")
-
-            or metadata.get("topic")
-
+            metadata.get("topic")
+            or analysis.get("topic")
+            or state.get("last_topic")
         )
 
-        try:
-
-            examples = model.find_examples(
-
-                message=message,
-
-                risk_level=risk_level,
-
-                mood=requested_mood,
-
-                intent=requested_intent,
-
-                topic=requested_topic,
-
-                top_k=5,
-
+        # Generic stress statements should not be forced into a topic such as
+        # work merely because the response-model metadata classifier guessed it.
+        # Keep the mood signal, but let semantic retrieval determine the topic.
+        generic_stress = bool(
+            re.search(
+                r"\b(?:getting|feeling|feel|am|i'm|im)\s+stressed\b",
+                normalized,
+            )
+        ) or normalized in {
+            "i am stressed",
+            "im stressed",
+            "i'm stressed",
+            "i feel stressed",
+            "i am getting stressed",
+            "im getting stressed",
+            "i'm getting stressed",
+        }
+        if generic_stress:
+            requested_intent = analysis.get("intent")
+            requested_topic = (
+                analysis.get("topic")
+                or state.get("last_topic")
             )
 
-        except Exception:
+        # Explicit low-risk loneliness routing.
+        generic_loneliness = bool(
+            re.search(
+                r"\b(?:feel|feeling|am|i'm|im)\s+(?:very\s+)?lonely\b",
+                normalized,
+            )
+        ) or normalized in {
+            "i feel lonely",
+            "i'm lonely",
+            "im lonely",
+            "i am lonely",
+            "i feel alone",
+            "i am alone",
+        }
 
-            return None
+        if generic_loneliness:
+            requested_intent = "loneliness"
+            requested_mood = "sad"
+            requested_topic = "social"
+
+        # Use the user's exact wording first, plus a canonical stress
+        # paraphrase when the wording is colloquial.
+        retrieval_queries = [message]
+        if generic_loneliness:
+            retrieval_queries.append(
+                "I feel lonely and alone and wish I had someone to talk to"
+            )
+        if generic_stress:
+            retrieval_queries.append(
+                "I feel stressed and overwhelmed and have too much on my mind"
+            )
+
+        examples = []
+        for retrieval_query in retrieval_queries:
+            try:
+                found = model.find_examples(
+                    message=retrieval_query,
+                    risk_level=risk_level,
+                    mood=requested_mood,
+                    intent=requested_intent,
+                    topic=requested_topic,
+                    top_k=30,
+                )
+                self.response_model_last_error = None
+            except Exception as exc:
+                self.response_model_last_error = (
+                    f"retrieval: {type(exc).__name__}: {exc}"
+                )
+                found = []
+
+            if found:
+                examples.extend(found)
+
+        if not examples and generic_loneliness:
+            # For this ordinary low-risk intent, recover directly from the
+            # already-loaded trained response index before using fallback.
+            try:
+                index = getattr(model, "index", None)
+                records = (
+                    index.get("records") or []
+                    if isinstance(index, dict)
+                    else []
+                )
+                examples = [
+                    item
+                    for item in records
+                    if isinstance(item, dict)
+                    and str(item.get("intent", "")).strip().lower()
+                    == "loneliness"
+                    and str(item.get("risk_level", "low")).strip().lower()
+                    != "high"
+                    and str(item.get("response", "")).strip()
+                ]
+            except Exception as exc:
+                self.response_model_last_error = (
+                    f"loneliness index recovery: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                examples = []
 
         if not examples:
-
             return None
 
-        best = examples[0]
+        # Remove duplicate response texts while preserving retrieval order.
+        unique_examples = []
+        seen_responses = set()
+        for item in examples:
+            key = str(item.get("response", "")).strip().casefold()
+            if key and key not in seen_responses:
+                seen_responses.add(key)
+                unique_examples.append(item)
+        examples = unique_examples
 
-        similarity = float(best.get("similarity", 0.0) or 0.0)
-
-        retrieval_score = float(best.get("retrieval_score", 0.0) or 0.0)
-
-        metadata_match_count = int(best.get("metadata_match_count", 0) or 0)
-
-        phrase_hint = bool(best.get("phrase_hint", False))
-
-        semantic = best.get("semantic_metadata", {}) or {}
-
-        intent_semantic = float(
-
-            semantic.get("intent_semantic_confidence", 0.0) or 0.0
-
-        )
-
-        mood_semantic = float(
-
-            semantic.get("mood_semantic_confidence", 0.0) or 0.0
-
-        )
-
-        topic_semantic = float(
-
-            semantic.get("topic_semantic_confidence", 0.0) or 0.0
-
-        )
-
-        semantic_consensus = min(
-
-            intent_semantic,
-
-            mood_semantic,
-
-            topic_semantic,
-
-        )
-
-        if str(best.get("risk_level", "")).lower() == "high":
-
-            return None
-
-# Three gates avoid both extremes: rejecting useful low-overlap
-# paraphrases and accepting weak unrelated matches.
-#
-# The retrieval model now ranks contextual agreement first, so a
-# phrase-guided relationship/loneliness/positive candidate can be
-# accepted even when its lexical overlap is modest.
-        strong_match = (
-
-            similarity >= 0.30
-
-            and retrieval_score >= 0.65
-
-        )
-
-        consensus_match = (
-
-            semantic_consensus >= 0.66
-
-            and metadata_match_count >= 2
-
-            and similarity >= 0.10
-
-            and retrieval_score >= 0.55
-
-        )
-
-        phrase_match = (
-
-            phrase_hint
-
-            and metadata_match_count >= 2
-
-            and similarity >= 0.10
-
-            and retrieval_score >= 0.50
-
-        )
-
-        # Phrase hints can improve routing, but they cannot bypass
-        # the minimum semantic-evidence floor.
-        guided_match = (
-            phrase_hint
-            and metadata_match_count >= 2
-            and similarity >= 0.10
-            and retrieval_score >= 0.45
-        )
-
-        if not (
-
-            strong_match
-
-            or consensus_match
-
-            or phrase_match
-
-            or guided_match
-
-        ):
-
-            return None
-
-        # Keep diversity bounded by the already-ranked candidate set.
-        eligible_examples = [
+        # Do not allow a high-risk record to enter the normal response path.
+        safe_examples = [
             item
             for item in examples
+            if str(item.get("risk_level", "")).strip().lower() != "high"
+        ]
+        if not safe_examples:
+            return None
+
+        if generic_loneliness:
+            loneliness_examples = [
+                item
+                for item in safe_examples
+                if str(item.get("intent", "")).strip().lower()
+                == "loneliness"
+                and str(item.get("response", "")).strip()
+            ]
+            if loneliness_examples:
+                # Prefer a trained response whose wording explicitly anchors
+                # the reply to loneliness/being alone/connection/support.
+                # This keeps the response semantically faithful to a direct
+                # loneliness message instead of selecting a generic emotional
+                # response that happens to share the same intent label.
+                loneliness_anchors = (
+                    "lonely",
+                    "alone",
+                    "connection",
+                    "company",
+                    "support",
+                )
+                anchored_loneliness = [
+                    item
+                    for item in loneliness_examples
+                    if any(
+                        anchor in str(item.get("response", "")).lower()
+                        for anchor in loneliness_anchors
+                    )
+                ]
+                trained_loneliness = self._select_diverse_trained_response(
+                    anchored_loneliness or loneliness_examples
+                )
+                if trained_loneliness:
+                    if not any(
+                        anchor in trained_loneliness.lower()
+                        for anchor in loneliness_anchors
+                    ):
+                        trained_loneliness = (
+                            "It sounds like you are feeling lonely. "
+                            + trained_loneliness
+                        )
+                    return trained_loneliness
+
+        # For generic stress, prefer a candidate that is not explicitly tied
+        # to a topic absent from the user's message.
+        if generic_stress:
+            neutral_candidates = [
+                item for item in safe_examples
+                if str(item.get("topic", "")).strip().lower()
+                in {"", "general", "personal"}
+            ]
+            if neutral_candidates:
+                safe_examples = neutral_candidates + [
+                    item for item in safe_examples
+                    if item not in neutral_candidates
+                ]
+
+        best = safe_examples[0]
+        similarity = float(best.get("similarity", 0.0) or 0.0)
+        retrieval_score = float(
+            best.get("retrieval_score", similarity) or similarity
+        )
+        matches = set(best.get("metadata_matches", []) or [])
+        phrase_hint = bool(best.get("phrase_hint", False))
+
+        # Similarity remains the hard relevance floor. A phrase hint plus a
+        # matching mood is sufficient for ordinary low-risk emotional input.
+        semantic_floor = 0.18 if phrase_hint else 0.20
+        if similarity < semantic_floor:
+            return None
+
+        accepted = (
+            similarity >= 0.34
+            or ("intent" in matches and similarity >= 0.20)
+            or (
+                phrase_hint
+                and (
+                    "intent" in matches
+                    or "topic" in matches
+                    or "mood" in matches
+                )
+                and similarity >= 0.24
+            )
+            or retrieval_score >= 0.42
+        )
+        if not accepted:
+            return None
+
+        similarity_window = max(0.16, similarity - 0.16)
+        eligible_examples = [
+            item
+            for item in safe_examples
             if float(item.get("similarity", 0.0) or 0.0)
-            >= max(0.10, similarity - 0.12)
+            >= similarity_window
         ]
 
         return self._select_diverse_trained_response(
-            eligible_examples or examples[:1]
+            eligible_examples or [best]
         )
 
-# LLM
-# =====================================================================
     def _select_diverse_trained_response(
         self,
         examples,
@@ -620,7 +758,7 @@ class ResponseEngine:
             return None
 
         recent = {
-            str(item).strip().casefold()
+            self._clean_response_text(str(item)).casefold()
             for item in self._recent_trained_responses
         }
 
@@ -629,10 +767,12 @@ class ResponseEngine:
             response = str(item.get("response", "") or "").strip()
             if not response:
                 continue
-            if len(response) < 20 or len(response) > 500:
+            if len(response) < 12 or len(response) > 700:
                 continue
 
-            lowered = response.casefold()
+            cleaned = self._clean_response_text(response)
+            lowered = cleaned.casefold()
+
             if any(
                 marker in lowered
                 for marker in (
@@ -645,7 +785,10 @@ class ResponseEngine:
             ):
                 continue
 
-            eligible.append((item, response))
+            if len(cleaned) < 12:
+                continue
+
+            eligible.append((item, cleaned))
 
         if not eligible:
             return None
@@ -655,9 +798,76 @@ class ResponseEngine:
                 self._recent_trained_responses.append(response)
                 return response
 
+        # If every candidate was recently used, repeat the strongest eligible
+        # candidate rather than returning an uncleaned response.
         response = eligible[0][1]
         self._recent_trained_responses.append(response)
         return response
+
+    @staticmethod
+    def _clean_response_text(response: str) -> str:
+        """Normalize response-bank token-boundary and grammar artifacts."""
+        text = unicodedata.normalize("NFKC", str(response or ""))
+        text = re.sub(r"[\u200b-\u200f\u2060\ufeff]", "", text)
+        text = " ".join(text.split()).strip()
+
+        explicit_repairs = (
+            ("orsomething", "or something"),
+            ("Orsomething", "Or something"),
+            ("ORSOMETHING", "OR SOMETHING"),
+            ("isto", "is to"),
+            ("Isto", "Is to"),
+            ("ISTO", "IS TO"),
+            ("immediatedanger", "immediate danger"),
+            ("Immediatedanger", "Immediate danger"),
+            ("IMMEDIATEDANGER", "IMMEDIATE DANGER"),
+            ("practicaloption", "practical option"),
+            ("Practicaloption", "Practical option"),
+            ("PRACTICALOPTION", "PRACTICAL OPTION"),
+            ("worryingyou", "worrying you"),
+            ("Worryingyou", "Worrying you"),
+            ("whatkind", "what kind"),
+            ("Whatkind", "What kind"),
+            ("atime", "a time"),
+            ("Atime", "A time"),
+            ("onestep", "one step"),
+            ("Onestep", "One step"),
+            ("onesmall", "one small"),
+            ("Onesmall", "One small"),
+            ("mightreach", "might reach"),
+            ("Mightreach", "Might reach"),
+            ("mightfind", "might find"),
+            ("Mightfind", "Might find"),
+            ("togive", "to give"),
+            ("Togive", "To give"),
+            ("tostart", "to start"),
+            ("Tostart", "To start"),
+            ("tounderstanding", "to understanding"),
+            ("Tounderstanding", "To understanding"),
+            ("onunderstanding", "on understanding"),
+            ("Onunderstanding", "On understanding"),
+        )
+
+        for bad, good in explicit_repairs:
+            text = text.replace(bad, good)
+
+        grammar_replacements = (
+            (r"\bsituation\s+situation\b", "situation"),
+            (r"\byou\s+are\s+wanting\b", "you want"),
+            (r"\bconsider\s+take\b", "consider taking"),
+            (r"\bconsider\s+write\b", "consider writing"),
+            (r"\bconsider\s+separate\b", "consider separating"),
+            (r"\bconsider\s+give\b", "consider giving"),
+            (r"\bconsider\s+focus\b", "consider focusing"),
+            (r"\bfocus\s+onunderstanding\b", "focus on understanding"),
+        )
+
+        for pattern, replacement in grammar_replacements:
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
+        text = re.sub(r"\s+([,.!?;:])", r"\1", text)
+        text = re.sub(r"([.!?])(?=[A-Za-z])", r"\1 ", text)
+        return " ".join(text.split()).strip()
 
     def _try_llm(
 
@@ -1245,19 +1455,69 @@ class ResponseEngine:
 
     ) -> bool:
 
-        return text.strip() in {
+        normalized = " ".join(text.strip().lower().split())
+
+        return normalized in {
 
             "hi",
 
+            "hii",
+
+            "hiii",
+
             "hello",
 
+            "helo",
+
             "hey",
+
+            "heyy",
+
+            "heyyy",
+
+            "hiya",
+
+            "yo",
 
             "good morning",
 
             "good afternoon",
 
             "good evening",
+
+        }
+
+    def _is_short_uncertainty(
+
+        self,
+
+        text: str,
+
+    ) -> bool:
+
+        normalized = " ".join(text.strip().lower().split())
+
+        return normalized in {
+
+            "idk",
+
+            "i dk",
+
+            "idontknow",
+
+            "i dont know",
+
+            "i don't know",
+
+            "dont know",
+
+            "don't know",
+
+            "not sure",
+
+            "unsure",
+
+            "no idea",
 
         }
 
@@ -1770,6 +2030,16 @@ class ResponseEngine:
 # =====================================================================
 # GRATITUDE
 # =====================================================================
+    def _uncertainty_response(self) -> str:
+
+        return (
+
+            "That's okay. You don't have to have everything figured out "
+
+            "right now. What part feels unclear?"
+
+        )
+
     def _gratitude_response(self) -> str:
 
         return (
@@ -2007,3 +2277,4 @@ class ResponseEngine:
             "you reach human support."
 
         )
+

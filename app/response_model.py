@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import re
+import unicodedata
+
 from typing import Any, Dict, List, Optional
 
 import joblib
@@ -9,10 +12,6 @@ import joblib
 import numpy as np
 
 from sklearn.metrics.pairwise import cosine_similarity
-
-
-
-
 
 class TrainedResponseModel:
 
@@ -37,6 +36,22 @@ class TrainedResponseModel:
     The deterministic safety/risk layer remains authoritative.
 
     """
+
+# Conservative response-routing thresholds. Safety decisions remain
+# authoritative in BehaviorEngine; intent is primary metadata, while
+# mood/topic are only weak reranking hints.
+    MIN_SIMILARITY = 0.20
+
+    # Explicit phrase hints may retrieve from a wider semantic neighborhood.
+    PHRASE_HINT_SIMILARITY = 0.18
+
+    SHORT_MESSAGE_SIMILARITY = 0.40
+
+    INTENT_WEIGHT = 0.18
+
+    MOOD_WEIGHT = 0.03
+
+    TOPIC_WEIGHT = 0.03
 
     def __init__(
 
@@ -76,9 +91,9 @@ class TrainedResponseModel:
 
         self._load()
 
-            # ============================================================
+# ============================================================
 # MODEL LOADING
-                # ============================================================
+# ============================================================
     def _load(self) -> None:
 
         """Load the trained classifier and response retrieval index."""
@@ -521,13 +536,7 @@ class TrainedResponseModel:
 
     ) -> Dict[str, Any]:
 
-        """Predict response-routing metadata using classifier + semantic evidence.
-
-        Risk is informational here. The deterministic safety engine remains
-
-        authoritative and is never replaced by this model.
-
-        """
+        """Predict routing metadata without a full 50K-vector scan."""
 
         text = str(message or "").strip()
 
@@ -541,11 +550,7 @@ class TrainedResponseModel:
 
             return {}
 
-        semantic = self._semantic_metadata_consensus(text, top_n=5)
-
         hints = self._phrase_hints(text)
-
-        threshold = 0.70
 
         for field in ("intent", "mood", "topic"):
 
@@ -557,29 +562,13 @@ class TrainedResponseModel:
 
             )
 
-            semantic_value = semantic.get(field)
-
-            semantic_conf = float(
-
-                semantic.get(f"{field}_semantic_confidence", 0.0) or 0.0
-
-            )
-
             result[f"{field}_classifier_prediction"] = classifier_value
 
-            result[f"{field}_classifier_confidence"] = round(
+            result[f"{field}_classifier_confidence"] = round(classifier_conf, 4)
 
-                classifier_conf, 4
+            result[f"{field}_semantic_prediction"] = None
 
-            )
-
-            result[f"{field}_semantic_prediction"] = semantic_value
-
-            result[f"{field}_semantic_confidence"] = round(
-
-                semantic_conf, 4
-
-            )
+            result[f"{field}_semantic_confidence"] = 0.0
 
             if field in hints:
 
@@ -587,21 +576,11 @@ class TrainedResponseModel:
 
                 result[f"{field}_source"] = "phrase_hint"
 
-            elif semantic_value and classifier_conf < threshold:
-
-                result[field] = semantic_value
-
-                result[f"{field}_source"] = "semantic_consensus"
-
             else:
 
                 result[f"{field}_source"] = "classifier"
 
         return result
-
-# PHRASE HINTS
-# ============================================================
-    @staticmethod
 
     def _phrase_hints(
 
@@ -663,6 +642,12 @@ class TrainedResponseModel:
                 "so isolated",
 
                 "completely alone",
+                "feel lonely",
+                "feeling lonely",
+                "i feel lonely",
+                "i'm lonely",
+                "i am lonely",
+                "lonely",
 
             )
 
@@ -675,6 +660,213 @@ class TrainedResponseModel:
                 "mood": "sad",
 
                 "topic": "social",
+
+            }
+
+# --------------------------------------------------------
+# SLEEP
+# --------------------------------------------------------
+        if any(
+
+            phrase in t
+
+            for phrase in (
+
+                "can't sleep",
+
+                "cannot sleep",
+
+                "couldn't sleep",
+
+                "could not sleep",
+
+                "not sleeping",
+
+                "trouble sleeping",
+
+                "having trouble sleeping",
+
+                "sleep is difficult",
+
+                "sleeping badly",
+
+            )
+
+        ):
+
+            return {
+
+                "intent": "sleep",
+
+                "mood": "tired",
+
+                "topic": "sleep",
+
+            }
+
+# --------------------------------------------------------
+# GENERAL STRESS / OVERWHELM
+# --------------------------------------------------------
+        if any(
+
+            phrase in t
+
+            for phrase in (
+
+                "getting stressed",
+
+                "feeling stressed",
+
+                "feel stressed",
+
+                "so stressed",
+
+                "really stressed",
+
+                "too stressed",
+
+                "very stressed",
+
+                "feeling overwhelmed",
+
+                "feel overwhelmed",
+
+                "too much to handle",
+
+                "too much on my mind",
+
+            )
+
+        ):
+
+            return {
+
+                "intent": "overwhelm",
+
+                "mood": "stressed",
+
+                "topic": "workload",
+
+            }
+
+# --------------------------------------------------------
+# SADNESS / FEELING TERRIBLE
+# --------------------------------------------------------
+        if any(
+
+            phrase in t
+
+            for phrase in (
+
+                "i feel terrible",
+
+                "i feel awful",
+
+                "i feel horrible",
+
+                "feeling terrible",
+
+                "feeling awful",
+
+                "feeling horrible",
+
+                "i feel really bad",
+
+                "i feel very bad",
+
+            )
+
+        ):
+
+            return {
+
+                "intent": "sadness",
+
+                "mood": "sad",
+
+                "topic": "emotions",
+
+            }
+
+# --------------------------------------------------------
+# UNCERTAINTY / MENTAL STUCKNESS
+# --------------------------------------------------------
+        if any(
+
+            phrase in t
+
+            for phrase in (
+
+                "my mind feels stuck",
+
+                "my mind is stuck",
+
+                "i feel stuck",
+
+                "i am stuck",
+
+                "don't know what i'm feeling",
+
+                "dont know what im feeling",
+
+                "do not know what i'm feeling",
+
+                "do not know what i am feeling",
+
+                "not sure what i'm feeling",
+
+                "not sure what i am feeling",
+
+            )
+
+        ):
+
+            return {
+
+                "intent": "self_reflection",
+
+                "mood": "confused",
+
+                "topic": "self_reflection",
+
+            }
+
+# --------------------------------------------------------
+# GENERAL WELLBEING / NOT FEELING WELL
+# --------------------------------------------------------
+        if any(
+
+            phrase in t
+
+            for phrase in (
+
+                "not feeling well",
+
+                "don't feel well",
+
+                "dont feel well",
+
+                "do not feel well",
+
+                "not doing well",
+
+                "i am not well",
+
+                "i'm not well",
+
+                "im not well",
+
+            )
+
+        ):
+
+            return {
+
+                "intent": "sadness",
+
+                "mood": "low",
+
+                "topic": "wellbeing",
 
             }
 
@@ -729,6 +921,9 @@ class TrainedResponseModel:
                 "stressed about my exam",
 
                 "stressed about exams",
+                "stressed about my exams",
+                "i am stressed about my exams",
+                "i'm stressed about my exams",
 
                 "stress about my exam",
 
@@ -829,6 +1024,84 @@ class TrainedResponseModel:
 # ============================================================
 # RESPONSE RETRIEVAL
 # ============================================================
+    @staticmethod
+
+    def _short_message_route(text: str) -> Optional[str]:
+
+        """Route tiny conversational inputs without semantic retrieval."""
+
+        normalized = " ".join(str(text or "").strip().lower().split())
+
+        if normalized in {
+
+            "hi", "hii", "hiii", "hello", "helo", "hey", "heyy",
+
+            "heyyy", "hiya", "yo", "good morning", "good afternoon",
+
+            "good evening",
+
+        }:
+
+            return "greeting"
+
+        if normalized in {
+
+            "hmm", "hmmm", "hm", "umm", "um", "uh", "uhh", "okay",
+
+            "ok", "k", "right", "yeah", "yep", "nah", "nope",
+
+        }:
+
+            return "follow_up"
+
+        if normalized in {
+
+            "idk", "i dk", "idontknow", "i dont know", "i don't know",
+
+            "dont know", "don't know", "not sure", "unsure", "no idea",
+
+        }:
+
+            return "uncertainty"
+
+        return None
+
+    @staticmethod
+    def _clean_response_text(response: str) -> str:
+        """Clean retrieved response text before it reaches the response engine."""
+        text = unicodedata.normalize("NFKC", str(response or ""))
+        text = re.sub(r"[\u200b-\u200f\u2060\ufeff]", "", text)
+        text = " ".join(text.split()).strip()
+        repairs = (
+            (r"\borsomething\b", "or something"), (r"\bisto\b", "is to"),
+            (r"\bimmediatedanger\b", "immediate danger"),
+            (r"\bpracticaloption\b", "practical option"),
+            (r"\bworryingyou\b", "worrying you"), (r"\bwhatkind\b", "what kind"),
+            (r"\batime\b", "a time"), (r"\bonestep\b", "one step"),
+            (r"\bonesmall\b", "one small"), (r"\bmightreach\b", "might reach"),
+            (r"\bmightfind\b", "might find"), (r"\btogive\b", "to give"),
+            (r"\btostart\b", "to start"), (r"\btoseparate\b", "to separate"),
+            (r"\btounderstanding\b", "to understanding"),
+            (r"\bonunderstanding\b", "on understanding"), (r"\bonfocus\b", "on focus"),
+            (r"\btheimmediate\b", "the immediate"), (r"\bitmay\b", "it may"),
+            (r"\bwrite downwhat\b", "write down what"), (r"\bcouldbe\b", "could be"),
+            (r"\bstepcould\b", "step could"), (r"\bgiveyourself\b", "give yourself"),
+            (r"\bandthink\b", "and think"), (r"\btakethe\b", "take the"),
+            (r"\bthesituation\b", "the situation"),
+        )
+        for pattern, replacement in repairs:
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+        for pattern, replacement in (
+            (r"\bsituation\s+situation\b", "situation"),
+            (r"\bconsider\s+take\b", "consider taking"),
+            (r"\bconsider\s+write\b", "consider writing"),
+            (r"\bconsider\s+separate\b", "consider separating"),
+            (r"\bconsider\s+give\b", "consider giving"),
+            (r"\bconsider\s+focus\b", "consider focusing"),
+        ):
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+        return re.sub(r"\s+([,.!?;:])", r"\1", " ".join(text.split()).strip())
+
     def find_examples(
 
         self,
@@ -847,13 +1120,13 @@ class TrainedResponseModel:
 
     ) -> List[Dict[str, Any]]:
 
-        """Retrieve safe, context-relevant response examples.
+        """Retrieve safe, semantically relevant response examples.
 
-        Ranking combines TF-IDF similarity, metadata agreement, semantic
+        Similarity is the primary relevance signal. Intent is a secondary
 
-        consensus and explicit phrase evidence. This is response routing only;
+        routing signal. Mood/topic are weak tie-breakers only. Metadata can
 
-        it never decides safety risk.
+        never compensate for negligible semantic similarity.
 
         """
 
@@ -867,11 +1140,13 @@ class TrainedResponseModel:
 
             return []
 
+        if self._short_message_route(text) is not None:
+
+            return []
+
         metadata = self._predict_classifier_metadata(text)
 
         hints = self._phrase_hints(text)
-
-        semantic = self._semantic_metadata_consensus(text, top_n=5)
 
         requested = {}
 
@@ -885,36 +1160,7 @@ class TrainedResponseModel:
 
         ):
 
-# Explicit phrase evidence is strongest for response routing.
-            value = hints.get(field) or explicit
-
-            if not value:
-
-                classifier_conf = float(
-
-                    metadata.get(f"{field}_confidence", 0.0) or 0.0
-
-                )
-
-                semantic_value = semantic.get(field)
-
-                semantic_conf = float(
-
-                    semantic.get(f"{field}_semantic_confidence", 0.0) or 0.0
-
-                )
-
-                if semantic_value and (
-
-                    classifier_conf < 0.70 or semantic_conf >= 0.66
-
-                ):
-
-                    value = semantic_value
-
-                else:
-
-                    value = metadata.get(field, "")
+            value = hints.get(field) or explicit or metadata.get(field, "")
 
             requested[field] = str(value or "").strip().lower()
 
@@ -936,6 +1182,18 @@ class TrainedResponseModel:
 
         hint_fields = set(hints)
 
+        short_input = len(text.split()) <= 2
+
+        minimum_similarity = (
+
+            self.SHORT_MESSAGE_SIMILARITY
+
+            if short_input
+
+            else self.MIN_SIMILARITY
+
+        )
+
         for idx in np.argsort(-similarities):
 
             record = records[int(idx)]
@@ -946,25 +1204,55 @@ class TrainedResponseModel:
 
             similarity = float(similarities[int(idx)])
 
+            if similarity < minimum_similarity:
+
+                break
+
             matches: List[str] = []
 
             score = similarity
 
-            for field, weight in (("intent", 0.12), ("mood", 0.08), ("topic", 0.08)):
+            actual_intent = str(record.get("intent", "")).strip().lower()
 
-                expected = requested.get(field, "")
+            actual_mood = str(record.get("mood", "")).strip().lower()
 
-                actual = str(record.get(field, "")).strip().lower()
+            actual_topic = str(record.get("topic", "")).strip().lower()
 
-                if expected and actual == expected:
+            expected_intent = requested.get("intent", "")
 
-                    matches.append(field)
+            expected_mood = requested.get("mood", "")
 
-                    score += weight
+            expected_topic = requested.get("topic", "")
 
-                    if field in hint_fields:
+            if expected_intent and actual_intent == expected_intent:
 
-                        score += 0.12
+                matches.append("intent")
+
+                score += self.INTENT_WEIGHT
+
+                if "intent" in hint_fields:
+
+                    score += 0.08
+
+            if expected_mood and actual_mood == expected_mood:
+
+                matches.append("mood")
+
+                score += self.MOOD_WEIGHT
+
+                if "mood" in hint_fields:
+
+                    score += 0.02
+
+            if expected_topic and actual_topic == expected_topic:
+
+                matches.append("topic")
+
+                score += self.TOPIC_WEIGHT
+
+                if "topic" in hint_fields:
+
+                    score += 0.02
 
             item = dict(record)
 
@@ -984,34 +1272,23 @@ class TrainedResponseModel:
 
                 "response_routing_metadata": requested,
 
-                "semantic_metadata": semantic,
+                "semantic_metadata": {},
 
             })
 
             candidates.append(item)
 
-# Route by contextual relevance first. Raw TF-IDF similarity alone
-# can rank a lexically similar but emotionally wrong example above a
-# slightly less-overlapping example that agrees with the explicit
-# intent/mood/topic routing.
-#
-# Example: "I am angry at my friend" can retrieve an \`\`anger\`\`
-# example with higher lexical similarity, while the phrase hint says
-# relationship + angry + relationships. The latter must win.
+        # Retrieval score is semantic similarity plus small metadata boosts.
+        # This lets an explicit intent/phrase hint refine ranking without
+        # allowing a weak semantic match to dominate.
         candidates.sort(
-
             key=lambda item: (
-
                 float(item.get("retrieval_score", 0.0)),
-
+                int("intent" in item.get("metadata_matches", [])),
                 int(item.get("metadata_match_count", 0)),
-
                 float(item.get("similarity", 0.0)),
-
             ),
-
             reverse=True,
-
         )
 
         limit = max(1, int(top_k or self.top_k))
@@ -1022,7 +1299,7 @@ class TrainedResponseModel:
 
         for item in candidates:
 
-            response_text = str(item.get("response", "")).strip()
+            response_text = self._clean_response_text(item.get("response", ""))
 
             if not response_text:
 
@@ -1044,8 +1321,6 @@ class TrainedResponseModel:
 
         return results
 
-# CONTEXT BUILDER
-# ============================================================
     def build_context(
 
         self,
@@ -1171,3 +1446,4 @@ class TrainedResponseModel:
             lines
 
         )
+
