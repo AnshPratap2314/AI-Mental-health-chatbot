@@ -156,15 +156,11 @@ class MindCareRuleEngine:
         r"\boverwhelmed with assignments\b",
         r"\bstressed about my assignments\b",
         r"\bstressed about assignments\b",
-        r"\bstressed about exams\b",
-        r"\bstressed about my exams\b",
-        r"\bexam stress\b",
         r"\bassignment stress\b",
         r"\bcollege stress\b",
         r"\bwork stress\b",
         r"\bdeadline stress\b",
         r"\bpressure from my assignments\b",
-        r"\bpressure from my exams\b",
         r"\bpressure from my work\b",
         r"\bpressure from my college\b",
         r"\bpressure from my job\b",
@@ -176,7 +172,6 @@ class MindCareRuleEngine:
         r"\bstressed about studies\b",
         r"\bstressed about school\b",
         r"\bstressed about deadlines\b",
-        r"\bworried about my exams\b",
         r"\bworried about my assignments\b",
         r"\bcollege deadlines\b",
         r"\bdeadlines are making me stressed\b",
@@ -185,8 +180,6 @@ class MindCareRuleEngine:
         r"\bstruggling emotionally\b",
         r"\bneed someone to talk to\b",
         r"\bjust need someone to talk to\b",
-        r"\bfeel lonely\b",
-        r"\bfeeling lonely\b",
     ]
 
     def predict(self, message: str) -> str:

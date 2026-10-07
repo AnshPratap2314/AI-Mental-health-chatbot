@@ -540,7 +540,29 @@ class ResponseEngine:
             "im getting stressed",
             "i'm getting stressed",
         }
-        if generic_stress:
+        # Explicit low-risk exam-stress routing must take priority over
+        # generic stress routing. Otherwise the response-model metadata can
+        # steer an exam message into a generic stress/work response bank.
+        exam_stress = bool(
+            re.search(
+                r"\\b(?:exam|exams|examination|examinations|test|tests)\\b",
+                normalized,
+            )
+            and (
+                re.search(
+                    r"\\b(?:stress|stressed|stressful|anxious|anxiety|"
+                    r"worried|worry|nervous|overwhelmed|overwhelm)\\b",
+                    normalized,
+                )
+                or bool(analysis.get("mood") in {"anxious", "stressed"})
+            )
+        )
+
+        if exam_stress:
+            requested_intent = "exam_stress"
+            requested_mood = "anxious"
+            requested_topic = "college"
+        elif generic_stress:
             requested_intent = analysis.get("intent")
             requested_topic = (
                 analysis.get("topic")
@@ -574,7 +596,11 @@ class ResponseEngine:
             retrieval_queries.append(
                 "I feel lonely and alone and wish I had someone to talk to"
             )
-        if generic_stress:
+        elif exam_stress:
+            retrieval_queries.append(
+                "I feel anxious and stressed about my exams and need help preparing"
+            )
+        elif generic_stress:
             retrieval_queries.append(
                 "I feel stressed and overwhelmed and have too much on my mind"
             )
@@ -599,6 +625,34 @@ class ResponseEngine:
 
             if found:
                 examples.extend(found)
+
+        if not examples and exam_stress:
+            # Recover directly from the loaded index if semantic retrieval
+            # does not return a candidate. This is still a normal low-risk
+            # response path; authoritative safety remains outside this method.
+            try:
+                index = getattr(model, "index", None)
+                records = (
+                    index.get("records") or []
+                    if isinstance(index, dict)
+                    else []
+                )
+                examples = [
+                    item
+                    for item in records
+                    if isinstance(item, dict)
+                    and str(item.get("intent", "")).strip().lower()
+                    == "exam_stress"
+                    and str(item.get("risk_level", "low")).strip().lower()
+                    != "high"
+                    and str(item.get("response", "")).strip()
+                ]
+            except Exception as exc:
+                self.response_model_last_error = (
+                    f"exam stress index recovery: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                examples = []
 
         if not examples and generic_loneliness:
             # For this ordinary low-risk intent, recover directly from the
@@ -692,9 +746,49 @@ class ResponseEngine:
                         )
                     return trained_loneliness
 
+        # Exam stress must stay inside the dedicated exam_stress response
+        # bank. Do not let generic stress/work/overwhelm candidates leak into
+        # this route.
+        if exam_stress:
+            exam_examples = [
+                item
+                for item in safe_examples
+                if str(item.get("intent", "")).strip().lower()
+                == "exam_stress"
+                and str(item.get("response", "")).strip()
+            ]
+            if not exam_examples:
+                return None
+
+            # Prefer responses that explicitly acknowledge exams/tests/study
+            # pressure, while retaining the trained response bank as the only
+            # source of the final wording.
+            exam_anchors = (
+                "exam",
+                "exams",
+                "test",
+                "tests",
+                "study",
+                "studies",
+                "topics",
+                "prepare",
+                "preparation",
+                "revision",
+                "time block",
+            )
+            anchored_exam = [
+                item
+                for item in exam_examples
+                if any(
+                    anchor in str(item.get("response", "")).lower()
+                    for anchor in exam_anchors
+                )
+            ]
+            safe_examples = anchored_exam or exam_examples
+
         # For generic stress, prefer a candidate that is not explicitly tied
         # to a topic absent from the user's message.
-        if generic_stress:
+        elif generic_stress:
             neutral_candidates = [
                 item for item in safe_examples
                 if str(item.get("topic", "")).strip().lower()

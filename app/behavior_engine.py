@@ -102,11 +102,8 @@ class BehaviorEngine:
 
         self.memory: List[Dict[str, Any]] = []
 
-        # Conversation turns are kept separately from the legacy user-message
 
-        # memory so the LLM can see what it previously said and avoid sounding
 
-        # repetitive. This remains in-memory and follows the same session TTL.
 
         self.conversation_history: List[Dict[str, str]] = []
 
@@ -300,27 +297,7 @@ class BehaviorEngine:
 
         )
 
-        # Final safety/provenance invariant: authoritative high-risk
-        # analysis always owns both the response content and its provenance.
-        authoritative_high_risk = (
-            analysis.get("risk_level") == "high"
-            or bool(analysis.get("signals", {}).get("crisis"))
-            or bool(analysis.get("signals", {}).get("self_harm"))
-            or bool(analysis.get("signals", {}).get("plan"))
-            or bool(analysis.get("signals", {}).get("contextual_suicide"))
-            or bool(crisis_result.get("immediate_guidance", False))
-        )
-
-        if authoritative_high_risk:
-            reply = self._crisis_response()
-            if self.response_engine is not None:
-                try:
-                    self.response_engine.last_source = "safety"
-                    self.response_engine.last_model = None
-                except Exception:
-                    pass
-
-        if self.personalization_engine is not None and not authoritative_high_risk:
+        if self.personalization_engine is not None:
 
             try:
 
@@ -338,42 +315,25 @@ class BehaviorEngine:
 
                 pass
 
-        # Store the completed exchange only after the current reply has been
 
-        # generated. The next request can then use both sides of the dialogue.
 
         self._store_assistant_reply(message, reply)
-
-        # Normalize response provenance one last time before exposing it.
-        # This is derived from the authoritative BehaviorEngine risk result,
-        # never from the trained response model.
-        response_source = self._response_source()
-        response_model = self._response_model()
-
-        if authoritative_high_risk:
-            response_source = "safety"
-            response_model = None
-        elif response_source == "safety":
-            response_source = "fallback"
-            response_model = None
 
         result = {
             "reply": reply,
             "response": reply,
 
-            # Authoritative risk metadata from BehaviorEngine.
             "risk_level": analysis.get("risk_level", "low"),
             "risk_score": float(analysis.get("risk_score", 0.0) or 0.0),
             "decision_source": analysis.get("decision_source"),
 
-            # Useful safety/routing metadata for API consumers.
             "signals": analysis.get("signals", {}),
             "mode": analysis.get("mode", "normal"),
 
             "analysis": analysis,
             "state": analysis["state"],
-            "response_source": response_source,
-            "response_model": response_model,
+            "response_source": self._response_source(),
+            "response_model": self._response_model(),
         }
 
         if analysis["risk_level"] == "high":
@@ -549,10 +509,6 @@ class BehaviorEngine:
 
         )
 
-        # BehaviorEngine safety signals are authoritative for the final
-        # decision source. HybridRiskEngine remains useful for classification
-        # metadata, but an ML low-risk prediction must never mask an
-        # authoritative crisis/self-harm/plan detection.
         decision_source = None
 
         if signals.get("contextual_suicide"):
@@ -577,37 +533,12 @@ class BehaviorEngine:
 
         elif isinstance(hybrid_result, dict):
 
-            decision_source = hybrid_result.get(
-
-                "decision_source"
-
-            )
-
-        # Decision-source consistency invariant: a source that says
-        # "high risk" must never be exposed when the authoritative final
-        # risk level is low/moderate. Hybrid/ML predictions remain useful
-        # metadata, but BehaviorEngine owns the final risk decision.
-        normalized_decision_source = str(
-            decision_source or ""
-        ).strip().lower()
-        ml_high_risk_sources = {
-            "ml_high_risk",
-            "hybrid_high_risk",
-            "model_high_risk",
-        }
-
-        if (
-            risk_level != "high"
-            and normalized_decision_source in ml_high_risk_sources
-        ):
-            decision_source = "ml_contextual"
-        elif (
-            risk_level == "high"
-            and not str(decision_source or "").startswith("rule_")
-        ):
-            decision_source = "rule_safety_override"
-
+            hybrid_source = hybrid_result.get("decision_source")
+            if hybrid_source == "ml_high_risk" and risk_level != "high":
+                hybrid_source = "ml_contextual"
+            decision_source = hybrid_source
         if not decision_source:
+
             decision_source = "rule_engine"
 
         mood = self._detect_mood(
@@ -627,6 +558,23 @@ class BehaviorEngine:
         if topic is None:
 
             topic = previous_topic
+
+        # Give the trained response router an explicit normal-language intent
+        # for anxiety/stress messages. Safety decisions are already finalized
+        # above, so this never overrides crisis/self-harm/plan handling.
+        response_intent = None
+
+        if (
+            signals.get("anxiety")
+            and risk_level in {"low", "moderate"}
+            and not (
+                signals.get("crisis")
+                or signals.get("self_harm")
+                or signals.get("plan")
+            )
+        ):
+
+            response_intent = "overwhelm"
 
         is_follow_up = detected_topic is None and bool(
 
@@ -684,6 +632,10 @@ class BehaviorEngine:
             "detected_topic": detected_topic,
 
             "topic_detected": detected_topic is not None,
+
+            "intent": response_intent,
+
+            "response_intent": response_intent,
 
             "is_follow_up": is_follow_up,
 
@@ -795,11 +747,8 @@ class BehaviorEngine:
 
         )
 
-        # Explicit ideation / self-harm language. These are intentionally
 
-        # broader than the old keyword list so passive and conversational
 
-        # formulations are not missed.
 
         crisis_patterns = [
 
@@ -891,9 +840,42 @@ class BehaviorEngine:
 
         ]
 
-        crisis = self._contains_any(normalized, crisis_patterns)
+        negated_crisis = self._is_negated_crisis(normalized)
+        negated_self_harm = self._is_negated_self_harm(normalized)
+        negated = negated_crisis or negated_self_harm
 
-        self_harm = self._contains_any(normalized, self_harm_patterns)
+        safety_text = normalized
+
+        negation_phrases = [
+            "i am not suicidal",
+            "i'm not suicidal",
+            "not suicidal",
+            "i am not thinking about suicide",
+            "i'm not thinking about suicide",
+            "not thinking about suicide",
+            "i do not want to die",
+            "i don't want to die",
+            "do not want to die",
+            "don't want to die",
+            "i do not want to hurt myself",
+            "i don't want to hurt myself",
+            "do not want to hurt myself",
+            "don't want to hurt myself",
+            "i am not thinking about self harm",
+            "i'm not thinking about self harm",
+            "not thinking about self harm",
+            "i am not thinking about self-harm",
+            "i'm not thinking about self-harm",
+            "not thinking about self-harm",
+        ]
+
+        for phrase in negation_phrases:
+            safety_text = safety_text.replace(phrase, " ")
+
+        safety_text = re.sub(r"\s+", " ", safety_text).strip()
+
+        crisis = self._contains_any(safety_text, crisis_patterns)
+        self_harm = self._contains_any(safety_text, self_harm_patterns)
 
         serious = self._contains_any(
 
@@ -933,7 +915,7 @@ class BehaviorEngine:
 
         sad = self._contains_any(
 
-            normalized,
+            safety_text,
 
             [
 
@@ -1059,11 +1041,8 @@ class BehaviorEngine:
 
         )
 
-        # Intent is stronger when it is explicitly connected to a harmful
 
-        # action. Generic help-seeking phrases should not be treated as
 
-        # suicidal intent.
 
         intent = self._contains_any(
 
@@ -1267,9 +1246,7 @@ class BehaviorEngine:
 
         )
 
-        # Only suppress an explicit safety signal when the harmful statement
 
-        # itself is clearly negated. Do NOT use a global negation switch.
 
         negated_crisis = self._is_negated_crisis(normalized)
 
@@ -1325,13 +1302,9 @@ class BehaviorEngine:
 
             )
 
-            # The positive phrase "want to die" is itself present inside
 
-            # "don't want to die", so exact protective statements need an
 
-            # explicit exception. Mixed statements such as "I'm suicidal
 
-            # but I don't want to die" remain safety-significant.
 
             only_protective = normalized in {
 
@@ -1757,9 +1730,7 @@ class BehaviorEngine:
 
             score += 0.10
 
-            # Protective factors are important context, but they must not erase
 
-            # an explicit current suicidal/self-harm signal.
 
         if signals["protective"] and not (
 
@@ -2529,6 +2500,14 @@ class BehaviorEngine:
 
         ):
 
+
+            if self.response_engine is not None:
+                try:
+                    self.response_engine.last_source = "safety"
+                    self.response_engine.last_model = None
+                except Exception:
+                    pass
+
             return self._crisis_response()
 
         if self.response_engine is not None:
@@ -3286,15 +3265,17 @@ class BehaviorEngine:
         return self._normalize(message) in {
 
             "hi",
-
+            "hii",
+            "hiii",
             "hello",
-
+            "helo",
             "hey",
-
+            "heyy",
+            "heyyy",
+            "hiya",
+            "yo",
             "good morning",
-
             "good afternoon",
-
             "good evening"
 
         }

@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import re
+
 import unicodedata
 
 from typing import Any, Dict, List, Optional
@@ -37,13 +38,7 @@ class TrainedResponseModel:
 
     """
 
-# Conservative response-routing thresholds. Safety decisions remain
-# authoritative in BehaviorEngine; intent is primary metadata, while
-# mood/topic are only weak reranking hints.
-    MIN_SIMILARITY = 0.20
-
-    # Explicit phrase hints may retrieve from a wider semantic neighborhood.
-    PHRASE_HINT_SIMILARITY = 0.18
+    MIN_SIMILARITY = 0.26
 
     SHORT_MESSAGE_SIMILARITY = 0.40
 
@@ -52,6 +47,18 @@ class TrainedResponseModel:
     MOOD_WEIGHT = 0.03
 
     TOPIC_WEIGHT = 0.03
+
+    NEGATED_DISTRESS_INTENTS = {
+
+        "negated_distress",
+
+    }
+
+    OVERWHELM_RETRIEVAL_INTENTS = {
+
+        "overwhelm",
+
+    }
 
     def __init__(
 
@@ -82,18 +89,10 @@ class TrainedResponseModel:
         )
 
         self.root = root
-
         self.top_k = max(1, int(top_k))
-
         self.classifier = None
-
         self.index = None
-
         self._load()
-
-# ============================================================
-# MODEL LOADING
-# ============================================================
     def _load(self) -> None:
 
         """Load the trained classifier and response retrieval index."""
@@ -101,13 +100,11 @@ class TrainedResponseModel:
         classifier_path = (
 
             self.root / "response_classifier.joblib"
-
         )
 
         index_path = (
 
             self.root / "response_index.joblib"
-
         )
 
         if not classifier_path.exists():
@@ -126,11 +123,8 @@ class TrainedResponseModel:
 
             )
 
-# Load both artifacts only after both paths have been validated.
         self.classifier = joblib.load(classifier_path)
-
         self.index = joblib.load(index_path)
-
         if not isinstance(self.classifier, dict):
 
             raise TypeError("Invalid response classifier bundle")
@@ -144,7 +138,6 @@ class TrainedResponseModel:
         missing_classifier = required_classifier_keys.difference(
 
             self.classifier.keys()
-
         )
 
         if missing_classifier:
@@ -171,9 +164,6 @@ class TrainedResponseModel:
 
             )
 
-# ============================================================
-# RAW CLASSIFIER PREDICTION
-# ============================================================
     def _predict_classifier_metadata(
 
         self,
@@ -256,9 +246,6 @@ class TrainedResponseModel:
 
         return result
 
-# ============================================================
-# SEMANTIC METADATA CONSENSUS
-# ============================================================
     def _semantic_metadata_consensus(
 
         self,
@@ -341,8 +328,6 @@ class TrainedResponseModel:
 
             record = records[int(idx)]
 
-# Never use high-risk examples
-# for normal response metadata.
             if (
 
                 str(
@@ -437,8 +422,6 @@ class TrainedResponseModel:
 
                     continue
 
-# Give stronger weight to higher-ranked
-# semantic neighbors.
                 rank_weight = (
 
                     1.0 / (rank + 1)
@@ -525,9 +508,6 @@ class TrainedResponseModel:
 
         return result
 
-# ============================================================
-# METADATA PREDICTION
-# ============================================================
     def predict_metadata(
 
         self,
@@ -584,6 +564,8 @@ class TrainedResponseModel:
 
     def _phrase_hints(
 
+        self,
+
         text: str,
 
     ) -> Dict[str, str]:
@@ -610,9 +592,6 @@ class TrainedResponseModel:
 
         )
 
-# --------------------------------------------------------
-# LONELINESS
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -642,11 +621,17 @@ class TrainedResponseModel:
                 "so isolated",
 
                 "completely alone",
+
                 "feel lonely",
+
                 "feeling lonely",
+
                 "i feel lonely",
+
                 "i'm lonely",
+
                 "i am lonely",
+
                 "lonely",
 
             )
@@ -663,9 +648,6 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# SLEEP
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -704,36 +686,177 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# GENERAL STRESS / OVERWHELM
-# --------------------------------------------------------
         if any(
 
             phrase in t
 
             for phrase in (
 
-                "getting stressed",
+                "stressed about my exam",
 
-                "feeling stressed",
+                "stressed about exams",
 
-                "feel stressed",
+                "stressed about my exams",
 
-                "so stressed",
+                "i am stressed about my exams",
 
-                "really stressed",
+                "i'm stressed about my exams",
 
-                "too stressed",
+                "stress about my exam",
 
-                "very stressed",
+                "exam stress",
 
-                "feeling overwhelmed",
+                "exams are stressing me",
 
-                "feel overwhelmed",
+                "anxious about my exam",
 
-                "too much to handle",
+                "anxious about exams",
 
-                "too much on my mind",
+                "anxious about my exams",
+
+            )
+
+        ):
+
+            return {
+
+                "intent": "exam_stress",
+
+                "mood": "anxious",
+
+                "topic": "college",
+
+            }
+
+        academic_stress = (
+            any(
+                phrase in t
+                for phrase in (
+                    "stressed at college",
+                    "stressed because of college",
+                    "stress because of college",
+                    "college is stressful",
+                    "college has been stressful",
+                    "stressful college",
+                    "stressful day at college",
+                    "stressful week at college",
+                    "stressed about college",
+                    "stress from college",
+                    "college stress",
+                    "college workload",
+                    "college work is stressful",
+                    "too much college work",
+                    "university is stressful",
+                    "stressed at university",
+                    "stress because of university",
+                    "academic stress",
+                    "academic workload",
+                )
+            )
+            and "exam" not in t
+            and "overwhelmed" not in t
+        )
+
+        if academic_stress:
+            return {
+                "intent": "work_stress",
+                "mood": "stressed",
+                "topic": "work",
+            }
+
+        # Generic difficult-day wording should not be interpreted
+        # as loneliness unless the user explicitly mentions isolation,
+        # being alone, or wanting connection.
+        if any(
+            phrase in t
+            for phrase in (
+                "i had a difficult day",
+                "i had a really difficult day",
+                "i had a very difficult day",
+                "today was difficult",
+                "today has been difficult",
+                "today was a difficult day",
+                "today has been a difficult day",
+                "it was a difficult day",
+                "it has been a difficult day",
+                "really difficult day",
+                "very difficult day",
+                "difficult day",
+            )
+        ):
+            return {
+                "intent": "sadness",
+                "mood": "sad",
+                "topic": "emotions",
+            }
+
+        negated_distress = bool(
+
+            re.search(
+
+                r"\b(?:not|never|dont|don't|do not|no longer|isn't|isnt|wasn't|wasnt)\s+(?:be\s+|feel(?:ing)?\s+)?(?:stressed|overwhelmed)\b",
+
+                t,
+
+            )
+
+        )
+
+        if (
+
+            not negated_distress
+
+            and any(
+
+                phrase in t
+
+                for phrase in (
+
+                    "getting stressed",
+
+                    "feeling stressed",
+
+                    "feel stressed",
+
+                    "so stressed",
+
+                    "really stressed",
+
+                    "too stressed",
+
+                    "very stressed",
+
+                    "stressed today",
+
+                    "stressed day",
+
+                    "stressful day",
+
+                    "stressful week",
+
+                    "stressful time",
+
+                    "feeling overwhelmed",
+
+                    "feel overwhelmed",
+
+                    "too much to handle",
+
+                    "too much on my mind",
+                    "everything is too much",
+                    "everything feels like too much",
+                    "everything feels too much",
+                    "i don't know how to deal with everything",
+                    "i dont know how to deal with everything",
+                    "don't know how to deal with everything",
+                    "do not know how to deal with everything",
+                    "i don't know how to handle everything",
+                    "i dont know how to handle everything",
+                    "don't know how to handle everything",
+                    "do not know how to handle everything",
+
+
+                )
 
             )
 
@@ -749,9 +872,6 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# SADNESS / FEELING TERRIBLE
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -788,9 +908,6 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# UNCERTAINTY / MENTAL STUCKNESS
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -831,9 +948,6 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# GENERAL WELLBEING / NOT FEELING WELL
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -870,9 +984,6 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# SELF REFLECTION / UNCERTAINTY
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -909,45 +1020,6 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# EXAM STRESS
-# --------------------------------------------------------
-        if any(
-
-            phrase in t
-
-            for phrase in (
-
-                "stressed about my exam",
-
-                "stressed about exams",
-                "stressed about my exams",
-                "i am stressed about my exams",
-                "i'm stressed about my exams",
-
-                "stress about my exam",
-
-                "exam stress",
-
-                "exams are stressing me",
-
-            )
-
-        ):
-
-            return {
-
-                "intent": "exam_stress",
-
-                "mood": "anxious",
-
-                "topic": "college",
-
-            }
-
-# --------------------------------------------------------
-# RELATIONSHIP ANGER
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -980,9 +1052,6 @@ class TrainedResponseModel:
 
             }
 
-# --------------------------------------------------------
-# POSITIVE
-# --------------------------------------------------------
         if any(
 
             phrase in t
@@ -1021,9 +1090,6 @@ class TrainedResponseModel:
 
         return {}
 
-# ============================================================
-# RESPONSE RETRIEVAL
-# ============================================================
     @staticmethod
 
     def _short_message_route(text: str) -> Optional[str]:
@@ -1067,39 +1133,73 @@ class TrainedResponseModel:
         return None
 
     @staticmethod
+
     def _clean_response_text(response: str) -> str:
+
         """Clean retrieved response text before it reaches the response engine."""
+
         text = unicodedata.normalize("NFKC", str(response or ""))
+
         text = re.sub(r"[\u200b-\u200f\u2060\ufeff]", "", text)
+
         text = " ".join(text.split()).strip()
+
         repairs = (
+
             (r"\borsomething\b", "or something"), (r"\bisto\b", "is to"),
+
             (r"\bimmediatedanger\b", "immediate danger"),
+
             (r"\bpracticaloption\b", "practical option"),
+
             (r"\bworryingyou\b", "worrying you"), (r"\bwhatkind\b", "what kind"),
+
             (r"\batime\b", "a time"), (r"\bonestep\b", "one step"),
+
             (r"\bonesmall\b", "one small"), (r"\bmightreach\b", "might reach"),
+
             (r"\bmightfind\b", "might find"), (r"\btogive\b", "to give"),
+
             (r"\btostart\b", "to start"), (r"\btoseparate\b", "to separate"),
+
             (r"\btounderstanding\b", "to understanding"),
+
             (r"\bonunderstanding\b", "on understanding"), (r"\bonfocus\b", "on focus"),
+
             (r"\btheimmediate\b", "the immediate"), (r"\bitmay\b", "it may"),
+
             (r"\bwrite downwhat\b", "write down what"), (r"\bcouldbe\b", "could be"),
+
             (r"\bstepcould\b", "step could"), (r"\bgiveyourself\b", "give yourself"),
+
             (r"\bandthink\b", "and think"), (r"\btakethe\b", "take the"),
+
             (r"\bthesituation\b", "the situation"),
+
         )
+
         for pattern, replacement in repairs:
+
             text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
         for pattern, replacement in (
+
             (r"\bsituation\s+situation\b", "situation"),
+
             (r"\bconsider\s+take\b", "consider taking"),
+
             (r"\bconsider\s+write\b", "consider writing"),
+
             (r"\bconsider\s+separate\b", "consider separating"),
+
             (r"\bconsider\s+give\b", "consider giving"),
+
             (r"\bconsider\s+focus\b", "consider focusing"),
+
         ):
+
             text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
         return re.sub(r"\s+([,.!?;:])", r"\1", " ".join(text.split()).strip())
 
     def find_examples(
@@ -1120,13 +1220,13 @@ class TrainedResponseModel:
 
     ) -> List[Dict[str, Any]]:
 
-        """Retrieve safe, semantically relevant response examples.
+        """Retrieve safe, context-relevant response examples.
 
-        Similarity is the primary relevance signal. Intent is a secondary
+        Similarity provides the semantic relevance signal. Explicit
 
-        routing signal. Mood/topic are weak tie-breakers only. Metadata can
+        phrase hints provide stronger routing guidance for known intents.
 
-        never compensate for negligible semantic similarity.
+        Safety decisions remain outside this method.
 
         """
 
@@ -1148,7 +1248,7 @@ class TrainedResponseModel:
 
         hints = self._phrase_hints(text)
 
-        requested = {}
+        requested: Dict[str, str] = {}
 
         for field, explicit in (
 
@@ -1182,15 +1282,49 @@ class TrainedResponseModel:
 
         hint_fields = set(hints)
 
+        positive_work_stress = (
+            requested.get("intent") == "work_stress"
+            and "intent" in hint_fields
+        )
+
         short_input = len(text.split()) <= 2
 
         minimum_similarity = (
 
             self.SHORT_MESSAGE_SIMILARITY
-
             if short_input
 
             else self.MIN_SIMILARITY
+
+        )
+
+        if positive_work_stress:
+            minimum_similarity = 0.06
+
+        positive_overwhelm = (
+
+            requested.get("intent") == "overwhelm"
+
+            and "intent" in hint_fields
+
+        )
+
+        if positive_overwhelm:
+            minimum_similarity = 0.06
+
+        positive_loneliness = (
+
+            requested.get("intent") == "loneliness"
+
+            and "intent" in hint_fields
+
+        )
+
+        positive_exam_stress = (
+
+            requested.get("intent") == "exam_stress"
+
+            and "intent" in hint_fields
 
         )
 
@@ -1198,7 +1332,17 @@ class TrainedResponseModel:
 
             record = records[int(idx)]
 
-            if str(record.get("risk_level", "")).strip().lower() == "high":
+            if (
+
+                str(record.get("risk_level", ""))
+
+                .strip()
+
+                .lower()
+
+                == "high"
+
+            ):
 
                 continue
 
@@ -1206,17 +1350,63 @@ class TrainedResponseModel:
 
             if similarity < minimum_similarity:
 
+                if positive_overwhelm:
+
+                    continue
+
                 break
+
+            actual_intent = str(
+
+                record.get("intent", "")
+
+            ).strip().lower()
+
+            actual_mood = str(
+
+                record.get("mood", "")
+
+            ).strip().lower()
+
+            actual_topic = str(
+
+                record.get("topic", "")
+
+            ).strip().lower()
+
+            if positive_overwhelm and actual_intent in {
+
+                "negated_distress",
+
+            }:
+
+                continue
+
+            if positive_overwhelm:
+
+                if actual_intent != "overwhelm":
+
+                    continue
+
+            if positive_work_stress:
+                if actual_intent != "work_stress":
+                    continue
+
+            if positive_exam_stress:
+
+                if actual_intent != "exam_stress":
+
+                    continue
+
+            if positive_loneliness:
+
+                if actual_intent != "loneliness":
+
+                    continue
 
             matches: List[str] = []
 
             score = similarity
-
-            actual_intent = str(record.get("intent", "")).strip().lower()
-
-            actual_mood = str(record.get("mood", "")).strip().lower()
-
-            actual_topic = str(record.get("topic", "")).strip().lower()
 
             expected_intent = requested.get("intent", "")
 
@@ -1254,6 +1444,40 @@ class TrainedResponseModel:
 
                     score += 0.02
 
+            if positive_overwhelm:
+
+                if actual_intent in {
+
+                    "overwhelm",
+
+                    "stress",
+
+                }:
+
+                    score += 0.08
+
+                if actual_mood in {
+
+                    "stressed",
+
+                    "anxious",
+
+                    "overwhelmed",
+
+                }:
+
+                    score += 0.03
+
+            if positive_work_stress:
+                if actual_intent == "work_stress":
+                    score += 0.08
+
+                if actual_mood in {
+                    "stressed",
+                    "anxious",
+                }:
+                    score += 0.03
+
             item = dict(record)
 
             item.update({
@@ -1278,20 +1502,73 @@ class TrainedResponseModel:
 
             candidates.append(item)
 
-        # Retrieval score is semantic similarity plus small metadata boosts.
-        # This lets an explicit intent/phrase hint refine ranking without
-        # allowing a weak semantic match to dominate.
         candidates.sort(
+
             key=lambda item: (
-                float(item.get("retrieval_score", 0.0)),
-                int("intent" in item.get("metadata_matches", [])),
-                int(item.get("metadata_match_count", 0)),
-                float(item.get("similarity", 0.0)),
+
+                float(
+
+                    item.get(
+
+                        "retrieval_score",
+
+                        0.0,
+
+                    )
+
+                ),
+
+                int(
+
+                    "intent"
+
+                    in item.get(
+
+                        "metadata_matches",
+
+                        [],
+
+                    )
+
+                ),
+
+                int(
+
+                    item.get(
+
+                        "metadata_match_count",
+
+                        0,
+
+                    )
+
+                ),
+
+                float(
+
+                    item.get(
+
+                        "similarity",
+
+                        0.0,
+
+                    )
+
+                ),
+
             ),
+
             reverse=True,
+
         )
 
-        limit = max(1, int(top_k or self.top_k))
+        limit = max(
+
+            1,
+
+            int(top_k or self.top_k),
+
+        )
 
         results: List[Dict[str, Any]] = []
 
@@ -1299,7 +1576,11 @@ class TrainedResponseModel:
 
         for item in candidates:
 
-            response_text = self._clean_response_text(item.get("response", ""))
+            response_text = self._clean_response_text(
+
+                item.get("response", "")
+
+            )
 
             if not response_text:
 
@@ -1446,4 +1727,3 @@ class TrainedResponseModel:
             lines
 
         )
-
