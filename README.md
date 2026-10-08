@@ -1,23 +1,90 @@
 # 🧠 MindCare AI
 
 <p align="center">
-  <strong>A safety-first AI mental health support chatbot built with Python, FastAPI, machine learning, and a dedicated 50K-message response model.</strong>
+  <img src="https://img.shields.io/badge/AI%2FML-Mental%20Health%20Support-6C63FF?style=for-the-badge" alt="AI ML Mental Health Support">
+  <img src="https://img.shields.io/badge/Safety-First-22C55E?style=for-the-badge" alt="Safety First">
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/Tests-238%20Passed-16A34A?style=for-the-badge" alt="238 Tests Passed">
 </p>
 
 <p align="center">
-  <a href="https://mindcare-ai-o1e5.onrender.com">Live Demo</a> •
-  <a href="https://mindcare-ai-semb.onrender.com/health">API Health</a> •
-  <a href="https://github.com/AnshPratap2314/AI-Mental-health-chatbot">GitHub Repository</a>
+  <strong>A safety-first conversational AI system combining machine learning, deterministic safety controls, a 50K-message response model, FastAPI, and production deployment.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white" alt="Python 3.11">
-  <img src="https://img.shields.io/badge/FastAPI-REST%20API-009688?logo=fastapi&logoColor=white" alt="FastAPI">
-  <img src="https://img.shields.io/badge/ML-Hybrid%20Safety%20%2B%20Response%20Model-orange" alt="Machine Learning">
-  <img src="https://img.shields.io/badge/Tests-238%20passed-success" alt="238 tests passed">
-  <img src="https://img.shields.io/badge/Dataset-50K%20messages-purple" alt="50K messages">
+  <a href="https://mindcare-ai-o1e5.onrender.com" target="_blank" rel="noopener noreferrer"><strong>🌐 Live Demo</strong></a>
+  &nbsp;•&nbsp;
+  <a href="https://mindcare-ai-semb.onrender.com/health" target="_blank" rel="noopener noreferrer"><strong>💚 API Health</strong></a>
+  &nbsp;•&nbsp;
+  <a href="https://github.com/AnshPratap2314/AI-Mental-health-chatbot" target="_blank" rel="noopener noreferrer"><strong>💻 GitHub Repository</strong></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white" alt="Python 3.11">
+  <img src="https://img.shields.io/badge/Dataset-50K%20Messages-8B5CF6" alt="50K Dataset">
+  <img src="https://img.shields.io/badge/Model-mindcare--response--50k-F97316" alt="MindCare Response 50K">
   <img src="https://img.shields.io/badge/Deployment-Render-46E3B7?logo=render&logoColor=black" alt="Render">
 </p>
+
+<p align="center">
+  <em>Built as an AI/ML + software engineering project with an emphasis on safety, testing, explainability, and reliable deployment.</em>
+</p>
+
+---
+
+## 🔗 Link Behavior
+
+All external links in this README use HTML links with `target="_blank"` and `rel="noopener noreferrer"` so compatible Markdown renderers open them in a new tab/window.
+
+> **GitHub note:** GitHub sanitizes README HTML for security and may choose how link targets are handled. The README is configured with `target="_blank"`, but the final behavior is controlled by the platform/browser rendering the README.
+
+---
+
+## 🧭 Quick Navigation
+
+**Product**
+- [What is MindCare?](#-project-overview)
+- [Why I Built It](#-why-i-built-mindcare)
+- [Key Features](#-key-features)
+- [Live Demo](#-live-application)
+
+**AI / ML**
+- [Hybrid AI/ML System](#-2-hybrid-aiml-system)
+- [50K Response Dataset](#-3-50000-message-response-dataset)
+- [Response Model](#-4-trained-response-model)
+- [Conversation Routing](#-5-context-aware-conversation-routing)
+- [Safety Architecture](#-1-safety-first-architecture)
+
+**Engineering**
+- [System Architecture](#system-architecture)
+- [Security & Reliability](#-security--reliability)
+- [Testing](#-testing)
+- [API](#-api-endpoints)
+- [Project Structure](#-project-structure)
+- [Deployment](#-deployment)
+
+**Recruiter View**
+- [Engineering Highlights](#-engineering-highlights)
+- [Current Project Status](#-current-project-status)
+- [Developer](#-developer)
+
+---
+
+## 👀 Recruiter Snapshot
+
+| Area | What MindCare demonstrates |
+|---|---|
+| **AI / ML** | Hybrid ML pipeline, trained response model, intent/risk routing, retrieval similarity |
+| **AI Safety** | Deterministic risk authority, negation handling, protective signals, safety auditing |
+| **Backend** | FastAPI REST API, Pydantic validation, sessions, rate limiting, health/readiness APIs |
+| **Data Engineering** | 50K-message dataset, balanced intents, duplicate/leakage audits, train/validation/test splits |
+| **Software Engineering** | Modular architecture, regression tests, environment configuration, error handling |
+| **Security** | CORS, security headers, request validation, protected audit endpoints |
+| **Testing** | **238 automated tests passing** |
+| **Deployment** | Public frontend + backend deployed on Render |
+| **Languages / Tools** | Python, JavaScript, FastAPI, Scikit-learn, Pandas, NumPy, Git/GitHub |
+
+> **What makes this project different:** it is not only a chatbot UI. It combines AI/ML, safety engineering, backend APIs, dataset engineering, automated testing, and real deployment in one project.
 
 ---
 
@@ -51,7 +118,7 @@ The system combines:
 
 ### Frontend
 
-**https://mindcare-ai-o1e5.onrender.com**
+**<a href="https://mindcare-ai-o1e5.onrender.com**" target="_blank" rel="noopener noreferrer">https://mindcare-ai-o1e5.onrender.com**</a>
 
 The deployed interface provides a private conversational space with:
 
@@ -66,7 +133,7 @@ The deployed interface provides a private conversational space with:
 
 ### Backend API
 
-**https://mindcare-ai-semb.onrender.com**
+**<a href="https://mindcare-ai-semb.onrender.com**" target="_blank" rel="noopener noreferrer">https://mindcare-ai-semb.onrender.com**</a>
 
 Health endpoint:
 
@@ -457,13 +524,13 @@ The API explicitly controls allowed frontend origins.
 Current deployed frontend:
 
 ```text
-https://mindcare-ai-o1e5.onrender.com
+<a href="https://mindcare-ai-o1e5.onrender.com" target="_blank" rel="noopener noreferrer">https://mindcare-ai-o1e5.onrender.com</a>
 ```
 
 The previous/alternate frontend origin is also supported:
 
 ```text
-https://ai-mental-health-chatbot-nm2r.onrender.com
+<a href="https://ai-mental-health-chatbot-nm2r.onrender.com" target="_blank" rel="noopener noreferrer">https://ai-mental-health-chatbot-nm2r.onrender.com</a>
 ```
 
 ### Security headers
@@ -485,7 +552,7 @@ Audit endpoints are protected using an audit access key when configured.
 
 ---
 
-# 🧪 Testing
+# 🧪 Testing & Quality Assurance
 
 MindCare currently has a comprehensive regression suite.
 
@@ -657,7 +724,7 @@ AI-Mental-health-chatbot/
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/AnshPratap2314/AI-Mental-health-chatbot.git
+git clone <a href="https://github.com/AnshPratap2314/AI-Mental-health-chatbot.git" target="_blank" rel="noopener noreferrer">https://github.com/AnshPratap2314/AI-Mental-health-chatbot.git</a>
 cd AI-Mental-health-chatbot
 ```
 
@@ -721,13 +788,13 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 The API will be available at:
 
 ```text
-http://127.0.0.1:8000
+<a href="http://127.0.0.1:8000" target="_blank" rel="noopener noreferrer">http://127.0.0.1:8000</a>
 ```
 
 Health check:
 
 ```text
-http://127.0.0.1:8000/health
+<a href="http://127.0.0.1:8000/health" target="_blank" rel="noopener noreferrer">http://127.0.0.1:8000/health</a>
 ```
 
 ---
@@ -748,13 +815,13 @@ python3 -m http.server 5500
 Then open:
 
 ```text
-http://localhost:5500
+<a href="http://localhost:5500" target="_blank" rel="noopener noreferrer">http://localhost:5500</a>
 ```
 
 The frontend automatically uses:
 
 ```text
-http://127.0.0.1:8000
+<a href="http://127.0.0.1:8000" target="_blank" rel="noopener noreferrer">http://127.0.0.1:8000</a>
 ```
 
 for local backend development and the deployed Render API for the production frontend.
@@ -840,7 +907,7 @@ MindCare is currently deployed using **Render** with separate services.
 Render Static Site
         │
         ▼
-https://mindcare-ai-o1e5.onrender.com
+<a href="https://mindcare-ai-o1e5.onrender.com" target="_blank" rel="noopener noreferrer">https://mindcare-ai-o1e5.onrender.com</a>
 ```
 
 ### Backend
@@ -849,7 +916,7 @@ https://mindcare-ai-o1e5.onrender.com
 Render Web Service
         │
         ▼
-https://mindcare-ai-semb.onrender.com
+<a href="https://mindcare-ai-semb.onrender.com" target="_blank" rel="noopener noreferrer">https://mindcare-ai-semb.onrender.com</a>
 ```
 
 ### Production request flow
@@ -886,7 +953,7 @@ Docker is therefore treated as an additional deployment/reproducibility option r
 
 ---
 
-# 📈 Engineering Highlights
+# 📈 Engineering Highlights for Recruiters
 
 This project demonstrates more than simply building a chatbot UI.
 
@@ -1090,11 +1157,11 @@ Mewar University, Rajasthan, India
 
 ### GitHub
 
-https://github.com/AnshPratap2314
+<a href="https://github.com/AnshPratap2314" target="_blank" rel="noopener noreferrer">https://github.com/AnshPratap2314</a>
 
 ### Project Repository
 
-https://github.com/AnshPratap2314/AI-Mental-health-chatbot
+<a href="https://github.com/AnshPratap2314/AI-Mental-health-chatbot" target="_blank" rel="noopener noreferrer">https://github.com/AnshPratap2314/AI-Mental-health-chatbot</a>
 
 ---
 
@@ -1103,6 +1170,20 @@ https://github.com/AnshPratap2314/AI-Mental-health-chatbot
 Add the project's intended open-source license here before public distribution.
 
 If this repository is intended to be open source, a standard license such as MIT can be added explicitly as a separate `LICENSE` file.
+
+---
+
+## 🤝 Let's Connect
+
+If you're reviewing MindCare as a recruiter, interviewer, mentor, or collaborator, the best places to explore are:
+
+<p align="center">
+  <a href="https://mindcare-ai-o1e5.onrender.com" target="_blank" rel="noopener noreferrer"><strong>🌐 Try the Live Application</strong></a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://github.com/AnshPratap2314/AI-Mental-health-chatbot" target="_blank" rel="noopener noreferrer"><strong>💻 View Source Code</strong></a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://mindcare-ai-semb.onrender.com/health" target="_blank" rel="noopener noreferrer"><strong>💚 Check API Health</strong></a>
+</p>
 
 ---
 
