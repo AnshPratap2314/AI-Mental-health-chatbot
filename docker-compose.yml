@@ -1,3 +1,5 @@
+name: ai-mental-health-chatbot
+
 services:
   mindcare-api:
     build:
@@ -6,40 +8,36 @@ services:
 
     container_name: mindcare-api
 
+    environment:
+      API_PUBLIC_URL: "http://127.0.0.1:8001"
+      CHAT_RATE_LIMIT: "30"
+      CHAT_RATE_LIMIT_BURST: "30"
+      DEBUG: "false"
+      ENABLE_LLM: "True"
+      ENVIRONMENT: "production"
+      FRONTEND_URLS: "http://localhost:5500,http://127.0.0.1:5500,http://localhost:5501,http://127.0.0.1:5501"
+      MAX_MEMORY: "20"
+      MAX_MESSAGE_LENGTH: "4000"
+      MAX_SESSIONS: "1000"
+      MINDCARE_AUDIT_API_KEY: "${MINDCARE_AUDIT_API_KEY:?Set MINDCARE_AUDIT_API_KEY in .env}"
+      MINDCARE_AUDIT_FILE: "/app/logs/safety_audit.jsonl"
+      MINDCARE_AUDIT_MAX_RECORDS: "1000"
+      MINDCARE_LOG_DIR: "/app/logs"
+      PORT: "8000"
+      SESSION_RATE_LIMIT: "10"
+      SESSION_RATE_LIMIT_BURST: "10"
+      SESSION_TTL_SECONDS: "7200"
+
     ports:
       - "8001:8000"
-
-    environment:
-      ENVIRONMENT: "production"
-      DEBUG: "false"
-      API_PUBLIC_URL: "https://mindcare-ai-semb.onrender.com"
-      FRONTEND_URL: "${FRONTEND_URL:-}"
-      FRONTEND_URLS: "${FRONTEND_URLS}"
-      ENABLE_LLM: "${ENABLE_LLM:-false}"
-      MAX_MESSAGE_LENGTH: "${MAX_MESSAGE_LENGTH:-4000}"
-      MAX_MEMORY: "${MAX_MEMORY:-20}"
-      SESSION_TTL_SECONDS: "${SESSION_TTL_SECONDS:-7200}"
-      MAX_SESSIONS: "${MAX_SESSIONS:-1000}"
-
-      MINDCARE_AUDIT_API_KEY: "${MINDCARE_AUDIT_API_KEY:?MINDCARE_AUDIT_API_KEY must be set}"
-      MINDCARE_AUDIT_FILE: "/app/logs/safety_audit.jsonl"
-      MINDCARE_LOG_DIR: "/app/logs"
-
-    volumes:
-      - mindcare_logs:/app/logs
 
     restart: unless-stopped
 
     healthcheck:
       test:
-        - "CMD"
-        - "python"
-        - "-c"
-        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"
+        - CMD-SHELL
+        - python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 10s
-
-volumes:
-  mindcare_logs:
+      start_period: 30s
