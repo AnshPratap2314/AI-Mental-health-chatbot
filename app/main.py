@@ -23,7 +23,7 @@ from app.session_manager import SessionManager
 APP_VERSION = "1.2.0"
 
 DEFAULT_FRONTEND_URLS = [
-    "https://mindcare-ai-o1e5.onrender.com",
+    "https://ai-mental-health-chatbot-nm2r.onrender.com",
 ]
 
 _raw_frontend_urls = (
@@ -31,11 +31,14 @@ _raw_frontend_urls = (
     or os.getenv("FRONTEND_URL", "")
 )
 
-configured_origins = [
-    item.strip().rstrip("/")
-    for item in _raw_frontend_urls.split(",")
-    if item.strip()
-]
+if _raw_frontend_urls.strip():
+    configured_origins = [
+        item.strip().rstrip("/")
+        for item in _raw_frontend_urls.split(",")
+        if item.strip()
+    ]
+else:
+    configured_origins = DEFAULT_FRONTEND_URLS
 
 ALLOWED_ORIGINS = list(
     dict.fromkeys(

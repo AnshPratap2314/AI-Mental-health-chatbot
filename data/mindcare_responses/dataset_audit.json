@@ -1,0 +1,44 @@
+{
+  "rows": 50000,
+  "unique_normalized_messages": 50000,
+  "unique_responses": 18009,
+  "intents": 20,
+  "rows_per_intent": {
+    "anger": 2500,
+    "anxiety": 2500,
+    "career": 2500,
+    "casual": 2500,
+    "exam_stress": 2500,
+    "family": 2500,
+    "gratitude": 2500,
+    "greeting": 2500,
+    "high_risk": 2500,
+    "loneliness": 2500,
+    "motivation": 2500,
+    "negated_distress": 2500,
+    "overwhelm": 2500,
+    "positive": 2500,
+    "relationship": 2500,
+    "sadness": 2500,
+    "self_reflection": 2500,
+    "sleep": 2500,
+    "uncertainty": 2500,
+    "work_stress": 2500
+  },
+  "split_counts": {
+    "train": 40000,
+    "validation": 5000,
+    "test": 5000
+  },
+  "language_counts": {
+    "en": 43556,
+    "hinglish": 6444
+  },
+  "normalized_duplicates": 0,
+  "train_validation_overlap": 0,
+  "train_test_overlap": 0,
+  "validation_test_overlap": 0,
+  "high_risk_rows": 2500,
+  "synthetic": true,
+  "note": "Synthetic development/training data; use a separate human-written evaluation set before deployment."
+}

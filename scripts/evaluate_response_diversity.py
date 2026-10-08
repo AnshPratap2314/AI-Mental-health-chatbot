@@ -1,50 +1,57 @@
-from pathlib import Path
-
-import pandas as pd
-
-
-ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data" / "mindcare_responses"
+from collections import Counter
+from app.response_engine import ResponseEngine
 
 
-def main():
-    for split in ["train", "validation", "test"]:
-        path = DATA_DIR / f"{split}.csv"
-        df = pd.read_csv(path)
+MESSAGE = "I feel lonely"
+RUNS = 20
 
-        print("\n" + "=" * 70)
-        print(split.upper())
-        print("=" * 70)
+engine = ResponseEngine()
 
-        print("Rows:", len(df))
-        print("Unique messages:", df["message"].nunique())
-        print("Unique responses:", df["response"].nunique())
+responses = []
 
-        print("\nResponses per intent:")
+analysis = {
+    "risk_level": "low",
+    "signals": {},
+    "state": {},
+}
 
-        diversity = (
-            df.groupby("intent")["response"]
-            .nunique()
-            .sort_values()
-        )
+for i in range(RUNS):
+    result = engine.generate(
+        MESSAGE,
+        analysis,
+        {},
+    )
 
-        print(diversity.to_string())
+    reply = str(result).strip()
 
-        print(
-            "\nMinimum responses/intent:",
-            diversity.min(),
-        )
+    responses.append(reply)
 
-        print(
-            "Maximum responses/intent:",
-            diversity.max(),
-        )
+    print(f"{i + 1:02d}. {reply}")
+    print(f"    SOURCE: {engine.last_source}")
+    print(f"    MODEL : {engine.last_model}")
+    print()
 
-        print(
-            "Mean responses/intent:",
-            round(diversity.mean(), 2),
-        )
+counts = Counter(responses)
 
+unique_count = len(counts)
+total_count = len(responses)
 
-if __name__ == "__main__":
-    main()
+print("=" * 80)
+print("DIVERSITY RESULTS")
+print("=" * 80)
+
+print("Total responses :", total_count)
+print("Unique responses:", unique_count)
+
+if total_count:
+    print(
+        "Unique ratio   : "
+        f"{unique_count / total_count:.2%}"
+    )
+
+print()
+print("DUPLICATES:")
+
+for response, count in counts.most_common():
+    if count > 1:
+        print(f"{count}x -> {response}")

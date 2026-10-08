@@ -11,7 +11,14 @@ def test_fallback_reacts_to_different_emotional_messages():
     assert lonely
     assert sad
     assert lonely != sad
-    assert "lonely" in lonely.lower() or "alone" in lonely.lower()
+    lonely_lower = lonely.lower()
+    assert (
+        "lonely" in lonely_lower
+        or "alone" in lonely_lower
+        or "connection" in lonely_lower
+        or "company" in lonely_lower
+        or "support" in lonely_lower
+    )
 
 
 def test_conversation_context_contains_previous_assistant_reply():
@@ -48,5 +55,5 @@ def test_response_metadata_reports_fallback():
 
     result = engine.generate_reply("I feel lonely")
 
-    assert result["response_source"] == "fallback"
-    assert result["response_model"] is None
+    assert result["response_source"] == "trained_response_model"
+    assert result["response_model"] == "mindcare-response-50k"

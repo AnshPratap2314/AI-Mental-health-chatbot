@@ -6,7 +6,7 @@ from app.main import app
 
 client = TestClient(app)
 
-VALID_ORIGIN = "https://mindcare-ai-o1e5.onrender.com"
+VALID_ORIGIN = "https://ai-mental-health-chatbot-nm2r.onrender.com"
 INVALID_ORIGIN = "https://evil-example.invalid"
 
 
