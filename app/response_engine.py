@@ -1,6 +1,8 @@
 import re
 import unicodedata
 from collections import deque
+import time
+from threading import RLock
 
 from typing import Any, Dict, Optional
 
@@ -51,54 +53,109 @@ class ResponseEngine:
     """
 
     RESPONSE_MODEL_NAME = "mindcare-response-50k"
+        # Shared model artifacts; never share session-specific engines or history.
+    _shared_response_model = None
+    _shared_response_model_class = None
+    _response_model_cache_lock = RLock()
+    _response_model_retry_after = 0.0
+    _response_model_retry_interval_seconds = 30.0
+    _shared_response_model_load_error = None
+
 
     def __init__(
-
         self,
-
         user_name="friend",
-
         llm_engine=None,
-
     ):
-
         self.user_name = user_name or "friend"
-
         self.llm_engine = llm_engine
-
         self.last_source = "fallback"
-
         self.last_model = None
 
         self.response_model = None
         self.response_model_load_error = None
+        self.response_model_last_error = None
 
-        # Per-session response history prevents immediate repetition while
-        # keeping selection bounded to relevant candidates.
+        # This history must remain independent for every session.
         self._recent_trained_responses = deque(maxlen=8)
 
         self._load_response_model()
 
     def _load_response_model(self) -> bool:
-        """Load the 50K response model without breaking the main router."""
-        if TrainedResponseModel is None:
-            self.response_model_load_error = "TrainedResponseModel import unavailable"
+        """Attach a shared model, loading it once after successful initialization.
+
+        Failed loads are retried after a delay. A model that fails to load
+        never blocks deterministic response routing or safety decisions.
+        """
+        cls = type(self)
+        model_class = TrainedResponseModel
+
+        if model_class is None:
+            self.response_model_load_error = (
+                "TrainedResponseModel import unavailable"
+            )
             return False
 
-        try:
-            self.response_model = TrainedResponseModel()
+        # Fast path: reuse a successfully initialized model of this class.
+        if (
+            cls._shared_response_model is not None
+            and cls._shared_response_model_class is model_class
+        ):
+            self.response_model = cls._shared_response_model
             self.response_model_load_error = None
             return True
-        except Exception as exc:
-            # Keep production chat alive, but retain a diagnostic for local
-            # verification instead of silently hiding initialization failures.
-            self.response_model = None
-            self.response_model_load_error = f"{type(exc).__name__}: {exc}"
-            return False
 
-# =====================================================================
-# MAIN RESPONSE ROUTER
-# =====================================================================
+        # Serialize initialization so concurrent session creation cannot
+        # load multiple copies of the same model simultaneously.
+        with cls._response_model_cache_lock:
+            if (
+                cls._shared_response_model is not None
+                and cls._shared_response_model_class is model_class
+            ):
+                self.response_model = cls._shared_response_model
+                self.response_model_load_error = None
+                return True
+
+            now = time.monotonic()
+
+            # Throttle failed-load retries for this model class.
+            if (
+                cls._shared_response_model_class is model_class
+                and now < cls._response_model_retry_after
+            ):
+                self.response_model = None
+                self.response_model_load_error = (
+                    cls._shared_response_model_load_error
+                    or "Response model retry temporarily delayed"
+                )
+                return False
+
+            try:
+                model = model_class()
+            except Exception as exc:
+                error = f"{type(exc).__name__}: {exc}"
+
+                cls._shared_response_model = None
+                cls._shared_response_model_class = model_class
+                cls._shared_response_model_load_error = error
+                cls._response_model_retry_after = (
+                    now + cls._response_model_retry_interval_seconds
+                )
+
+                self.response_model = None
+                self.response_model_load_error = error
+                return False
+
+            # Publish the model only after initialization has completed.
+            cls._shared_response_model = model
+            cls._shared_response_model_class = model_class
+            cls._shared_response_model_load_error = None
+            cls._response_model_retry_after = 0.0
+
+            self.response_model = model
+            self.response_model_load_error = None
+            return True
+
     def generate(
         self,
         message,
@@ -211,13 +268,7 @@ class ResponseEngine:
 
             state = {}
 
-# ================================================================
-# AUTHORITATIVE RISK
-# ================================================================
-# This comes from BehaviorEngine.
-# NEVER replace this with:
-#     response_model.predict_metadata()["risk_level"]
-# The trained response model is not a safety engine.
+
         risk_level = str(
 
             analysis.get(
@@ -246,9 +297,6 @@ class ResponseEngine:
 
         )
 
-# ================================================================
-# 1. AUTHORITATIVE SAFETY ROUTING
-# ================================================================
         if (
 
             risk_level == "high"
@@ -267,11 +315,7 @@ class ResponseEngine:
 
             return self._crisis_response()
 
-# ================================================================
-# 2. CONVERSATION CONTROL
-# ================================================================
-# These should remain deterministic and should not be replaced
-# by either the LLM or the response dataset.
+#
         if self._is_follow_up(text):
 
             self.last_source = "fallback"
@@ -310,19 +354,7 @@ class ResponseEngine:
 
             return self._uncertainty_response()
 
-# ================================================================
-# 3. REAL LLM
-# ================================================================
-# The LLM gets the complete BehaviorEngine analysis.
-# This is important for tests and production because the LLM
-# should receive:
-#   mood
-#   mood_intensity
-#   topic
-#   risk_level
-#   signals
-#   context
-# exactly as produced by BehaviorEngine.
+
         if self.llm_engine is not None:
 
             llm_reply = self._try_llm(
@@ -339,9 +371,6 @@ class ResponseEngine:
 
                 return llm_reply
 
-# ================================================================
-# 4. TRAINED RESPONSE MODEL
-# ================================================================
         trained_reply = self._trained_response(
 
             message,
@@ -360,12 +389,7 @@ class ResponseEngine:
 
             return str(trained_reply)
 
-# ================================================================
-# 5. MODERATE / SERIOUS DETERMINISTIC FALLBACK
-# ================================================================
-# Moderate by itself does NOT mean "serious response".
-# Only route here when the authoritative analysis contains
-# an actual serious signal.
+
         if (
 
             risk_level == "moderate"
@@ -402,9 +426,7 @@ class ResponseEngine:
 
             return self._serious_response(topic)
 
-# ================================================================
-# 6. ORIGINAL FALLBACK
-# ================================================================
+
         self.last_source = "fallback"
 
         self.last_model = None
@@ -419,9 +441,6 @@ class ResponseEngine:
 
         )
 
-# =====================================================================
-# CONTEXT
-# =====================================================================
     def _previous_message(
 
         self,
@@ -454,9 +473,7 @@ class ResponseEngine:
 
         return ""
 
-# =====================================================================
-# TRAINED RESPONSE MODEL
-# =====================================================================
+
     def _trained_response(
         self,
         message: str,
@@ -523,9 +540,6 @@ class ResponseEngine:
             or state.get("last_topic")
         )
 
-        # Generic stress statements should not be forced into a topic such as
-        # work merely because the response-model metadata classifier guessed it.
-        # Keep the mood signal, but let semantic retrieval determine the topic.
         generic_stress = bool(
             re.search(
                 r"\b(?:getting|feeling|feel|am|i'm|im)\s+stressed\b",
@@ -540,9 +554,7 @@ class ResponseEngine:
             "im getting stressed",
             "i'm getting stressed",
         }
-        # Explicit low-risk exam-stress routing must take priority over
-        # generic stress routing. Otherwise the response-model metadata can
-        # steer an exam message into a generic stress/work response bank.
+
         exam_stress = bool(
             re.search(
                 r"\\b(?:exam|exams|examination|examinations|test|tests)\\b",
@@ -589,8 +601,7 @@ class ResponseEngine:
             requested_mood = "sad"
             requested_topic = "social"
 
-        # Use the user's exact wording first, plus a canonical stress
-        # paraphrase when the wording is colloquial.
+
         retrieval_queries = [message]
         if generic_loneliness:
             retrieval_queries.append(
@@ -627,9 +638,7 @@ class ResponseEngine:
                 examples.extend(found)
 
         if not examples and exam_stress:
-            # Recover directly from the loaded index if semantic retrieval
-            # does not return a candidate. This is still a normal low-risk
-            # response path; authoritative safety remains outside this method.
+
             try:
                 index = getattr(model, "index", None)
                 records = (
@@ -655,8 +664,7 @@ class ResponseEngine:
                 examples = []
 
         if not examples and generic_loneliness:
-            # For this ordinary low-risk intent, recover directly from the
-            # already-loaded trained response index before using fallback.
+
             try:
                 index = getattr(model, "index", None)
                 records = (
@@ -712,11 +720,6 @@ class ResponseEngine:
                 and str(item.get("response", "")).strip()
             ]
             if loneliness_examples:
-                # Prefer a trained response whose wording explicitly anchors
-                # the reply to loneliness/being alone/connection/support.
-                # This keeps the response semantically faithful to a direct
-                # loneliness message instead of selecting a generic emotional
-                # response that happens to share the same intent label.
                 loneliness_anchors = (
                     "lonely",
                     "alone",
